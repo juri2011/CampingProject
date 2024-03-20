@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.campingga.mapper.GoodsImageMapper">
+ 
+ <insert id="insert" parameterType="com.campingga.domain.GoodsImage">
+   INSERT INTO goodsImage (image_no, goods_no, imagepath, uuid)
+   VALUES ( 
+      #{ino}, 
+      #{gno}, 
+      #{imagepath},
+      #{uuid}
+   )
+</insert>
+ 	
+ 	<delete id="delete">
+ 		delete from goodsImage where uuid = #{uuid}
+ 	</delete>
+ 	
+ 	<select id="findByGno" resultType="com.campingga.domain.GoodsImage">
+ 		select * from goodsImage where goods_no = #{gno}
+ 	</select>
+ 
+</mapper>

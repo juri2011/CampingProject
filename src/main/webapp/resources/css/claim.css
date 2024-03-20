@@ -1,0 +1,110 @@
+body, div {
+    margin:0;
+    padding:0;
+}
+
+.claims {
+    margin-top: 30px;
+    border-top: 2px solid #777;
+    border-bottom: 1px solid #ddd;
+    width: 60%;
+    text-align: left;
+}
+
+.claim {
+    position: relative;
+    border-top: 1px solid #ddd
+}
+
+.claim:first-child {
+    border-top: 0 none
+}
+
+.claim__label,.claim__reply__label {
+    position: absolute;
+    top: 20px;
+    display: inline-block;
+    padding: 4px;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: #fff
+}
+
+.claim__label {
+    left: 1em;
+    background-color: #777
+}
+
+.claim__wrap {
+    padding: 20px 5px 5px 4em
+}
+
+.claim__author {
+    display: block
+}
+
+.claim__selected-option {
+    margin-top: 4px;
+    color: #888
+}
+
+.claim__content,.claim__reply__content {
+    margin: 0px 0px 0px 60px;
+}
+/* 
+.claim__reply__icon {
+    position: absolute;
+    left: 1em;
+    top: 25px;
+    display: inline-block;
+    width: 8px;
+    height: 10px;
+    background-image: url("image.png")
+} */
+
+.claim__util {
+    margin-top: 10px
+}
+
+.claim__delete-btn {
+    display: inline-block;
+    padding: 0 6px;
+    box-shadow: inset 0 -1px #ddd;
+    border: 1px solid #aaa;
+    border-radius: 2px;
+    font-size: 11px;
+    line-height: 1.8em;
+    vertical-align: middle;
+    color: #555;
+    background-color: #fff
+}
+
+.claim__time,.claim__reply__time {
+    position: absolute;
+    right: 10px;
+    top: 20px;
+    color: #888
+}
+
+.claim__reply {
+    position: relative;
+    border-top: 1px solid #ddd;
+    background-color: #fafafa
+}
+
+.claim__reply__label {
+    left: 2.2em;
+    background-color: #346aff
+}
+
+.claim__reply__wrap {
+    padding: 20px 5px 5px 5.2em
+}
+
+.claim__reply__content {
+    word-break: break-all
+}
+
+.prod-inquiry-list__container .claims {
+    font-size: 12px
+}

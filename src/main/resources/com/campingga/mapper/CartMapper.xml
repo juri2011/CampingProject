@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.campingga.mapper.CartMapper">
+
+	<select id="selectCart" resultType="cart">
+		select * from cart where
+		mem_id = #{id} AND ordernum is null
+	</select>
+
+	<select id="selectCartAllByNumber" resultType="list" parameterType="list">
+		select * from cart where 
+		cart_no in #{numberList} 
+	</select>
+	<select id="selectCartNo" resultType="cart">
+		select * from cart where
+		cart_no = #{cartNo} AND ordernum is null
+	</select>
+    <select id="selectCartByCartNo" resultType="cart">
+		select * from cart where 
+		mem_id = #{id} and cart_no in
+	    <foreach collection="numberList" item="item" open="(" separator="," close=")">
+	          #{item}
+	    </foreach>    
+	</select>        
+	<insert id="insertCart" parameterType="cart" useGeneratedKeys="true"
+		keyProperty="cart_no">
+		insert into cart(mem_id, goods_no, optionName, totalPrice, quantity, pname)
+		values(#{memid},#{goods_no}, #{optionName}, #{totalPrice}, #{quantity}, #{pname})
+	</insert>
+
+	<delete id="deleteCart">
+		delete cart where cart_no = #{cart_no}
+	</delete>
+
+	<select id="selectCartCount" resultType="int">
+		select count(*) from
+		cart where mem_id = #{memid} AND ordernum is null
+	</select>
+
+	<update id="updateCart">
+		UPDATE cart SET quantity = #{quantity} WHERE mem_id =
+		#{id} AND cart_no =
+		#{cartNo}
+	</update>
+
+	<update id="updateCartOrderNo">
+		UPDATE cart SET ordernum=#{orderNo},
+			status = '2',
+			update_date = SYSDATE()
+		 WHERE mem_id = #{memberId}
+		 and cart_no in
+		<foreach collection="numberList" item="item" open="(" separator="," close=")">
+	          #{item}
+	    </foreach>    
+		 
+	</update>
+
+</mapper>

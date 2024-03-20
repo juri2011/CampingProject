@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.campingga.mapper.ReviewMapper">
+	<sql id="info">
+			review_no as reviewNo,
+			RPAD(mem_id,9,'*') as memId,
+			r.goods_no as goodsNo,
+			r.content as content,
+			score as score,
+			DATE_FORMAT(r.regiDate,'%Y%m%d') as regiDateStr,
+			DATE_FORMAT(r.updateDate,'%Y%m%d') as updateDateStr,
+			ROW_NUMBER() over(ORDER BY r.regidate desc) AS rownum,
+			count(1) over() AS totalCount
+	</sql>
+	<sql id="whereorder">
+	</sql>
+	
+
+	<select id="selectReviewList" parameterType="com.campingga.domain.Common" resultType="com.campingga.domain.Review">
+		select *	
+		from (
+			select
+				g.pname as title,
+				<include refid="info"/>  
+			from review r 
+			inner join goods g on(g.goods_no = r.goods_no)
+			where r.goods_no = #{no}
+		) t
+		where rownum BETWEEN (#{section}-1)*10*100+(#{pageNum}-1)*10+1 AND (#{section}-1)*100+#{pageNum}*10
+		order by rownum
+	</select>	
+	
+	<select id="selectReviewById"  resultType="com.campingga.domain.Review">
+		select 
+		<include refid="info"/>  
+		from review r
+		where review_no = #{reviewNo}
+	</select>
+
+	<insert id="insertReview"  parameterType="com.campingga.domain.Review">
+		insert into review(mem_id,goods_no,title,content,score) 
+		values(#{memId},#{goodsNo},#{title},#{content},#{score})
+	</insert>
+	
+	<update id="updateReview" parameterType="com.campingga.domain.Review">
+		update review
+		set titl e= #{title},
+			content = #{content},
+			score = #{score}
+		where review_no = #{reviewNo} 
+	</update>
+	
+	<delete id="deleteReview">
+		delete from review
+		where review_no = #{reviewNo}
+	</delete>
+	
+</mapper>

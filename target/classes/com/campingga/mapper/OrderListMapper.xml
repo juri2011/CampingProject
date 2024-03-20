@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.campingga.mapper.OrderListMapper">
+
+	<sql id="info">
+		orderlist_no as orderlist_no,
+		l.mem_id as mem_id,
+		totprice,
+		dstatus,
+		waybill_num as waybill_num,
+		parcel_cd as parcel_cd,
+		DATE_FORMAT(l.regiDate,'%Y%m%d') as regiDateStr,
+		ROW_NUMBER() over(ORDER BY l.regiDate desc) AS rownum,
+		count(1) over() AS totalCount 			
+	</sql>
+
+
+	<insert id="insertOrder"
+		parameterType="com.campingga.domain.OrderList" useGeneratedKeys="true"
+		keyProperty="orderlist_no">
+		INSERT INTO orderlist (mem_id, totprice) VALUES
+		(#{mem_id}, #{totprice})
+	</insert>
+
+	<insert id="insertOrderPayment"
+		parameterType="com.campingga.domain.OrderPayment">
+		INSERT INTO order_payment(order_no, imp_uid) VALUES
+		(#{order_no}, #{imp_uid})
+	</insert>
+
+	<insert id="insertOrderAddress"
+		parameterType="com.campingga.domain.OrderAddress">
+		INSERT INTO order_address(order_no, `name`, phone, addr1, addr2,
+		memo)
+		VALUES (#{order_no}, #{name}, #{phone}, #{addr1}, #{addr2}, #{memo})
+	</insert>
+	
+
+	<sql id="where">
+	</sql>
+
+	<select id="selectOrderList" parameterType="com.campingga.domain.Common" resultType="com.campingga.domain.OrderList">
+		select t.* 
+		from (
+			select
+				<include refid="info"/> 
+			from orderlist l
+		) t
+		where rownum BETWEEN (#{section}-1)*10*100+(#{pageNum}-1)*10+1 AND (#{section}-1)*100+#{pageNum}*10
+		order by rownum
+		
+	</select>
+	<select id="selectOrderId" resultType="java.util.HashMap">
+		select
+			name,
+			phone,
+			a.addr1,
+			addr2 as Daddr,
+			memo,
+			DATE_FORMAT(update_date,'%m/%d') as parcelDate,
+			(case WEEKDAY(update_date)
+			    when '0' then '월'
+			    when '1' then '화'
+			    when '2' then '수'
+			    when '3' then '목'
+			    when '4' then '금'
+			    when '5' then '토'
+			    when '6' then '일'
+		    end) as weekDay,
+		    case
+			    when l.dstatus= '1' then '배송전'
+			    when l.dstatus= '2' then '출고완료'
+			    when l.dstatus= '3' then '배송중'
+			   	when l.dstatus= '4' then '배송완료'
+			    else '배송정보사용불가'
+			end as dstatusStr,
+		    
+			<include refid="info"/> 
+		from orderlist l
+		INNER JOIN order_address a ON(l.orderlist_no = a.order_no)
+		INNER JOIN cart c ON(l.orderlist_no = c.ordernum)
+		where orderlist_no = #{orderlistNo}
+		  and c.goods_no = #{gno}
+	</select>
+	<insert id="insertOrderList" parameterType="com.campingga.domain.OrderList">
+		insert into orderlist(mem_id,totprice,dstatus)
+		values(#{memId},#{topprice},#{dstatus})
+	</insert>
+
+
+	<update id="updateOrderList" parameterType="com.campingga.domain.OrderList">
+		update orderlist
+			set topprice = #{topprice},
+			dstatus = #{dstatus}
+		where orderlist_no = #{orderlistNo}
+	</update>
+
+	<delete id="deleteOrderList" parameterType="com.campingga.domain.OrderList">
+		delete from orderlist 
+		where orderlist_no = #{orderlistNo}
+	</delete>
+	
+	
+	<update id="updateWaybillData" parameterType="com.campingga.domain.OrderList">
+		update orderlist
+			set waybill_num = #{waybillNum},
+			parcel_cd = #{parcelCd}
+		where orderlist_no = #{orderlistNo}
+	</update>
+
+	
+
+</mapper>

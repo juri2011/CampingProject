@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.campingga.mapper.GclaimMapper">
+
+<!-- gclaim + answer_gclaim  -->
+<select id="selectClaims" parameterType="com.campingga.domain.Common" resultType="com.campingga.domain.Adminclaim">
+SELECT * FROM(
+	WITH RECURSIVE ClaimHierarchy AS (
+	  SELECT
+	    gclaim_no,
+	    goods_no,
+	    mem_id,
+	    content,
+	    regidate,
+	    updatedate,
+	    status,
+	    0 AS answer_no,
+	    1 AS level
+	  FROM gclaim
+	  <where>
+	  	<if test="goods_no != 0">
+	  		goods_no = #{goods_no}
+	  	</if>
+	  </where>
+	  
+	  UNION ALL
+	  
+	  SELECT
+	    ac.gclaim_no,
+	    gc.goods_no,
+	    gc.mem_id,
+	    ac.content,
+	    ac.regidate,
+	    ac.updatedate,
+	    ac.status,
+	    ac.answer_no,
+	    ch.level + 1 AS level
+	  FROM answer_claim ac
+	  JOIN ClaimHierarchy ch ON ac.gclaim_no = ch.gclaim_no
+	  JOIN gclaim gc ON ac.gclaim_no = gc.gclaim_no
+	  WHERE LEVEL = 1
+	)
+	SELECT
+	  LEVEL,
+	  gclaim_no,
+	  goods_no,
+	  mem_id,
+	  content,
+	  regidate,
+	  updatedate,
+	  status,
+	  answer_no,
+	  ROW_NUMBER() over(ORDER BY gclaim_no, answer_no) AS rownum,
+	  count(1) over() AS total
+	FROM ClaimHierarchy
+	ORDER BY gclaim_no, answer_no
+)b
+WHERE rownum BETWEEN (#{section}-1)*100+(#{pageNum}-1)*10+1 AND (#{section}-1)*100+#{pageNum}*10;
+</select>
+
+
+<!-- gclaim table -->
+ <select id="selectGclaims" resultType="com.campingga.domain.Gclaim">
+ 	select
+ 	gclaim_no as glno,
+ 	goods_no as gno,
+ 	mem_id as id,
+ 	content,
+ 	regidate,
+ 	updatedate,
+ 	status
+ 	from gclaim
+ </select>
+ 
+ <select id="selectOneGclaim" resultType="com.campingga.domain.Gclaim">
+ 	select
+ 	gclaim_no as glno,
+ 	goods_no as gno,
+ 	mem_id as id,
+ 	content,
+ 	regidate,
+ 	updatedate,
+ 	status
+ 	from gclaim
+ 	where gclaim_no=#{glno}
+ </select>
+ 
+ <insert id="insertGclaim" parameterType="com.campingga.domain.Gclaim">
+ 	insert into gclaim(goods_no, mem_id, content, status)
+ 	values(#{gno}, #{id}, #{content}, #{status})
+ </insert>
+ 
+ <update id="updateGclaim" parameterType="com.campingga.domain.Gclaim">
+ 	update gclaim
+ 	set
+ 	content=#{content},
+ 	status=#{status}
+ 	where gclaim_no=#{glno}
+ </update>
+ 
+ <delete id="deleteGclaim">
+ 	delete from gclaim where gclaim_no=#{glno}
+ </delete>
+ 
+ 
+ <!-- answer_gclaim table -->
+ <select id="selectClaimAnswers" resultType="com.campingga.domain.AnswerClaim">
+	select
+	answer_no as anscno,
+	gclaim_no as glno,
+	title,
+	content,
+	regidate,
+	updatedate,
+	status
+	from answer_claim
+</select>
+
+<select id="selectOneClaimAnswer" resultType="com.campingga.domain.AnswerClaim">
+	select
+	answer_no as anscno,
+	gclaim_no as glno,
+	title,
+	content,
+	regidate,
+	updatedate,
+	status
+	from answer_claim
+	where answer_no=#{anscno}
+</select>
+
+<insert id="insertClaimAnswer" parameterType="com.campingga.domain.AnswerClaim">
+	insert into answer_claim (gclaim_no, title, content, status)
+	values (#{glno}, #{title}, #{content}, #{status})
+</insert>
+
+<update id="updateClaimStatus" parameterType="com.campingga.domain.AnswerClaim">
+	update answer_claim
+	set
+	title=#{title},
+	content=#{content},
+	status=#{status}
+	where answer_no=#{anscno}
+</update>
+
+<delete id="deleteClaimAnswer">
+	delete from answer_claim where answer_no=#{anscno}
+</delete>
+ 
+ 
+
+</mapper>

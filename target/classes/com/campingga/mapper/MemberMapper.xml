@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.campingga.mapper.MemberMapper">
+	 
+	<resultMap type="com.campingga.domain.Member" id="memberMap">
+		<id property="mem_id" column="mem_id" />
+		<result property="mem_id" column="mem_id" />
+		<result property="name" column="name" />
+		<result property="pwd" column="pwd" />
+		<result property="pnum" column="pnum" />
+		<result property="email" column="email" />
+		<result property="userAddr" column="userAddr" />
+		<result property="userDaddr" column="userDaddr" />
+		<result property="grade" column="grade" />
+		<result property="regidate" column="regidate" />
+		<result property="updatedate" column="updatedate" />
+		<collection property="authList" resultMap="authMap"></collection>
+	</resultMap>
+	 
+	<resultMap type="com.campingga.domain.Authority" id="authMap">
+		<result property="mem_id" column="mem_id"/>
+		<result property="auth" column="auth"/>
+	</resultMap>
+	 
+	<select id="selectMemberaslogin" resultMap="memberMap">
+		select
+		mem.mem_id,
+		name,
+		pwd,
+		pnum,
+		email,
+		userAddr,
+		userDaddr,
+		grade,
+		regidate,
+		updatedate,
+		status,
+		auth
+		from member mem LEFT JOIN authority auth on mem.mem_id = auth.mem_id
+		where mem.mem_id=#{username}
+	</select>
+
+	<select id="selectMember" resultType="com.campingga.domain.Member">
+		select
+		mem_id as id,
+		name,
+		pwd,
+		pnum,
+		email,
+		userAddr,
+		userDaddr,
+		grade,
+		regidate,
+		updatedate,
+		status
+		from member where mem_id=#{id}
+	</select>
+	
+	<select id="selectbyidCheck" parameterType="String" resultType="int" >
+		select count(*) from member where mem_id = #{mem_id}
+	</select>
+	
+	<insert id="insertMember" parameterType="com.campingga.domain.Member">
+		insert into member(mem_id, name, pwd, pnum, email, userAddr, userDaddr)
+		values(#{mem_id}, #{name}, #{pwd}, #{pnum}, #{email}, #{userAddr}, #{userDaddr})
+	</insert>
+	
+	<insert id="insertAuth" parameterType="com.campingga.domain.Authority">
+		insert into authority (mem_id, auth)
+		values (#{mem_id}, #{auth})
+	</insert>
+	
+	<update id="updateMember" parameterType="com.campingga.domain.Member">
+		update member set pwd=#{pwd}, pnum=#{pnum}, email=#{email}, userAddr=#{userAddr}, userDaddr=#{userDaddr} where mem_id=#{mem_id}
+	</update>
+	
+	<delete id="deleteMember">
+		delete from member where mem_id=#{mem_id}
+	</delete>
+
+</mapper>

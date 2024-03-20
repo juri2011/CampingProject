@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC
+"-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+"http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+
+<tiles-definitions>
+
+<definition name="layout" template="/WEB-INF/views/tiles/template.jsp" preparer="menuPreparer" >
+	<put-attribute name="header" value="/WEB-INF/views/tiles/header.jsp" />
+	<put-attribute name="body" value="" />
+	<put-attribute name="footer" value="/WEB-INF/views/tiles/footer.jsp" />
+</definition>
+
+
+
+
+<definition name="about" extends="layout">
+<put-attribute name="title" value="about" />
+<put-attribute name="body" value="/WEB-INF/views/about/about.jsp" />
+</definition>
+
+<definition name="blog" extends="layout">
+<put-attribute name="title" value="blog" />
+<put-attribute name="body" value="/WEB-INF/views/blog/blog.jsp" />
+</definition>
+
+<definition name="blogs" extends="layout">
+<put-attribute name="title" value="blogs" />
+<put-attribute name="body" value="/WEB-INF/views/blog/bloglist.jsp" />
+</definition>
+
+<definition name="cart" extends="layout">
+<put-attribute name="title" value="장바구니" />
+<put-attribute name="body" value="/WEB-INF/views/cart/cartList.jsp" />
+</definition>
+
+
+<definition name="contact" extends="layout">
+<put-attribute name="title" value="Contact" />
+<put-attribute name="body" value="/WEB-INF/views/claim/contact.jsp" />
+</definition>
+
+
+<definition name="item" extends="layout">
+<put-attribute name="title" value="Goods" />
+<put-attribute name="body" value="/WEB-INF/views/goods/item.jsp" />
+</definition>
+
+
+<definition name="itemlist" extends="layout">
+<put-attribute name="title" value="Goods List" />
+<put-attribute name="body" value="/WEB-INF/views/goods/list.jsp" />
+</definition>
+
+<definition name="searchlist" extends="layout">
+<put-attribute name="title" value="Goods List" />
+<put-attribute name="body" value="/WEB-INF/views/goods/searchlist.jsp" />
+</definition>
+
+
+
+<definition name="/review/form" extends="layout">
+	<put-attribute name="title" value="home" />
+	<put-attribute name="body" value="/WEB-INF/views/review/form.jsp" />
+</definition>
+
+
+<definition name="home" extends="layout">
+<put-attribute name="title" value="home" />
+<put-attribute name="body" value="/WEB-INF/views/main/home.jsp" />
+</definition>
+
+<definition name="registerGoods" extends="layout">
+<put-attribute name="title" value="상품 등록 페이지" /> 
+<!-- <put-attribute name="header" value="/WEB-INF/views/tiles/header.jsp" /> -->
+<put-attribute name="body" value="/WEB-INF/views/goods/goodsRegister.jsp" />
+<!-- <put-attribute name="footer" value="/WEB-INF/views/tiles/footer.jsp" /> -->
+</definition>
+
+<definition name="/payments" extends="layout">
+	<put-attribute name="title" value="OrderList" />
+	<put-attribute name="body" value="/WEB-INF/views/cart/myCart.jsp" />
+</definition>
+
+<definition name="qna" extends="layout">
+	<put-attribute name="title" value="Contact" />
+	<put-attribute name="body" value="/WEB-INF/views/qna/qna.jsp" />
+</definition>
+
+
+<definition name="detail" extends="layout">
+	<put-attribute name="title" value="goodsDetail" />
+	<put-attribute name="body" value="/WEB-INF/views/goods/goodsDetail.jsp" />
+</definition>
+<definition name="*/*" extends="layout">
+	<put-attribute name="title" value="shop" />
+	<put-attribute name="body" value="/WEB-INF/views/{1}/{2}.jsp" />
+</definition>
+
+
+</tiles-definitions>
