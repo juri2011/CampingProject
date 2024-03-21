@@ -8,7 +8,9 @@
 
  ---
  
-밑의줄은 코드 , 코드 앞에 4zks Emldnrl
+밑의줄은 코드 , 코드 앞에
+
     private String email;
+    
 코드끝    
     
