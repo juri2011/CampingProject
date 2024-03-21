@@ -35,7 +35,7 @@ import com.campingga.service.ReviewService;
 import lombok.extern.log4j.Log4j;
 import net.coobird.thumbnailator.Thumbnailator;
 
-
+// 오주리가 수정할 코드입니다.
 @Controller
 @Log4j 
 public class GoodsController {
