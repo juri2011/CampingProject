@@ -19,7 +19,7 @@ import com.campingga.service.ClaimService;
 import com.campingga.service.GoodsService;
 
 import lombok.extern.log4j.Log4j;
-// 테스트 용 주석입니다.
+
 @Controller
 @Log4j
 @RequestMapping("/admin/")

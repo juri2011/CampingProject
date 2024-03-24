@@ -35,7 +35,7 @@ import com.campingga.service.ReviewService;
 import lombok.extern.log4j.Log4j;
 import net.coobird.thumbnailator.Thumbnailator;
 
-// 오주리가 수정할 코드입니다.
+
 @Controller
 @Log4j 
 public class GoodsController {
@@ -58,7 +58,7 @@ public class GoodsController {
 	private String filePath;
 
 	
-	
+	//관리자용 상품 리스트(페이지네이션 없음)
 	@GetMapping("/list")
 	public String showItemList(Model model, Common common) {
 		log.info("show Admin List start...");
@@ -74,6 +74,7 @@ public class GoodsController {
 		
 	}
 	
+	//사용자용 상품 리스트 - home에 있던 그 녀석 : list.jsp로 이동
 	@RequestMapping("/showlist")
 	public String goodslist(Model model,Common common) {
 
@@ -89,8 +90,6 @@ public class GoodsController {
 		return "itemlist";
 	}
 
-	
-	
 	@GetMapping("/goods/search.do")
 	public String searchList(Model model,Common common) {
 

@@ -25,7 +25,7 @@ import com.campingga.dto.res.CartPutitem;
 import com.campingga.service.CartService;
 
 import lombok.extern.log4j.Log4j;
-//하나가 힘들지만.........
+
 @Log4j 
 @Controller
 @RequestMapping("/cart")
