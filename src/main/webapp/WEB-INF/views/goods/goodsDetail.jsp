@@ -619,7 +619,7 @@
 		optionProducts.innerHTML = html;
 		document.getElementById("option_box_0").selected = true;
 		calculateTot();
-	}
+	}  
 	
  	function deleteOption(){
 		var deleteObj = event.target.id;

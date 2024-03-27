@@ -5,6 +5,28 @@
  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.campingga.mapper.GoodsMapper">
+	<!-- 
+		select문에서 찾을 컬럼의 내용을 sql태그로 묶어서 정리했다.
+		alias: g(goods 테이블)
+		
+		상품번호
+		카테고리
+		내용
+		상품이름
+		판매가
+		피부타입
+		등록일
+		수정일
+		물량
+		상태(판매중/재입고중/품절)
+		이미지경로
+		원가
+		할인가
+		이미지uuid
+		옵션 리스트
+		rownum
+		총 상품 수
+	 -->
 	<sql id="info">
 		g.goods_no as gno,
 		category,
@@ -24,7 +46,8 @@
 		ROW_NUMBER() over(ORDER BY g.regidate desc) AS rownum,
 		count(1) over() AS totalCount
 	</sql>
-
+	
+	<!-- 상품 상세정보 가져오기 -->
 	<select id="selectOneItem" resultType="com.campingga.domain.Goods">
 		select
 			<include refid="info"/>  
@@ -32,12 +55,14 @@
 		where goods_no = #{gno}
 	</select>
 
+	<!-- 카테고리 검색으로 리스트 가져오기 -->
 	<select id="selectListByCategory" resultType="com.campingga.domain.Goods">
 		select
 			<include refid="info"/>  
 		from goods g where category = #{category}
 	</select>
 
+	<!-- 카테고리와 피부타입 검색으로 리스트 가져오기 -->
 	<select id="selectListByCateAndSkin"
 		resultType="com.campingga.domain.Goods">
 		select
@@ -49,6 +74,7 @@
 		into goods(category, pname, price, skintype, stock, status) values(#{category}, 
 		#{pname}, #{price}, #{skintype}, #{stock}, #{status}) </insert> -->
 
+	<!-- 상품 수정 -->
 	<update id="updateItem" parameterType="com.campingga.domain.Goods">
 		update goods 
 		set category=#{category}, 
@@ -66,12 +92,18 @@
 		where goods_no=#{gno}
 	</update>
 
+	<!-- 상품삭제하기 -->
 	<delete id="deleteItem">
 		delete from goods where goods_no = #{gno}
 	</delete>
 	<!-- <select id="selectImageList" resultType="com.campingga.domain.Goods"> 
 		select * from goodsImage where goods_no = #{gno} </select> -->
 
+	<!--
+		registerGoods()에 사용되는 쿼리
+		상품등록하기
+		useGeneratedKeys -> insert후 pk값 얻어오기	
+	-->
 	<insert id="insertItem" parameterType="com.campingga.domain.Goods" useGeneratedKeys="true" keyProperty="gno">
 		INSERT INTO goods (category, pname, content, sellPrice, skintype,
 		stock, status, imagepath, originalPrice, discountPrice, uuid,
@@ -92,10 +124,20 @@
 		)
 	</insert>
 
+	<!-- 다음 데이터에 들어갈 아이디값구하기 -->
 	<select id="getGoodsNo" resultType="int">
 		SELECT max(last_insert_id(goods_no))+1 FROM goods
 	</select>
-
+	
+	<!--
+		controller의 goodsList에서 사용(/showlist)
+		
+		pagination으로 아이템 리스트 구하기
+		goods 테이블 전체
+		no/s_uuid : 서버에 들어갈 이미지 경로
+		행숫자
+		전체 아이템 수
+	-->
 	<select id="goodsList" parameterType="com.campingga.domain.Common" resultType="com.campingga.domain.Goods">
 	select * from (
 		select
@@ -110,6 +152,12 @@
 	order by rownum
 	
 	</select>
+	
+	<!-- 
+		컨트롤러의 goodsList() /showlist에서 사용
+		검색으로 리스트 가져오기
+		where 1=1 대신에 trim 사용하는 것이 좋을듯
+	 -->
 	<select id="selectSearchList" parameterType="com.campingga.domain.Common" resultType="com.campingga.domain.Goods">
 		select
 			goods_no as gno,
@@ -130,11 +178,21 @@
 			</if>
 	</select>
 
+	<!-- 이미지 파일 업로드 경로 -->
 	<update id="updateFilePath" parameterType="com.campingga.domain.Goods">
 		update goods set imagepath=#{imagepath}, uuid=#{uuid}
 		where goods_no = #{gno}
 	</update>
 
+	<!-- 
+		parcelDate -> 배송일?
+		dstatus -> orderlist테이블 배송상태(1/2/3/4)
+		dstatusStr -> orderList (배송전/출고완료/배송중/배송완료)
+		payDate -> orderList 등록일
+		waybill_num -> 
+		parcelCd -> orderList 배송코드
+		orderlist_no -> 주문번호
+	 -->
 	<select id="selectGoodsOrderList" parameterType="com.campingga.domain.Common" resultType="com.campingga.domain.Goods">
 		select
 			c.update_date as parcelDate,
