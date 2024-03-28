@@ -100,7 +100,6 @@ public class GoodsController {
 		return "searchlist";
 	}
 	
-	//사용하지 않는 코드
 	@GetMapping("/showItem")
 	public String showOneItem(Model model) {
 		
@@ -126,7 +125,6 @@ public class GoodsController {
 	
 //	public Goods registerGoods(@RequestParam("sellPrice") String  sellPrice,@RequestParam("originalPrice") String  originalPrice,@RequestParam("pname") String pname, @RequestParam("stock") String stock,
 //			@RequestParam("skintype") String skintype, @RequestParam("category") String category, ) {
-	//사용 불가한 코드(보안 문제로 보임)
 	@PostMapping("/registerGoods")
 	public String registerGoods(Goods goods,@RequestParam("uploadFile") MultipartFile[] uploadFile,@RequestParam("uploadSubFile") MultipartFile[] uploadFilesub) {
 		log.info("registerGoods");
@@ -153,7 +151,7 @@ public class GoodsController {
 		 
 		return "redirect:/goodsWrite/write";
 	}
-	//goodsRegister.jsp로 이동하는 코드
+	
 	@GetMapping("/registerGoods")
 	public String registerGoods2() {
 		log.info("register goods");
@@ -357,7 +355,6 @@ public class GoodsController {
 	@GetMapping("/goodsDetail/{gno}")
 	public String goodsDetail(Model model, Common common, @PathVariable("gno") int gno) {
 		log.info("goods detail");
-		System.out.println(common);
 		Common common4 = new Common();
 		Goods goods = service.showOneItem(gno);
 		log.info("콘텐츠"+goods.getContent());

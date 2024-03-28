@@ -32,7 +32,7 @@ public class MenuPreparer implements ViewPreparer {
 	WishMapper wishMapper;
 	@Override
     public void execute(Request contextrequest, AttributeContext attributeContext) throws PreparerException {
-        HttpServletRequest servletRequest = ServletUtil.getServletRequest(contextrequest).getRequest();
+        /*HttpServletRequest servletRequest = ServletUtil.getServletRequest(contextrequest).getRequest();
         String menu = servletRequest.getParameter("menu");
         List<MenuVO> list = mapper.selectMenuList(menu);
         attributeContext.putAttribute("menuList", new Attribute(list), true);
@@ -53,7 +53,7 @@ public class MenuPreparer implements ViewPreparer {
         	attributeContext.putAttribute("wishCount", new Attribute(wishCount), true);
         }catch(Exception e) {
         	
-        }
+        }*/
 
     }
 }

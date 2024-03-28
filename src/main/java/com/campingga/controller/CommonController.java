@@ -28,14 +28,14 @@ public class CommonController {
 	
 	@RequestMapping("/home")
 	public String mainPage(Model model, Common common) {
-
+/*
 		log.info("enter the mainPage");
 		List<Goods> goodsList = service.goodsList(common);
 
 		model.addAttribute("goodsList",goodsList);
 		if(goodsList.size() > 0)
 			model.addAttribute("tot", goodsList.get(0).getTotalCount());
-
+*/
 		return "home";
 	}
 	

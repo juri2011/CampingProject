@@ -23,8 +23,8 @@ public class JDBCTests {
 	public void testConnectionMySQL() {
 		try(Connection con= 
 			DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/campingDB",
-					"camp",
+					"jdbc:mysql://localhost:3306/shop",
+					"dbuser",
 					"12345")) {
 				log.info(con);
 		} catch (Exception e) {

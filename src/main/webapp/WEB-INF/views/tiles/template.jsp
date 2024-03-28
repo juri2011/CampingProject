@@ -12,6 +12,6 @@
 </head>
 <body>
 	<script src="../resources/vendor/jquery/jquery-3.2.1.min.js"></script>
-	<tiles:insertAttribute name="header" ></tiles:insertAttribute>
+	<%-- <tiles:insertAttribute name="header" ></tiles:insertAttribute> --%>
 	<tiles:insertAttribute name="body"></tiles:insertAttribute>
-	<tiles:insertAttribute name="footer" ></tiles:insertAttribute>
+	<%-- <tiles:insertAttribute name="footer" ></tiles:insertAttribute> --%>
