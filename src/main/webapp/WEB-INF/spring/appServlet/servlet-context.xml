@@ -22,14 +22,13 @@
 	</beans:bean>
 	
 	<context:component-scan base-package="com.campingga.controller" />
-	
-   	<!-- Tiles -->
+<!-- 	
+   	Tiles
     <beans:bean id="tilesViewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
         <beans:property name="viewClass" value="org.springframework.web.servlet.view.tiles3.TilesView" />
         <beans:property name="order" value="1" />
     </beans:bean>
     
-	<beans:bean id="menuPreparer" class="com.campingga.menu.MenuPreparer"></beans:bean>
 
     <beans:bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
         <beans:property name="definitions">
@@ -39,8 +38,8 @@
         </beans:property>
         <beans:property name="preparerFactoryClass" value="org.springframework.web.servlet.view.tiles3.SpringBeanPreparerFactory"></beans:property>
     </beans:bean>        
-    <!-- ViewPreparer을 위한 bean 등록 -->
-	
+    ViewPreparer을 위한 bean 등록
+	 -->
     
     <!-- viewResolver 설정 (사용자 view의 위치, 확장명 설정) -->	
     <beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -58,16 +57,5 @@
         <beans:property name="fileEncoding" value="UTF-8" />
     </beans:bean>
  	
-	
-	
-	<!-- Tiles Start -->
-	<!-- 
-	<beans:bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles3.TilesConfigurer"
-			p:definitions="/WEB-INF/tiles/tiles.xml"
-			p:preparerFactoryClass="org.springframework.web.servlet.view.tiles3.SpringBeanPreparerFactory"
-	/>
-	 -->
-	<!-- Tiles End -->
-	
 	
 </beans:beans>

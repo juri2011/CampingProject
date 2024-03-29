@@ -2,7 +2,7 @@
 <!DOCTYPE tiles-definitions PUBLIC
 "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
 "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
-
+<!-- 
 <tiles-definitions>
 
 <definition name="layout" template="/WEB-INF/views/tiles/template.jsp" preparer="menuPreparer" >
@@ -72,9 +72,9 @@
 
 <definition name="registerGoods" extends="layout">
 <put-attribute name="title" value="상품 등록 페이지" /> 
-<!-- <put-attribute name="header" value="/WEB-INF/views/tiles/header.jsp" /> -->
+<put-attribute name="header" value="/WEB-INF/views/tiles/header.jsp" />
 <put-attribute name="body" value="/WEB-INF/views/goods/goodsRegister.jsp" />
-<!-- <put-attribute name="footer" value="/WEB-INF/views/tiles/footer.jsp" /> -->
+<put-attribute name="footer" value="/WEB-INF/views/tiles/footer.jsp" />
 </definition>
 
 <definition name="/payments" extends="layout">
@@ -98,4 +98,4 @@
 </definition>
 
 
-</tiles-definitions>
+</tiles-definitions> -->

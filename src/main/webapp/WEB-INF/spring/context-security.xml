@@ -4,7 +4,7 @@
 	xmlns:security="http://www.springframework.org/schema/security"
 	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-
+<!-- 
 	<bean id="loginSuccess" class="com.campingga.security.LoginSuccessHandler"></bean>
 	<bean id="customPasswordEncoder" class="com.campingga.security.CustomPasswordEncoder"></bean>
 	<bean id="customUserDetailService" class="com.campingga.security.CustomUserDetailsService"></bean>
@@ -13,10 +13,10 @@
 	
  	
 	<security:http>
- 		<!-- 
+ 		
 		<security:intercept-url pattern="/*" access="permitAll"/>
 		<security:intercept-url pattern="/*/*.do" access="permitAll"/>
-		 -->
+		
 		 
 		<security:intercept-url pattern="/admin" access="hasRole('ROLE_ADMIN')"/>
 		<security:intercept-url pattern="/admin/*" access="hasRole('ROLE_ADMIN')"/>
@@ -37,7 +37,7 @@
 		<security:form-login login-page="/member/login" authentication-success-handler-ref="loginSuccess" />
 		<security:logout logout-url="/logout.do" invalidate-session="true" />
 		
-		<!-- <security:access-denied-handler error-page="/accessError"/> -->
+		<security:access-denied-handler error-page="/accessError"/>
 		
 		<security:access-denied-handler ref="customAccessDenied"/>
 	</security:http>
@@ -50,5 +50,5 @@
 		</security:authentication-provider>
 		
 	</security:authentication-manager>
-
+ -->
 </beans>

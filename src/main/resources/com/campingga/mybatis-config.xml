@@ -5,9 +5,5 @@
 <configuration>
 	
 	<typeAliases>
-		<typeAlias type="com.campingga.domain.Cart" alias="cart"/>
-		<typeAlias type="com.campingga.domain.Coupon" alias="coupon"/>
-		<typeAlias type="com.campingga.domain.Gclaim" alias="gclaim"/>
-		
 	</typeAliases>
 </configuration>
