@@ -21,7 +21,7 @@ public class ItemController {
 	
 	@GetMapping("/list")
 	public String showList(Criteria cri, Model model){
-		List<ItemVO> itemList = itemService.getList();
+		List<ItemVO> itemList = itemService.getListWithPaging(cri);
 		model.addAttribute("itemList", itemList);
 		System.out.println(itemList);
 		return "listTest";

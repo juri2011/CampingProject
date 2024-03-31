@@ -13,4 +13,9 @@
 		<include refid="cols" />
 		from item
 	</select>
+	
+	<select id="selectListWithPaging" parameterType="criteria" resultType="itemVO">
+		select item_no, item_name, price from item i
+		limit #{startNum}, #{amount}
+	</select>
 </mapper>

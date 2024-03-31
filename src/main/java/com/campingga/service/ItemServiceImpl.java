@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.campingga.domain.Criteria;
 import com.campingga.domain.ItemVO;
 import com.campingga.mapper.ItemMapper;
 
@@ -17,6 +18,11 @@ public class ItemServiceImpl implements ItemService{
 	@Override
 	public List<ItemVO> getList() {
 		return itemMapper.selectList();
+	}
+
+	@Override
+	public List<ItemVO> getListWithPaging(Criteria cri) {
+		return itemMapper.selectListWithPaging(cri);
 	}
 
 }

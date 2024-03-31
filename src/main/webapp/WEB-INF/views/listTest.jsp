@@ -32,6 +32,7 @@
 		<option value="fireplace">난로</option>
 	</select>
 	<table>
+	
 		<tr>
 		<c:forEach var="item" items="${itemList}">
 			<td>

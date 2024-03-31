@@ -8,10 +8,10 @@ import lombok.ToString;
 @Setter
 @ToString
 public class Criteria {
-	private int pageNum;
-	private int amount;
-	
-	private String category;
+	private int pageNum; //현재 페이지 번호
+	private int amount; //한 페이지 출력될 양
+	private int startNum; // 페이지 첫 게시물 번호
+	private String category; //카테고리
 	
 	public Criteria() {
 		this(1, 12);
@@ -19,5 +19,6 @@ public class Criteria {
 	public Criteria(int pageNum, int amount) {
 		this.pageNum = pageNum;
 		this.amount = amount;
+		this.startNum = (pageNum-1) * amount;
 	}
 }

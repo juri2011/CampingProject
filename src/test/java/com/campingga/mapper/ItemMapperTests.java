@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.campingga.domain.Criteria;
+
 import lombok.extern.log4j.Log4j;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -18,5 +20,12 @@ public class ItemMapperTests {
 	@Test
 	public void testGetList() {
 		log.info(itemMapper.selectList());
+	}
+	
+	//페이징 상품 출력 테스트
+	@Test
+	public void testGetListWithPaging() {
+		Criteria cri = new Criteria(2, 12);
+		log.info(itemMapper.selectListWithPaging(cri));
 	}
 }
