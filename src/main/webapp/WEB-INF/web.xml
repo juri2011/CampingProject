@@ -4,6 +4,12 @@
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
 	version="3.1">
 
+
+	<!-- Creates the Spring Container shared by all Servlets and Filters -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
 	<!-- The definition of the Root Spring Container shared by all Servlets 
 		and Filters -->
 	<context-param>
@@ -14,10 +20,6 @@
 		</param-value>
 	</context-param>
 
-	<!-- Creates the Spring Container shared by all Servlets and Filters -->
-	<listener>
-		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-	</listener>
 
 	<!-- Processes application requests -->
 	<servlet>
@@ -30,9 +32,9 @@
 		<load-on-startup>1</load-on-startup>
 
 		<multipart-config>
-  <!-- 			<location>C:\\upload\\temp</location>  나중에 우분투 내에서의 폴더를 설정할 예정 -->
+			<!-- <location>C:\\upload\\temp</location> 나중에 우분투 내에서의 폴더를 설정할 예정 -->
 			<location>/upload</location>    <!-- 나중에 우분투 내에서의 폴더를 설정할 예정 -->
-			
+
 			<max-file-size>20971520</max-file-size> <!-- 1MB * 20 -->
 			<max-request-size>41943040</max-request-size> <!-- 40MB -->
 			<file-size-threshold>20971520</file-size-threshold> <!-- 20MB -->
@@ -63,14 +65,7 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 
-<!--  
- 	<filter>
-		<filter-name>springSecurityFilterChain</filter-name>
-		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-	</filter>
-	<filter-mapping>
-		<filter-name>springSecurityFilterChain</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
- -->
+	<!-- <filter> <filter-name>springSecurityFilterChain</filter-name> <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class> 
+		</filter> <filter-mapping> <filter-name>springSecurityFilterChain</filter-name> 
+		<url-pattern>/*</url-pattern> </filter-mapping> -->
 </web-app>
