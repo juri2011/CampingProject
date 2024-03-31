@@ -17,6 +17,7 @@
 </head>
 <body>
 <div id="wrap">
+	<!-- 검색기준 form 태그 -->
 	<form id="actionForm" action="/item/list" method="get">
 		<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum}" />
 		<input type="hidden" name="amount" value="${pageMaker.cri.amount}" />
@@ -77,19 +78,24 @@
 	       </c:if>
 	   </c:forEach>
 	</table>
+	
+	<!-- 페이지네이션 처리 -->
 	<div class='pull-right'>
 		<ul class="pagination">
+			<!-- 이전 블록이 있다면 : prev 표시(이전 블록의 마지막 페이지로 이동) -->
 			<c:if test="${pageMaker.prev}">
-				<!-- bootstrap 버전이 달라서 교재와 class가 다를 수 있음 -->
 				<li class="page-item"><a class="page-link" href="${pageMaker.startPage-1}">Previous</a></li>
 			</c:if>
 			<c:forEach begin="${pageMaker.startPage}"
 						end="${pageMaker.endPage}"
 						var="num">
+				<!-- 현재 페이지 번호에는 active 클래스 부여 -->
 				<li class="page-item ${pageMaker.cri.pageNum == num ? 'active':'' }">
+					<!-- href는 preventDefault로 실제 작동되지 않고 속성값을 이용하여 form 태그의 input 값으로 삽입 -->
 					<a class="page-link" href="${num}">${num}</a>
 				</li>
 			</c:forEach>
+			<!-- 다음 블록이 있다면 : next 표시(이전 블록의 첫번째 페이지로 이동) -->
 			<c:if test="${pageMaker.next}">
 				<li class="page-item"><a class="page-link" href="${pageMaker.endPage+1}">Next</a></li>
 			</c:if>
@@ -112,10 +118,14 @@
 		actionForm.attr('action','/item/list');
 		actionForm.submit();
 	});
+	//카테고리 선택 시 카테고리로 리스트 출력
 	$("#category").on("change", function(e){
+		//select에서 선택된 값이 들어옴
 		const selectedCategory = $(this).val();
-		console.log(selectedCategory);
+		
+		//카테고리 input에 선택한 항목 들어감
 		actionForm.find("input[name='category']").val(selectedCategory);
+		//항상 첫번째 페이지로 이동
 		actionForm.find("input[name='pageNum']").val(1);
 		actionForm.submit();
 	});
