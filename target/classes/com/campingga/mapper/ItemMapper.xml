@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.campingga.mapper.ItemMapper">
+<sql id="cols">
+	item_no, item_name, content, price, regdate, category, status 
+</sql>
+	<select id="selectList" resultType="itemVO">
+		select 
+		<include refid="cols" />
+		from item
+	</select>
+</mapper>
