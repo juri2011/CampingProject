@@ -18,4 +18,8 @@
 		select item_no, item_name, price from item i
 		limit #{startNum}, #{amount}
 	</select>
+	
+	<select id="selectCount" resultType="int">
+		select count(*) from item
+	</select>
 </mapper>

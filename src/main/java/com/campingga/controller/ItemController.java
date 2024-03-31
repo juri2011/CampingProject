@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.campingga.domain.Criteria;
 import com.campingga.domain.ItemVO;
+import com.campingga.domain.PageDTO;
 import com.campingga.service.ItemService;
 
 @Controller
@@ -24,6 +25,7 @@ public class ItemController {
 	public String showList(Criteria cri, Model model){
 		List<ItemVO> itemList = itemService.getListWithPaging(cri);
 		model.addAttribute("itemList", itemList);
+		model.addAttribute("pageMaker", new PageDTO(cri,itemService.getTotal(cri)));
 		System.out.println(itemList);
 		return "listTest";
 	}

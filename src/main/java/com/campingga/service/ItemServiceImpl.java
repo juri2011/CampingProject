@@ -25,4 +25,9 @@ public class ItemServiceImpl implements ItemService{
 		return itemMapper.selectListWithPaging(cri);
 	}
 
+	@Override
+	public int getTotal() {
+		return itemMapper.selectTotal();
+	}
+
 }

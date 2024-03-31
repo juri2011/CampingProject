@@ -11,4 +11,6 @@ public interface ItemMapper {
 
 	List<ItemVO> selectListWithPaging(Criteria cri);
 
+	int selectTotal();
+
 }

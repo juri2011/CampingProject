@@ -13,6 +13,10 @@
 </style>
 </head>
 <body>
+<div id="wrap">
+	<form action="/item/list" method="get">
+		<input type="hidden" name="pageNum" value="${}" />
+	</form>
 	<!-- 로고 -->
 	<a href="${pageContext.request.contextPath}/home">
 	    <img src="${pageContext.request.contextPath}/resources/images/캠핑가로고1.png" alt="Logo">
@@ -53,5 +57,7 @@
 	<table border="1" width="90%">
 		<td>이전 1 2 3 4 5 6 7 8 9 10 다음</td>
 	</table>
+</div>
+
 </body>
 </html>
