@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/editMember.css">
 <style>
 	td{border: 1px solid black; width: 300px; height: 300px;}
-	.item-img{width:100px; height: 100px; background-color: yellow;}
+	.item-img{display: block; width:200px; height: 200px; background-color: yellow;}
 </style>
 </head>
 <body>
@@ -32,17 +32,24 @@
 		<option value="fireplace">난로</option>
 	</select>
 	<table>
-	
-		<tr>
-		<c:forEach var="item" items="${itemList}">
-			<td>
-				<div class="item-img">item_img: (추가예정)</div>
-				<p><c:out value="${item.item_name}" /></p>
-				<p><c:out value="${item.price}" /></p>			
-			</td>
-		</c:forEach>
-		</tr>
-	</table>
+	<!-- varStatus="loop"는 for문에서 i에 해당 -->
+    <c:forEach var="item" items="${itemList}" varStatus="loop">
+    	<!-- 새로운 행이 시작되었다면 tr태그 생성 -->
+        <c:if test="${loop.index % 4 == 0}">
+            <tr>
+        </c:if>
+        <!-- 데이터 들어가는 부분 -->
+        <td>
+            <a class="item-img" href="#">item_img: (추가예정)</a>
+            <p><c:out value="${item.item_name}" /></p>
+            <p><c:out value="${item.price}" /></p>
+        </td>
+        <!-- 행이 끝났거나 마지막 데이터라면 tr태그 close -->
+        <c:if test="${(loop.index + 1) % 4 == 0 || loop.last}">
+            </tr>
+        </c:if>
+    </c:forEach>
+</table>
 	<table border="1" width="90%">
 		<td>이전 1 2 3 4 5 6 7 8 9 10 다음</td>
 	</table>

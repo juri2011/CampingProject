@@ -19,6 +19,7 @@ public class ItemController {
 	@Autowired
 	private ItemService itemService;
 	
+	//페이징으로 아이템 출력(기본값 1페이지)
 	@GetMapping("/list")
 	public String showList(Criteria cri, Model model){
 		List<ItemVO> itemList = itemService.getListWithPaging(cri);
