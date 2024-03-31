@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/editMember.css">
 <style>
 	td{border: 1px solid black; width: 300px; height: 300px;}
+	.item-img{width:100px; height: 100px; background-color: yellow;}
 </style>
 </head>
 <body>
@@ -32,32 +33,13 @@
 	</select>
 	<table>
 		<tr>
-			<td><img src="" alt="" />상품이름<br />가격</td>
-			<td>2</td>
-			<td>3</td>
-			<td>4</td>
-			<td>5</td>
-		</tr>
-		<tr>
-			<td>6</td>
-			<td>7</td>
-			<td>8</td>
-			<td>9</td>
-			<td>10</td>
-		</tr>
-		<tr>
-			<td>11</td>
-			<td>12</td>
-			<td>13</td>
-			<td>14</td>
-			<td>15</td>
-		</tr>
-		<tr>
-			<td>16</td>
-			<td>17</td>
-			<td>18</td>
-			<td>19</td>
-			<td>20</td>
+		<c:forEach var="item" items="${itemList}">
+			<td>
+				<div class="item-img">item_img: (추가예정)</div>
+				<p><c:out value="${item.item_name}" /></p>
+				<p><c:out value="${item.price}" /></p>			
+			</td>
+		</c:forEach>
 		</tr>
 	</table>
 	<table border="1" width="90%">

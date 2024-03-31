@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.campingga.domain.Criteria;
 import com.campingga.domain.ItemVO;
 import com.campingga.service.ItemService;
 
@@ -19,8 +20,10 @@ public class ItemController {
 	private ItemService itemService;
 	
 	@GetMapping("/list")
-	public String showList(Model model){
+	public String showList(Criteria cri, Model model){
 		List<ItemVO> itemList = itemService.getList();
+		model.addAttribute("itemList", itemList);
+		System.out.println(itemList);
 		return "listTest";
 	}
 }
