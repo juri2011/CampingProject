@@ -15,24 +15,34 @@
 	</select>
 	
 	<select id="selectListWithPaging" parameterType="criteria" resultType="itemVO">
-		<![CDATA[
-			select item_no, item_name, price
+		
+			select item_no, item_name, price, category
 			from (
 				select
 					item_no,
 					item_name,
 					price,
+					category,
 					ROW_NUMBER() over(ORDER BY regdate desc) AS rownum
 				from item i
+				<if test='category != null and category != ""'>
+					where category like #{category}
+				</if>
 			) i
-			WHERE rownum > (#{pageNum}-1) * #{amount} and
+			WHERE
+		<![CDATA[
+			 rownum > (#{pageNum}-1) * #{amount} and
 				  rownum <= #{amount} * #{pageNum}
-			order by rownum
 		]]>
+			order by rownum
 		
 	</select>
 	
-	<select id="selectTotalCount" resultType="int">
+	<select id="selectTotalCount" parameterType="criteria" resultType="int">
 		select count(*) from item
+		<if test='category != null and category != ""'>
+			where category like #{category}
+		</if>
+		
 	</select>
 </mapper>

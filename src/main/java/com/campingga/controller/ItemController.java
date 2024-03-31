@@ -27,7 +27,7 @@ public class ItemController {
 		System.out.println(cri);
 		List<ItemVO> itemList = itemService.getListWithPaging(cri);
 		model.addAttribute("itemList", itemList);
-		model.addAttribute("pageMaker", new PageDTO(cri,itemService.getTotalCount()));
+		model.addAttribute("pageMaker", new PageDTO(cri,itemService.getTotalCount(cri)));
 		System.out.println(itemList);
 		return "listTest";
 	}

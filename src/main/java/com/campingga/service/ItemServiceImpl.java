@@ -26,8 +26,8 @@ public class ItemServiceImpl implements ItemService{
 	}
 
 	@Override
-	public int getTotalCount() {
-		return itemMapper.selectTotalCount();
+	public int getTotalCount(Criteria cri) {
+		return itemMapper.selectTotalCount(cri);
 	}
 
 }

@@ -32,6 +32,8 @@ public class ItemMapperTests {
 	//상품 총 개수 테스트
 	@Test
 	public void testGetTotalCount() {
-		log.info(itemMapper.selectTotalCount());
+		Criteria cri = new Criteria(1, 12);
+		//cri.setCategory("텐트");
+		log.info(itemMapper.selectTotalCount(cri));
 	}
 }

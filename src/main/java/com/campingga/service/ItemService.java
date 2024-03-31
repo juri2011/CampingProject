@@ -15,5 +15,5 @@ public interface ItemService {
 	List<ItemVO> getListWithPaging(Criteria cri);
 	
 	//상품 전체 개수
-	int getTotalCount();
+	int getTotalCount(Criteria cri);
 }
