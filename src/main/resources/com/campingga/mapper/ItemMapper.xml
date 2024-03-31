@@ -15,11 +15,24 @@
 	</select>
 	
 	<select id="selectListWithPaging" parameterType="criteria" resultType="itemVO">
-		select item_no, item_name, price from item i
-		limit #{startNum}, #{amount}
+		<![CDATA[
+			select item_no, item_name, price
+			from (
+				select
+					item_no,
+					item_name,
+					price,
+					ROW_NUMBER() over(ORDER BY regdate desc) AS rownum
+				from item i
+			) i
+			WHERE rownum > (#{pageNum}-1) * #{amount} and
+				  rownum <= #{amount} * #{pageNum}
+			order by rownum
+		]]>
+		
 	</select>
 	
-	<select id="selectCount" resultType="int">
+	<select id="selectTotalCount" resultType="int">
 		select count(*) from item
 	</select>
 </mapper>

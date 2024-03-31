@@ -7,6 +7,9 @@
 <meta charset="UTF-8">
 <title>List</title>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/editMember.css">
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<!-- 임시 스타일 -->
 <style>
 	td{border: 1px solid black; width: 300px; height: 300px;}
 	.item-img{display: block; width:200px; height: 200px; background-color: yellow;}
@@ -14,8 +17,10 @@
 </head>
 <body>
 <div id="wrap">
-	<form action="/item/list" method="get">
-		<input type="hidden" name="pageNum" value="${}" />
+	<form id="actionForm" action="/item/list" method="get">
+		<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum}" />
+		<input type="hidden" name="amount" value="${pageMaker.cri.amount}" />
+		<input type="hidden" name="category" value='<c:out value="${pageMaker.cri.category}"/>'/>
 	</form>
 	<!-- 로고 -->
 	<a href="${pageContext.request.contextPath}/home">
@@ -37,27 +42,57 @@
 	</select>
 	<table>
 	<!-- varStatus="loop"는 for문에서 i에 해당 -->
-    <c:forEach var="item" items="${itemList}" varStatus="loop">
-    	<!-- 새로운 행이 시작되었다면 tr태그 생성 -->
-        <c:if test="${loop.index % 4 == 0}">
-            <tr>
-        </c:if>
-        <!-- 데이터 들어가는 부분 -->
-        <td>
-            <a class="item-img" href="#">item_img: (추가예정)</a>
-            <p><c:out value="${item.item_name}" /></p>
-            <p><c:out value="${item.price}" /></p>
-        </td>
-        <!-- 행이 끝났거나 마지막 데이터라면 tr태그 close -->
-        <c:if test="${(loop.index + 1) % 4 == 0 || loop.last}">
-            </tr>
-        </c:if>
-    </c:forEach>
-</table>
-	<table border="1" width="90%">
-		<td>이전 1 2 3 4 5 6 7 8 9 10 다음</td>
+	   <c:forEach var="item" items="${itemList}" varStatus="loop">
+	   	<!-- 새로운 행이 시작되었다면 tr태그 생성 -->
+	       <c:if test="${loop.index % 4 == 0}">
+	           <tr>
+	       </c:if>
+	       <!-- 데이터 들어가는 부분 -->
+	       <td>
+	           <a class="item-img" href="#">item_img: (추가예정)</a>
+	           <p><c:out value="${item.item_name}" /></p>
+	           <p><c:out value="${item.price}" /></p>
+	       </td>
+	       <!-- 행이 끝났거나 마지막 데이터라면 tr태그 close -->
+	       <c:if test="${(loop.index + 1) % 4 == 0 || loop.last}">
+	           </tr>
+	       </c:if>
+	   </c:forEach>
 	</table>
+	<div class='pull-right'>
+		<ul class="pagination">
+			<c:if test="${pageMaker.prev}">
+				<!-- bootstrap 버전이 달라서 교재와 class가 다를 수 있음 -->
+				<li class="page-item"><a class="page-link" href="${pageMaker.startPage-1}">Previous</a></li>
+			</c:if>
+			<c:forEach begin="${pageMaker.startPage}"
+						end="${pageMaker.endPage}"
+						var="num">
+				<li class="page-item ${pageMaker.cri.pageNum == num ? 'active':'' }">
+					<a class="page-link" href="${num}">${num}</a>
+				</li>
+			</c:forEach>
+			<c:if test="${pageMaker.next}">
+				<li class="page-item"><a class="page-link" href="${pageMaker.endPage+1}">Next</a></li>
+			</c:if>
+		</ul>
+	</div>
 </div>
-
 </body>
+<script>
+	var actionForm = $('#actionForm');
+	//페이지네이션
+	$(".page-link").on("click",function(e){
+		e.preventDefault();
+		//$("input[name='bno']").remove();
+		//href는 preventDefault에 의해 실제로 작동하지 않고 속성값이 form으로 이용됨
+		var targetPage = $(this).attr('href');
+		console.log(targetPage);
+		
+		//pageNum에 href로 들어간 속성값이 들어간다.(페이지 넘버) 
+		actionForm.find("input[name='pageNum']").val(targetPage);
+		actionForm.attr('action','/item/list');
+		actionForm.submit();
+	});
+</script>
 </html>

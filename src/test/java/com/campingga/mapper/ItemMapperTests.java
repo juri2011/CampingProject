@@ -25,7 +25,13 @@ public class ItemMapperTests {
 	//페이징 상품 출력 테스트
 	@Test
 	public void testGetListWithPaging() {
-		Criteria cri = new Criteria(2, 12);
+		Criteria cri = new Criteria(1, 12);
 		log.info(itemMapper.selectListWithPaging(cri));
+	}
+	
+	//상품 총 개수 테스트
+	@Test
+	public void testGetTotalCount() {
+		log.info(itemMapper.selectTotalCount());
 	}
 }
