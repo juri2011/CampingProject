@@ -3,13 +3,7 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.campingga.mapper.MemberMapper">
-<<<<<<< Updated upstream
-    <insert id="memberJoin" parameterType="com.campingga.domain.MemberVO">
-        INSERT INTO member (mem_id, pwd, name, birth, phone, gender, email, userAddr, userDaddr)
-        VALUES (#{mem_id}, #{pwd}, #{name}, #{birth}, #{phone}, #{gender}, #{email}, #{userAddr}, #{userDaddr})
-    </insert>
-</mapper>
-=======
+    
     <!-- 회원가입 -->
     <insert id="memberJoin" parameterType="com.campingga.domain.MemberVO">
         INSERT INTO member (mem_id, pwd, name, birth, phone, gender, email, userStnum, userAddr, userDaddr)
@@ -23,6 +17,3 @@
   	
   	</select>
 </mapper>
-
-	
->>>>>>> Stashed changes

@@ -5,11 +5,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-<<<<<<< Updated upstream
-=======
+
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
->>>>>>> Stashed changes
 
 import com.campingga.domain.MemberVO;
 import com.campingga.service.MemberService;
@@ -46,9 +44,6 @@ public class MemberController {
 			return "redirect:/main";
 			
 		}
-	
-<<<<<<< Updated upstream
-=======
 		// 아이디 중복 검사
 		@PostMapping("/memberIdChk")
 		@ResponseBody
@@ -71,7 +66,6 @@ public class MemberController {
 			}	
 		} // memberIdChkPOST() 종료	
 	
->>>>>>> Stashed changes
 	//로그인 페이지 이동
 	@GetMapping("/login")
 	public void joinGET() {
