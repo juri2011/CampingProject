@@ -13,4 +13,6 @@ public interface ItemMapper {
 
 	int selectTotalCount(Criteria cri);
 
+	ItemVO selectOneItem(int item_no);
+
 }

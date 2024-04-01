@@ -16,4 +16,7 @@ public interface ItemService {
 	
 	//상품 전체 개수
 	int getTotalCount(Criteria cri);
+
+	//상품 가져오기
+	ItemVO get(int item_no);
 }
