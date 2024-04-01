@@ -2,5 +2,8 @@
     pageEncoding="UTF-8"%>
 
 <%
-	response.sendRedirect(request.getContextPath()  + "/home");
+	/* response.sendRedirect(request.getContextPath()  + "/home");
+		/home에서 /main으로 변겅!!
+	*/
+	response.sendRedirect(request.getContextPath()  + "/main");
 %>
