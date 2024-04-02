@@ -43,7 +43,7 @@ public class ItemController {
 	public void get(@RequestParam("item_no") int item_no, @ModelAttribute("cri") Criteria cri, Model model) {
 	    
 	    log.info("/get or /modify");
-	    model.addAttribute("item_no",itemService.get(item_no));
+	    model.addAttribute("item",itemService.get(item_no));
 	    model.addAttribute("cri",cri);
 	  }
 }

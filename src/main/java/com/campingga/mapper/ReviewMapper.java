@@ -19,4 +19,7 @@ public interface ReviewMapper {
   //리뷰 전체 갯수
   public int selectCountByItemNo(int item_no);
   
+  //리뷰 등록
+  public int insertReview(ReviewVO vo);
+  
 }

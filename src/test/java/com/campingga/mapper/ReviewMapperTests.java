@@ -28,12 +28,24 @@ public class ReviewMapperTests {
 	
 	@Test
 	public void getReviewListWithPagingTest() {
-	  Criteria cri = new Criteria(1, 3); //페이지, 페이지당 게시글 수
+	  Criteria cri = new Criteria(1, 6); //페이지, 페이지당 게시글 수
 	  int total = reviewMapper.selectCountByItemNo(1); //리스트를 가져올 리뷰 번호
 	  log.info(total);
 	  List<ReviewVO> reviewList = reviewMapper.selectReviewListWithPaging(cri,1,total); //페이징, 상품번호, 총상품수
 	  
 	  reviewList.forEach(review -> log.info(review));
 	  
+	}
+	
+	//테스트
+	@Test
+	public void insertReviewTest() {
+		ReviewVO vo = new ReviewVO();
+		vo.setContent("내용~!");
+		vo.setItem_no(1);
+		vo.setWriter("user003");
+		vo.setScore(4);
+		
+		reviewMapper.insertReview(vo);
 	}
 }

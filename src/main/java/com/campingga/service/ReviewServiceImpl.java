@@ -1,5 +1,7 @@
 package com.campingga.service;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,5 +31,15 @@ public class ReviewServiceImpl implements ReviewService{
   		return new ReviewPageDTO(
   				reviewMapper.selectReviewListWithPaging(cri, item_no, total),total);
 }
+
+	@Override
+	public int register(ReviewVO vo) {
+		//유효성검사
+		if(vo.getWriter().isBlank() || vo.getContent().isBlank() || vo.getScore()>5 ||
+				vo.getScore()<1) {
+			return 0;
+		}
+		return reviewMapper.insertReview(vo);
+	}
 
 }

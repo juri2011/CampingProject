@@ -14,7 +14,7 @@
 	<select id="selectReviewListWithPaging" resultType="reviewVO">
 		select * from (
 			select rev_no, i.item_no, concat(m.name,'(',m.mem_id ,')') as 'writer', r.content, score, r.regdate,
-				ROW_NUMBER() over(ORDER BY r.regdate desc) AS rownum
+				ROW_NUMBER() over(ORDER BY r.regdate) AS rownum
 			from review r
 			inner join item i on r.item_no = i.item_no
 			inner join member m on r.writer = m.mem_id
@@ -31,4 +31,9 @@
 		select count(*) from review
 		where item_no = #{item_no}
 	</select>
+	
+	<insert id="insertReview" parameterType="reviewVO">
+		insert into review(item_no, writer, content, score) values
+		(#{item_no}, #{writer}, #{content}, #{score})
+	</insert>
 </mapper>
