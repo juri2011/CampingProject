@@ -13,5 +13,6 @@
 		<typeAlias type="com.campingga.domain.MemberVO" alias="MemberVO"></typeAlias>
 		<typeAlias type="com.campingga.domain.OrderListVO" alias="OrderListVO"></typeAlias>
 		<typeAlias type="com.campingga.domain.ReviewVO" alias="ReviewVO"></typeAlias>
+		<typeAlias type="com.campingga.domain.ReviewDTO" alias="ReviewDTO"></typeAlias>
 	</typeAliases>
 </configuration>
