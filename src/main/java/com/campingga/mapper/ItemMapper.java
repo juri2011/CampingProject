@@ -7,12 +7,12 @@ import com.campingga.domain.ItemVO;
 
 public interface ItemMapper {
 
-	List<ItemVO> selectList();
+	public List<ItemVO> selectList();
 
-	List<ItemVO> selectListWithPaging(Criteria cri);
+	public List<ItemVO> selectListWithPaging(Criteria cri);
 
-	int selectTotalCount(Criteria cri);
+	public int selectTotalCount(Criteria cri);
 
-	ItemVO selectOneItem(int item_no);
+	public ItemVO selectOneItem(int item_no);
 
 }
