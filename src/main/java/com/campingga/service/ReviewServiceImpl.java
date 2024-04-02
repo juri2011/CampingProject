@@ -5,7 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.campingga.domain.ReviewDTO;
+import com.campingga.domain.Criteria;
+import com.campingga.domain.ReviewPageDTO;
 import com.campingga.domain.ReviewVO;
 import com.campingga.mapper.ReviewMapper;
 
@@ -22,8 +23,10 @@ public class ReviewServiceImpl implements ReviewService{
   }
 
   	@Override
-	public List<ReviewVO> getReviewListWithPaging(ReviewDTO reviewDTO) {
-		return reviewMapper.selectReviewListWithPaging(reviewDTO);
+	public ReviewPageDTO getReviewListWithPaging(Criteria cri, int item_no) {
+  		int total = reviewMapper.selectCountByItemNo(item_no);
+  		return new ReviewPageDTO(
+  				reviewMapper.selectReviewListWithPaging(cri, item_no, total),total);
 }
 
 }

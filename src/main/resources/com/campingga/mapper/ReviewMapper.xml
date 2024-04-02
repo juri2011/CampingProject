@@ -10,19 +10,25 @@
 		select * from review
 	</select>
 	
-	<select id="selectReviewListWithPaging" parameterType="reviewDTO" resultType="reviewVO">
+	<!-- 페이징 처리로 해당 상품의 리뷰 리스트 가져오기 -->
+	<select id="selectReviewListWithPaging" resultType="reviewVO">
 		select * from (
 			select rev_no, i.item_no, concat(m.name,'(',m.mem_id ,')') as 'writer', r.content, score, r.regdate,
-				ROW_NUMBER() over(ORDER BY r.regdate) AS rownum
+				ROW_NUMBER() over(ORDER BY r.regdate desc) AS rownum
 			from review r
 			inner join item i on r.item_no = i.item_no
 			inner join member m on r.writer = m.mem_id
 			where i.item_no = #{item_no}
 		) rv
 		<![CDATA[
-			where rownum > (#{reviewPageNum}-1) * #{reviewAmount} and
-				  rownum <= #{reviewAmount} * #{reviewPageNum}
+			where rownum <= ( #{total} - ( #{cri.amount} * (#{cri.pageNum} - 1 ) ) )
 		]]>
 		order by rownum desc
+		limit #{cri.amount}
+	</select>
+	
+	<select id="selectCountByItemNo" resultType="int">
+		select count(*) from review
+		where item_no = #{item_no}
 	</select>
 </mapper>

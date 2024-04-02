@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.campingga.domain.ReviewDTO;
+import com.campingga.domain.Criteria;
 import com.campingga.domain.ReviewVO;
 
 import lombok.extern.log4j.Log4j;
@@ -28,9 +28,10 @@ public class ReviewMapperTests {
 	
 	@Test
 	public void getReviewListWithPagingTest() {
-	  ReviewDTO reviewDTO = new ReviewDTO();
-	  reviewDTO.setItem_no(2);
-	  List<ReviewVO> reviewList = reviewMapper.selectReviewListWithPaging(reviewDTO);
+	  Criteria cri = new Criteria(1, 3); //페이지, 페이지당 게시글 수
+	  int total = reviewMapper.selectCountByItemNo(1); //리스트를 가져올 리뷰 번호
+	  log.info(total);
+	  List<ReviewVO> reviewList = reviewMapper.selectReviewListWithPaging(cri,1,total); //페이징, 상품번호, 총상품수
 	  
 	  reviewList.forEach(review -> log.info(review));
 	  
