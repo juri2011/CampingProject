@@ -24,6 +24,7 @@ public class ReviewServiceImpl implements ReviewService{
 
   	@Override
 	public ReviewPageDTO getReviewListWithPaging(Criteria cri, int item_no) {
+  		//total을 ReviewPageDTO로 넘겨줘야 하기 때문에 두 개의 쿼리를 분리해서 작성해야 한다.
   		int total = reviewMapper.selectCountByItemNo(item_no);
   		return new ReviewPageDTO(
   				reviewMapper.selectReviewListWithPaging(cri, item_no, total),total);
