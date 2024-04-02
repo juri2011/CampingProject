@@ -114,7 +114,13 @@
     </style>
 </head>
 <body>
-<p><a href="/main">홈</a> > <a href="/item/list">전체상품</a> > <a href="/item/list?pageNum=1&amount=12&category=<c:out value="${item.category}"/>"><c:out value="${item.category}"/></a></p>
+<p><a href="/main">홈</a> &gt; <a href="/item/list">전체상품</a> &gt; <a href="/item/list?pageNum=1&amount=12&category=<c:out value="${item.category}"/>"><c:out value="${item.category}"/></a></p>
+    <form name="actionForm" action="item/list" method="get">
+    	<input type="hidden" name="pageNum" value="<c:out value='${cri.pageNum}' />" />
+    	<input type="hidden" name="amount" value="<c:out value='${cri.amount}' />" />
+    	<input type="hidden" name="item_no" value="<c:out value='${item_no}' />" />
+    	<input type="hidden" name="category" value="<c:out value='${cri.category}' />" />
+    </form>
     <div class="container">
     	
         <div class="product-image">
