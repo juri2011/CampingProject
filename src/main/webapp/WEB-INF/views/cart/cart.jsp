@@ -50,7 +50,6 @@
 	}
 	
 	function showList(){
-		console.log(cartService);
 		cartService.getList(member_id, function(cartCnt, list){
 			console.log("cartCnt: "+cartCnt);
 			console.log("list: "+list);
@@ -63,8 +62,9 @@
 				return;
 			}
 			for(let i=0, len=list.length || 0; i<len; i++){
-				str += "<tr class='cartItem'>";
-				str += "	<td><img src='"+list[i].item_img+"' alt='"+list[i].item_name+"'></td>"
+				str += "<tr class='cartItem' id='cart-"+list[i].cart_no+"'>";
+				//img src에 list[i].item_img를 넣으려니 405에러 발생(이미지가 아직 없기 때문에)
+				str += "	<td><img src='' alt='"+list[i].item_name+"'></td>";
 				str += "	<td>"+list[i].item_name+"</td>";
 				str += "	<td>"+list[i].price+"</td>";
 				str += "	<td> <input type='number' name='quantity' ";
@@ -106,10 +106,13 @@
 					return;
 				}
 				for(let i=0, len=list.length || 0; i<len; i++){
-					const cart = {cart_no: list[i].cart_no, quantity: list[i].quantity};
-					cartService.update(cart, function(result){
-						alert(result);
-					});
+					const quantity = $('#cart-'+list[i].cart_no).find("input[name='quantity']").val();
+						const cart = {cart_no: list[i].cart_no,
+								quantity: quantity};
+						cartService.update(cart, function(result){
+							console.log('cart_no: ',list[i].cart_no , result);
+							//purchase로 이동
+						});
 				}
 			});//get
 		})
