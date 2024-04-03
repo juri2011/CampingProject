@@ -41,4 +41,10 @@ public class ReviewServiceTests {
 	  log.info("---------------------결과 : "+result);
 	  testGetReviewListWithPaging();
 	}
+	
+	@Test
+	public void removeTest() {
+	  int result = reviewService.remove(13);
+	  log.info("======================"+result);
+	}
 }
