@@ -34,8 +34,25 @@ const cartService = (function(){
 		});
     }
 
+    function update(cart, callback, error){
+		console.log("cart_no: "+cart.cart_no);
+		$.ajax({
+			type: 'put',
+			url:'/cart/'+cart.cart_no,
+			data: JSON.stringify(cart),
+			contentType: "application/json; charset=utf-8",
+			success: function(result, status, xhr){
+				if(callback) callback(result);
+			},
+			error: function(xhr, status, er){
+				if(error) error(er);
+			}
+		});
+	}
+
     return{
         remove: remove,
-        getList: getList
+        getList: getList,
+        update: update
     };
 })();

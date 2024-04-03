@@ -32,4 +32,15 @@ public class CartServiceImpl implements CartService{
 		return new CartDTO(cartMapper.selectCartItemList(member_id), total);
 	}
 
+	//장바구니 전부 삭제
+	@Override
+	public int removeAllCart(String member_id) {
+		return cartMapper.deleteAllCart(member_id);
+	}
+
+	@Override
+	public int modify(CartVO vo) {
+		return cartMapper.updateCart(vo);
+	}
+
 }

@@ -25,4 +25,12 @@
 	<delete id="deleteCartItem" parameterType="int">
 		delete from cart where cart_no = #{cart_no}
 	</delete>
+	
+	<delete id="deleteAllCart" parameterType="String">
+		delete from cart where member_id = #{member_id}
+	</delete>
+	
+	<update id="updateCart" parameterType="cartVO">
+		update cart set quantity = #{quantity} where cart_no = #{cart_no}
+	</update>
 </mapper>

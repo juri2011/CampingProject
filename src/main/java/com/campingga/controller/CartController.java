@@ -10,7 +10,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.campingga.domain.CartDTO;
@@ -54,5 +57,23 @@ public class CartController {
 		return cartService.removeCart(cart_no) == 1
 				? new ResponseEntity<>("success", HttpStatus.OK)
 				: new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	@DeleteMapping("/deleteAll/{member_id}")
+	public @ResponseBody String removeAllCart(@PathVariable String member_id){
+		log.info("remove all cart............. ");
+		
+		return cartService.removeAllCart(member_id) > 0
+				? "success" : "error";
+	}
+	
+	@RequestMapping(method = {RequestMethod.PUT, RequestMethod.PATCH}, value="/{cart_no}")
+	public @ResponseBody String updateCart(@PathVariable int cart_no, @RequestBody CartVO vo) {
+		vo.setCart_no(cart_no);
+		log.info("cart_no: " + cart_no);
+		log.info("modify: " + vo);
+		
+		return cartService.modify(vo) == 1
+				? "success" : "error";
 	}
 }

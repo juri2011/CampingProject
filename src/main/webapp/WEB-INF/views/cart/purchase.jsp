@@ -30,7 +30,7 @@
 				
 			</tbody>
 		</table>
-		<button id="purchase">구매</button>
+		<button>구매</button>
 		<button id="deleteAll">전체 삭제</button>
 </body>
 <script src="/resources/js/cart.js"></script>
@@ -39,6 +39,7 @@
 	const member_id = '<c:out value="${userId}"/>';
 	console.log(member_id);
 	const listTbody = $('#listTbody');
+	
 	
 	function cartDelete(cno){
 		const cart_no = cno;
@@ -95,24 +96,6 @@
 				});				
 			}
 		});// end of deleteAll
-		
-		$('#purchase').on('click', function(){
-			
-			cartService.getList(member_id, function(cartCnt, list){
-				console.log("cartCnt: "+cartCnt);
-				console.log("list: "+list);
-				
-				if(list == null || list.length == 0){
-					return;
-				}
-				for(let i=0, len=list.length || 0; i<len; i++){
-					const cart = {cart_no: list[i].cart_no, quantity: list[i].quantity};
-					cartService.update(cart, function(result){
-						alert(result);
-					});
-				}
-			});//get
-		})
 	});
 </script>
 </html>

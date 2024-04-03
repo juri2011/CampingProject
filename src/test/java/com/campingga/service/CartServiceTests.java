@@ -38,4 +38,13 @@ public class CartServiceTests {
 		CartDTO dto = cartService.getCartItemListWithCnt("user003");
 		log.info(dto);
 	}
+	
+	@Test
+	public void testModify() {
+		CartVO vo = new CartVO();
+		vo.setCart_no(3);
+		vo.setQuantity(5);
+		int result = cartService.modify(vo);
+		log.info(result);
+	}
 }

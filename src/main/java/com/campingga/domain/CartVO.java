@@ -5,7 +5,7 @@ import lombok.*;
 @Setter
 @ToString
 public class CartVO {
-	private String cart_no;
+	private int cart_no;
 	private String member_id;
 	private String item_img; //상품 이미지 경로
 	private String item_no;//상품번호

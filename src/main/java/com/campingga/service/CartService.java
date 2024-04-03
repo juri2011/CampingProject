@@ -15,4 +15,10 @@ public interface CartService {
 	//사용자 아이디로 장바구니 리스트와 갯수 가져오기
 	public CartDTO getCartItemListWithCnt(String member_id);
 
+	//장바구니 전부 삭제
+	public int removeAllCart(String member_id);
+
+	//장바구니 수정(수량)
+	public int modify(CartVO vo);
+
 }
