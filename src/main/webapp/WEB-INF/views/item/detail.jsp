@@ -240,6 +240,118 @@
 			});
 		};
 	}
+	
+	function showList(page){
+		reviewService.getList({item_no:item_no, page: page||1}, function(reviewCnt, list){
+			console.log("reviewCnt: "+reviewCnt);
+			console.log("list: "+list);
+			
+			//페이지 번호가 -1이면 마지막페이지를 호출
+			if(page == -1){
+				pageNum = Math.ceil(reviewCnt/5.0); //5개씩 한 페이지
+				showList(pageNum);
+				return;
+			}
+			let str = "";
+			//댓글이 없으면 댓글창 비우기
+			if(list == null || list.length == 0){
+				listTbody.html("");
+				
+				return;
+			}
+			for(let i=0, len=list.length || 0; i<len; i++){
+				str += "<tr><td>"+list[i].rownum+"</td>";
+				str += 		"<td>"+list[i].writer+"</td>";
+				str += 		"<td>"+list[i].content+"</td>";
+				str += 		"<td>"+list[i].score+"</td>";
+				str += 		"<td>"+reviewService.displayTime(list[i].regdate)+"</td>";
+				if(list[i].writerID === userID){
+					str += "<td><button class='review-update' onclick='reviewUpdate("+list[i].rev_no+")'>수정</button>";
+					str += "<button class='review-delete' onclick='reviewDelete("+list[i].rev_no+")'>삭제</button></td>";
+				}
+				
+				str += "</tr>";
+			}
+			
+			listTbody.html(str);
+			showReviewPage(reviewCnt);
+		});//end function
+	}//end showList
+	
+
+	
+	function showTabMenu(tab_id){
+		$('ul.tab-title li').removeClass('active');
+	    $('.tab-content div').removeClass('active');
+
+	    $("#myTabTitle"+tab_id).addClass('active');
+	    $("#myTabContent"+tab_id).addClass('active');
+	}
+	
+	function showReviewPage(reviewCnt){
+		let endNum = Math.ceil(pageNum/10.0) * 10; // 한 블록 끝페이지
+		const startNum = endNum - 9;// 한 블록 시작 페이지
+		
+		let prev = startNum != 1; //startNum이 1이면 prev없음, 그 외 존재
+		let next = false;
+		
+		if(endNum * 10 >= reviewCnt){//한 블록 끝페이지 마지막 게시물 번호가 실제 게시물 번호보다 크다면
+			endNum = Math.ceil(reviewCnt/5.0);//실제 마지막 게시물 번호로 맞춘다.
+		}
+		
+		if(endNum * 10 < reviewCnt){//마지막 블록이 아니라면 next 존재
+			next = true;
+		}
+		
+		console.log(startNum, endNum, prev, next);
+		
+		let str = "<ul class='pagination pull-right'>";
+		if(prev){//이전 블록이 있다면
+			str += "<li class='page-item'><a class='page-link' href='"+(startNum -1)+"'>Previous</a></li>"
+		}
+		
+		for(let i=startNum; i<=endNum; i++){
+			var active = pageNum == i? "page-active":"";
+			
+			//현재 페이지면 active 해제, 나머지 active
+			str+="<li class='page-item "+active+"'><a class='page-link' href='"+i+"'>"+i+"</a></li>";
+		}
+		if(next){//이전 블록이 있다면
+			str += "<li class='page-item'><a class='page-link' href='"+(endNum+1)+"'>Next</a></li>"
+		}
+		
+		str+="</ul>"
+		
+		console.log(str);
+		
+		reviewPageFooter.html(str);
+	}
+	reviewPageFooter.on("click","li a", function(e){
+		e.preventDefault();
+		console.log("page click");
+		var targetPageNum = $(this).attr("href");
+		console.log("targetPageNum: " + targetPageNum);
+		pageNum = targetPageNum;
+		showList(pageNum);
+	})
+	
+	
+	function addReview(){
+		const review = {
+			item_no: item_no,
+			writer: reviewWriter.val(),
+			content: reviewContent.val(),
+			score: reviewScore.val()
+		};
+		reviewService.add(review, function(result){
+			alert(result);
+			reviewScore.val(5);
+			reviewWriter.val('');
+			reviewContent.val('');
+			showList(1);
+			showTabMenu(2);
+		});
+	}
 	$(document).ready(function(){
 		
 			
@@ -261,114 +373,6 @@
 			const tab_id = $(this).attr('data-tab');
 			showTabMenu(tab_id);
 		});
-		
-		function showTabMenu(tab_id){
-			$('ul.tab-title li').removeClass('active');
-		    $('.tab-content div').removeClass('active');
-	
-		    $("#myTabTitle"+tab_id).addClass('active');
-		    $("#myTabContent"+tab_id).addClass('active');
-		}
-		
-		function showReviewPage(reviewCnt){
-			let endNum = Math.ceil(pageNum/10.0) * 10; // 한 블록 끝페이지
-			const startNum = endNum - 9;// 한 블록 시작 페이지
-			
-			let prev = startNum != 1; //startNum이 1이면 prev없음, 그 외 존재
-			let next = false;
-			
-			if(endNum * 10 >= reviewCnt){//한 블록 끝페이지 마지막 게시물 번호가 실제 게시물 번호보다 크다면
-				endNum = Math.ceil(reviewCnt/5.0);//실제 마지막 게시물 번호로 맞춘다.
-			}
-			
-			if(endNum * 10 < reviewCnt){//마지막 블록이 아니라면 next 존재
-				next = true;
-			}
-			
-			console.log(startNum, endNum, prev, next);
-			
-			let str = "<ul class='pagination pull-right'>";
-			if(prev){//이전 블록이 있다면
-				str += "<li class='page-item'><a class='page-link' href='"+(startNum -1)+"'>Previous</a></li>"
-			}
-			
-			for(let i=startNum; i<=endNum; i++){
-				var active = pageNum == i? "page-active":"";
-				
-				//현재 페이지면 active 해제, 나머지 active
-				str+="<li class='page-item "+active+"'><a class='page-link' href='"+i+"'>"+i+"</a></li>";
-			}
-			if(next){//이전 블록이 있다면
-				str += "<li class='page-item'><a class='page-link' href='"+(endNum+1)+"'>Next</a></li>"
-			}
-			
-			str+="</ul>"
-			
-			console.log(str);
-			
-			reviewPageFooter.html(str);
-		}
-		reviewPageFooter.on("click","li a", function(e){
-			e.preventDefault();
-			console.log("page click");
-			var targetPageNum = $(this).attr("href");
-			console.log("targetPageNum: " + targetPageNum);
-			pageNum = targetPageNum;
-			showList(pageNum);
-		})
-		
-		function showList(page){
-			reviewService.getList({item_no:item_no, page: page||1}, function(reviewCnt, list){
-				console.log("reviewCnt: "+reviewCnt);
-				console.log("list: "+list);
-				
-				//페이지 번호가 -1이면 마지막페이지를 호출
-				if(page == -1){
-					pageNum = Math.ceil(reviewCnt/5.0); //5개씩 한 페이지
-					showList(pageNum);
-					return;
-				}
-				let str = "";
-				//댓글이 없으면 댓글창 비우기
-				if(list == null || list.length == 0){
-					listTbody.html("");
-					
-					return;
-				}
-				for(let i=0, len=list.length || 0; i<len; i++){
-					str += "<tr><td>"+list[i].rownum+"</td>";
-					str += 		"<td>"+list[i].writer+"</td>";
-					str += 		"<td>"+list[i].content+"</td>";
-					str += 		"<td>"+list[i].score+"</td>";
-					str += 		"<td>"+reviewService.displayTime(list[i].regdate)+"</td>";
-					if(list[i].writerID === userID){
-						str += "<td><button class='review-update' onclick='reviewUpdate("+list[i].rev_no+")'>수정</button>";
-						str += "<button class='review-delete' onclick='reviewDelete("+list[i].rev_no+")'>삭제</button></td>";
-					}
-					
-					str += "</tr>";
-				}
-				
-				listTbody.html(str);
-				showReviewPage(reviewCnt);
-			});//end function
-		}//end showList
-		function addReview(){
-			const review = {
-				item_no: item_no,
-				writer: reviewWriter.val(),
-				content: reviewContent.val(),
-				score: reviewScore.val()
-			};
-			reviewService.add(review, function(result){
-				alert(result);
-				reviewScore.val(5);
-				reviewWriter.val('');
-				reviewContent.val('');
-				showList(1);
-				showTabMenu(2);
-			});
-		}
 		reviewForm.on('submit', function(e){
 			e.preventDefault();
 			//유효성 검사
