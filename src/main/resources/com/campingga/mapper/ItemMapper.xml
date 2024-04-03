@@ -50,4 +50,11 @@
 		</if>
 		
 	</select>
+	
+	<select id="selectOneItem" parameterType="int" resultType="itemVO">
+		select 
+		<include refid="cols" />
+		from item
+		where item_no = #{item_no}
+	</select>
 </mapper>

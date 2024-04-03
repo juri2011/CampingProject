@@ -68,7 +68,7 @@
 	       </c:if>
 	       <!-- 데이터 들어가는 부분 -->
 	       <td>
-	           <a class="item-img" href="#">item_img: (추가예정)</a>
+	           <a class="item-img" href="<c:out value='${item.item_no}'/>">item_img: (추가예정)</a>
 	           <p><c:out value="${item.item_name}" /></p>
 	           <p><c:out value="${item.price}" /></p>
 	       </td>
@@ -128,6 +128,12 @@
 		//항상 첫번째 페이지로 이동
 		actionForm.find("input[name='pageNum']").val(1);
 		actionForm.submit();
+	});
+	
+	$(".item-img").on('click',function(e){
+		e.preventDefault();
+		self.location = "/item/detail?item_no=" + $(this).attr('href');
+		//criteria, paging 정보 포함해서 넘기는 작업은 4/2일 구현 예정
 	});
 
 	

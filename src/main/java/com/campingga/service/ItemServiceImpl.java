@@ -30,4 +30,9 @@ public class ItemServiceImpl implements ItemService{
 		return itemMapper.selectTotalCount(cri);
 	}
 
+	@Override
+	public ItemVO get(int item_no) {
+		return itemMapper.selectOneItem(item_no);
+	}
+
 }
