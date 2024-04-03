@@ -32,4 +32,10 @@ public class CartMapperTests {
 		List<CartVO> list = cartMapper.selectCartItemList("user003");
 		list.forEach(cart -> log.info(cart));
 	}
+	
+	@Test
+	public void deleteCartItemTest() {
+		int result = cartMapper.deleteCartItem(3);
+		log.info(result);
+	}
 }

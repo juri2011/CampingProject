@@ -17,4 +17,8 @@
 		where c.member_id = #{userId}
 		order by c.cart_no desc
 	</select>
+	
+	<delete id="deleteCartItem" parameterType="int">
+		delete from cart where cart_no = #{cart_no}
+	</delete>
 </mapper>

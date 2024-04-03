@@ -1,11 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
 	<meta charset="UTF-8">
 	<title>Cart Page</title>
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/mypage.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 <body>
 	<!-- 로고 -->
@@ -26,21 +29,37 @@
 				</tr>
 			</thead>
 			<tbody>
-				<c:forEach items="" var="cartItem" >			
+				<c:forEach var="cart" items="${cartItemList}">	
+					<tr class="cartItem" data-no="<c:out value='${cart.cart_no}'/>">
 						<td><img src="" alt="상품이미지"></td>
-						<td><%-- ${ } cart리스트에서.상품명--%></td>
-						<td><%-- ${ } cart리스트에서.가격 --%></td>
+						<td><c:out value='${cart.item_name}'/></td>
+						<td><c:out value='${cart.price}'/></td>
 						<td>
-							
-							<input type="number" name="quantity" value="1" min="1" max="100"/>
+							<input type="number" name="quantity" value="<c:out value='${cart.quantity}'/>" min="1" max="100"/>
 						</td>
 						<td>
 							<!-- onclick="deleteCartItem(${item.cartNo})" style="cursor:pointer;스크립트삭제가능참고 -->
-							<img src="${pageContext.request.contextPath}/resources/static/images/delete-icon.png" alt="삭제" style="width: 20px; height: 20px; cursor:pointer;"/>
+							<button class="cart-delete">삭제</button>
 						</td>
+					</tr>
 				</c:forEach>
 			</tbody>
 		</table>
+		<button>구매</button>
+		<button>전체 삭제</button>
 	</form>
 </body>
+<script src="/resources/js/cart.js"></script>
+<script>
+	$(document).ready(function(){
+		$('.cart-delete').on('click', function(e){
+			e.preventDefault();
+			const cart_no = $(this).parent().parent().data('no')
+			console.log(cart_no);
+			cartService.remove(cart_no, function(result){
+				alert(result);
+			});
+		});
+	});
+</script>
 </html>
