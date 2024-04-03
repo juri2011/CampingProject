@@ -1,4 +1,4 @@
-package com.campingga.mapper;
+package com.campingga.service;
 
 import java.util.List;
 
@@ -15,21 +15,14 @@ import lombok.extern.log4j.Log4j;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("file:src/main/webapp/WEB-INF/spring/root-context.xml")
 @Log4j
-public class CartMapperTests {
+public class CartServiceTests {
 	@Autowired
-	private CartMapper cartMapper;
+	private CartService cartService;
 	
-	//장바구니 전부 가져오기
+	//사용자의 장바구니 리스트 불러오기
 	@Test
-	public void testSelectAllCartItem() {
-		List<CartVO> list = cartMapper.selectAllCartItem();
-		list.forEach(cart -> log.info(cart));
-	}
-	
-	//특정 사용자 장바구니 가져오기
-	@Test
-	public void testSelectCartItemList() {
-		List<CartVO> list = cartMapper.selectCartItemList("user003");
-		list.forEach(cart -> log.info(cart));
+	public void testGetCartItemList() {
+		List<CartVO> list = cartService.getCartItemList("user003");
+		list.forEach(cart -> log.info(list));
 	}
 }

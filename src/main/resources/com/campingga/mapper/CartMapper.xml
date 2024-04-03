@@ -14,6 +14,7 @@
 		select c.cart_no, c.item_no, i.item_name, i.price, i.status, c.quantity
 		from cart c
 		inner join item i on c.item_no = i.item_no
-		where c.member_id = #{userId};
+		where c.member_id = #{userId}
+		order by c.cart_no desc
 	</select>
 </mapper>
