@@ -66,7 +66,7 @@
 				//img src에 list[i].item_img를 넣으려니 405에러 발생(이미지가 아직 없기 때문에)
 				str += "	<td><img src='' alt='"+list[i].item_name+"'></td>";
 				str += "	<td>"+list[i].item_name+"</td>";
-				str += "	<td>"+list[i].price+"</td>";
+				str += "	<td>"+list[i].price.toLocaleString()+"원</td>";
 				str += "	<td> <input type='number' name='quantity' ";
 				str += "value='"+list[i].quantity+"' min='1' max='100'/></td>";
 				str += "	<td><button onclick='cartDelete("+list[i].cart_no+")'>삭제</button></td></tr>";
@@ -107,12 +107,17 @@
 				}
 				for(let i=0, len=list.length || 0; i<len; i++){
 					const quantity = $('#cart-'+list[i].cart_no).find("input[name='quantity']").val();
-						const cart = {cart_no: list[i].cart_no,
+					const cart = {cart_no: list[i].cart_no,
 								quantity: quantity};
-						cartService.update(cart, function(result){
-							console.log('cart_no: ',list[i].cart_no , result);
-							//purchase로 이동
-						});
+					if(list[i].status === '2'){
+						alert('품절된 상품이 포함되어 있습니다.');
+						return;
+					}
+					cartService.update(cart, function(result){
+						console.log('cart_no: ',list[i].cart_no , result);
+						//purchase로 이동
+						self.location="/order/purchase";
+					});
 				}
 			});//get
 		})
