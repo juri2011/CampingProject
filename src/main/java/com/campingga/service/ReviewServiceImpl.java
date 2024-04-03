@@ -42,4 +42,10 @@ public class ReviewServiceImpl implements ReviewService{
 		return reviewMapper.insertReview(vo);
 	}
 
+  @Override
+  public int remove(int rev_no) {
+    // TODO Auto-generated method stub
+    return reviewMapper.deleteReview(rev_no);
+  }
+
 }

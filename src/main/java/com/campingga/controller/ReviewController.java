@@ -3,6 +3,7 @@ package com.campingga.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -49,5 +50,13 @@ public class ReviewController {
 					: new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 			//삼항연산자
 		}
-	
+		
+		@DeleteMapping("/{rev_no}")
+	  public ResponseEntity<String> remove(@PathVariable("rev_no") int rev_no){
+	    log.info("remove: " + rev_no);
+	    
+	    return reviewService.remove(rev_no)==1
+	        ? new ResponseEntity<>("success", HttpStatus.OK)
+	        : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	  }
 }

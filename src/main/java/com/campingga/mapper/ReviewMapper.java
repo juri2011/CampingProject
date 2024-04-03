@@ -21,5 +21,8 @@ public interface ReviewMapper {
   
   //리뷰 등록
   public int insertReview(ReviewVO vo);
+
+  //리뷰 삭제
+  public int deleteReview(int rev_no);
   
 }

@@ -49,10 +49,10 @@ const reviewService = (function(){
 			});
 	}
 	
-	function remove(item_no, callback, error){
+	function remove(rev_no, callback, error){
 		$.ajax({
 			type: 'delete',
-			url: '/review/'+item_no,
+			url: '/review/'+rev_no,
 			success:function(deleteResult, status, xhr){
 				if(callback){
 					callback(deleteResult);

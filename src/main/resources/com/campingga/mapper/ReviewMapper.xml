@@ -69,4 +69,8 @@
 		insert into review(item_no, writer, content, score) values
 		(#{item_no}, #{writer}, #{content}, #{score})
 	</insert>
+	
+	<delete id="deleteReview" parameterType="int">
+		delete from review where rev_no=#{rev_no}
+	</delete>
 </mapper>

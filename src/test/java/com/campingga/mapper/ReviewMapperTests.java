@@ -48,4 +48,11 @@ public class ReviewMapperTests {
 		
 		reviewMapper.insertReview(vo);
 	}
+	
+	//삭제 테스트
+	@Test
+	public void deleteReviewTest() {
+	  int result = reviewMapper.deleteReview(15);
+	  log.info("------------------------"+result);
+	}
 }

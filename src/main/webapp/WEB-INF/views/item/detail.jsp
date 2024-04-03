@@ -232,9 +232,10 @@
 	function reviewUpdate(){
 		alert('수정');
 	}
-	function reviewDelete(){
+	function reviewDelete(rno){
+		const rev_no = rno;
 		if(confirm('정말 삭제하시겠습니까?')){
-			reviewService.remove(item_no, function(result){
+			reviewService.remove(rev_no, function(result){
 				showList(pageNum);
 			});
 		};
@@ -341,8 +342,8 @@
 					str += 		"<td>"+list[i].score+"</td>";
 					str += 		"<td>"+reviewService.displayTime(list[i].regdate)+"</td>";
 					if(list[i].writerID === userID){
-						str += "<td><button class='review-update' onclick='reviewUpdate()'>수정</button>";
-						str += "<button class='review-delete' onclick='reviewDelete()'>삭제</button></td>";
+						str += "<td><button class='review-update' onclick='reviewUpdate("+list[i].rev_no+")'>수정</button>";
+						str += "<button class='review-delete' onclick='reviewDelete("+list[i].rev_no+")'>삭제</button></td>";
 					}
 					
 					str += "</tr>";
