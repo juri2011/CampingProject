@@ -28,7 +28,7 @@ public class ReviewMapperTests {
 	
 	@Test
 	public void getReviewListWithPagingTest() {
-	  Criteria cri = new Criteria(1, 6); //페이지, 페이지당 게시글 수
+	  Criteria cri = new Criteria(1, 5); //페이지, 페이지당 게시글 수
 	  int total = reviewMapper.selectCountByItemNo(1); //리스트를 가져올 리뷰 번호
 	  log.info(total);
 	  List<ReviewVO> reviewList = reviewMapper.selectReviewListWithPaging(cri,1,total); //페이징, 상품번호, 총상품수

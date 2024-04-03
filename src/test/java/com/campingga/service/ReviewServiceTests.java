@@ -9,6 +9,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.campingga.domain.Criteria;
 import com.campingga.domain.ReviewPageDTO;
+import com.campingga.domain.ReviewVO;
 
 import lombok.extern.log4j.Log4j;
 
@@ -25,7 +26,19 @@ public class ReviewServiceTests {
 	public void testGetReviewListWithPaging() {
 		ReviewPageDTO dto =
 				//파라미터 - 1: 1페이지, 5개출력 / 2: 상품번호 2번
-				reviewService.getReviewListWithPaging(new Criteria(1,5), 2);
+				reviewService.getReviewListWithPaging(new Criteria(1,5), 1);
 		log.info(dto);
 	};
+	
+	@Test
+	public void registerTest() {
+	  ReviewVO vo = new ReviewVO();
+	  vo.setItem_no(1);
+	  vo.setContent("좋아요~~");
+	  vo.setWriter("user004");
+	  vo.setScore(4);
+	  int result = reviewService.register(vo);
+	  log.info(result);
+	  testGetReviewListWithPaging();
+	}
 }
