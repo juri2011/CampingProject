@@ -18,6 +18,10 @@
 		order by c.cart_no desc
 	</select>
 	
+	<select id="selectCountByMemberId" resultType="int">
+		select count(*) from cart where member_id = #{member_id}
+	</select>
+	
 	<delete id="deleteCartItem" parameterType="int">
 		delete from cart where cart_no = #{cart_no}
 	</delete>

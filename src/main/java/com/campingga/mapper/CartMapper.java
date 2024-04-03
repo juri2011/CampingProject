@@ -15,4 +15,7 @@ public interface CartMapper {
 	//장바구니 아이템 하나 삭제
 	public int deleteCartItem(int cart_no);
 
+	//사용자 장바구니에서 총 갯수 가져오기
+	public int selectCountByMemberId(String member_id);
+
 }

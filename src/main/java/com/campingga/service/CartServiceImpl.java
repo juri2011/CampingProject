@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.campingga.domain.CartDTO;
 import com.campingga.domain.CartVO;
 import com.campingga.mapper.CartMapper;
 
@@ -23,6 +24,12 @@ public class CartServiceImpl implements CartService{
 	@Override
 	public int removeCart(int cart_no) {
 		return cartMapper.deleteCartItem(cart_no);
+	}
+	
+	@Override
+	public CartDTO getCartItemListWithCnt(String member_id) {
+		int total = cartMapper.selectCountByMemberId(member_id);
+		return new CartDTO(cartMapper.selectCartItemList(member_id), total);
 	}
 
 }

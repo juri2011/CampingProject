@@ -28,21 +28,8 @@
 					<th>삭제</th>
 				</tr>
 			</thead>
-			<tbody>
-				<c:forEach var="cart" items="${cartItemList}">	
-					<tr class="cartItem" data-no="<c:out value='${cart.cart_no}'/>">
-						<td><img src="" alt="상품이미지"></td>
-						<td><c:out value='${cart.item_name}'/></td>
-						<td><c:out value='${cart.price}'/></td>
-						<td>
-							<input type="number" name="quantity" value="<c:out value='${cart.quantity}'/>" min="1" max="100"/>
-						</td>
-						<td>
-							<!-- onclick="deleteCartItem(${item.cartNo})" style="cursor:pointer;스크립트삭제가능참고 -->
-							<button class="cart-delete">삭제</button>
-						</td>
-					</tr>
-				</c:forEach>
+			<tbody id="listTbody">
+				
 			</tbody>
 		</table>
 		<button>구매</button>
@@ -51,7 +38,15 @@
 </body>
 <script src="/resources/js/cart.js"></script>
 <script>
+
+	const member_id = '<c:out value="${user_id}"/>';
+	const listTbody = $('#listTbody');
+	
+	
+	
+	
 	$(document).ready(function(){
+		showList();
 		$('.cart-delete').on('click', function(e){
 			e.preventDefault();
 			const cart_no = $(this).parent().parent().data('no')
@@ -60,6 +55,32 @@
 				alert(result);
 			});
 		});
+		function showList(){
+			console.log(cartService);
+			cartService.getList(member_id, function(list){
+				console.log("cartCnt: "+cartCnt);
+				console.log("list: "+list);
+				
+				let str = "";
+				//댓글이 없으면 댓글창 비우기
+				if(list == null || list.length == 0){
+					listTbody.html("");
+					
+					return;
+				}
+				for(let i=0, len=list.length || 0; i<len; i++){
+					str += "<tr class='cartItem' data-no='"+list[i].cart_no+"'>";
+					str += "	<td><img src='"+list[i].item_img+"' alt='"+list[i].item_name+"'></td>"
+					str += "	<td>"+list[i].item_name+"</td>";
+					str += "	<td>"+list[i].price+"</td>";
+					str += "	<td> <input type='number' name='quantity' ";
+					str += "value='"+list[i].quantity+"' min='1' max='100'/></td>";
+					str += "	<td><button class='cart-delete'>삭제</button></td></tr>";
+				}
+				console.log(str);
+				listTbody.html(str);
+			});//end function
+		}//end showList
 	});
 </script>
 </html>

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.campingga.domain.CartDTO;
 import com.campingga.domain.CartVO;
 
 import lombok.extern.log4j.Log4j;
@@ -30,5 +31,11 @@ public class CartServiceTests {
 	public void testRemoveCart() {
 		int result = cartService.removeCart(4);
 		log.info(result==1 ? "성공" : "실패");
+	}
+	
+	@Test
+	public void testGetCartItemListWithCnt() {
+		CartDTO dto = cartService.getCartItemListWithCnt("user003");
+		log.info(dto);
 	}
 }

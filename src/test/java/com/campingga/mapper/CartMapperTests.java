@@ -38,4 +38,10 @@ public class CartMapperTests {
 		int result = cartMapper.deleteCartItem(3);
 		log.info(result);
 	}
+	
+	@Test
+	public void selectCountByMemberId() {
+		int result = cartMapper.selectCountByMemberId("user003");
+		log.info(result);
+	}
 }
