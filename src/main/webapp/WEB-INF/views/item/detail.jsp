@@ -185,7 +185,7 @@
       <div id="myTabContent3">
         <h2>리뷰 작성</h2>
         <form id="reviewForm" action="/review/write">
-	        <p>별점 <input id="reviewScore" type="number" value="5" min="1" max="5" /></p>
+	        <p>별점 <input id="reviewScore" name="score" type="number" value="5" min="1" max="5" /></p>
 	        <%-- 
 	        	(시큐리티, 회원관리 가능하면 추가할예정 : 로그인했을 시 자신의 이름이 써지고 수정 불가-readOnly)
 	        	<c:if test=""></c:if>
@@ -193,8 +193,9 @@
 	        	그 전까진 아이디를 직접 쓰는걸로
 	         --%>
 	        <p><label for="writer">작성자</label><input type="text" name="writer" id="reviewWriter" placeholder="작성자를 입력해주세요"/></p>
-	        <p><textarea name="reviewContent" id="reviewContent" cols="30" rows="10" placeholder="내용을 입력해주세요"></textarea><p/>
+	        <p><textarea name="content" id="reviewContent" cols="30" rows="10" placeholder="내용을 입력해주세요"></textarea><p/>
 	        <!-- 비회원 상태에서 작성 가능 -->
+	        <input type="hidden" name="rev_no" value=""/>
 	        <input type="submit" value="작성"/>
 	        <input type="reset" value="초기화" />
         </form>
@@ -205,20 +206,44 @@
 </body>
 <script src="/resources/js/review.js"></script>
 <script>
+	//가져와서 출력
+	const price = '<c:out value="${item.price}"/>';
+	var item_no = '<c:out value="${item.item_no}"/>';
+	const listTbody = $('#listTbody');
+	const reviewPageFooter = $('.panel-footer');
+	const reviewForm = $('#reviewForm');
+	
+	const reviewWriter = $('#reviewWriter'); //작성자 input
+	const reviewContent = $('#reviewContent'); //내용 textarea
+	const reviewScore = $('#reviewScore'); //점수 input
+
+	let pageNum = 1;
+	const userID = 'user003' //임시
+	
+	
+	//동적으로 리뷰 리스트를 생성하기 전에 함수를 선언한다.
+	//$(document).ready() 안에 들어가게 되면
+	//리스트 안의 버튼이 이 함수를 실행하지 못한다.
+	if(userID != null || userID != ''){
+		$('#reviewWriter').attr('readonly','true');
+		$('#reviewWriter').attr('value',userID);
+	}
+	
+	function reviewUpdate(){
+		alert('수정');
+	}
+	function reviewDelete(){
+		if(confirm('정말 삭제하시겠습니까?')){
+			reviewService.remove(item_no, function(result){
+				showList(pageNum);
+			});
+		};
+	}
 	$(document).ready(function(){
-		//가져와서 출력
-		const price = '<c:out value="${item.price}"/>';
-		var item_no = '<c:out value="${item.item_no}"/>';
-		const listTbody = $('#listTbody');
-		const reviewPageFooter = $('.panel-footer');
-		const reviewForm = $('#reviewForm');
 		
-		const reviewWriter = $('#reviewWriter'); //작성자 input
-		const reviewContent = $('#reviewContent'); //내용 textarea
-		const reviewScore = $('#reviewScore'); //점수 input
+			
 		//리뷰 출력
 		showList(1);
-		let pageNum = 1;
 		
 		listTbody.html("<tr><td>테스트</td><td>테스트2</td></tr>");
 		$('#cart-total').html(Number(price).toLocaleString());
@@ -315,6 +340,11 @@
 					str += 		"<td>"+list[i].content+"</td>";
 					str += 		"<td>"+list[i].score+"</td>";
 					str += 		"<td>"+reviewService.displayTime(list[i].regdate)+"</td>";
+					if(list[i].writerID === userID){
+						str += "<td><button class='review-update' onclick='reviewUpdate()'>수정</button>";
+						str += "<button class='review-delete' onclick='reviewDelete()'>삭제</button></td>";
+					}
+					
 					str += "</tr>";
 				}
 				
@@ -322,7 +352,6 @@
 				showReviewPage(reviewCnt);
 			});//end function
 		}//end showList
-		
 		function addReview(){
 			const review = {
 				item_no: item_no,
@@ -335,7 +364,7 @@
 				reviewScore.val(5);
 				reviewWriter.val('');
 				reviewContent.val('');
-				showList(-1);
+				showList(1);
 				showTabMenu(2);
 			});
 		}

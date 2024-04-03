@@ -48,11 +48,11 @@ const reviewService = (function(){
 				}
 			});
 	}
-	/*
-	function remove(rno, callback, error){
+	
+	function remove(item_no, callback, error){
 		$.ajax({
 			type: 'delete',
-			url: '/replies/'+rno,
+			url: '/review/'+item_no,
 			success:function(deleteResult, status, xhr){
 				if(callback){
 					callback(deleteResult);
@@ -65,7 +65,7 @@ const reviewService = (function(){
 			}
 		});
 	}
-	
+	/*
 	function update(review, callback, error){
 		console.log("RNO: "+review.rno);
 		$.ajax({
@@ -122,7 +122,7 @@ const reviewService = (function(){
 	return {
 		add:add,
 		getList: getList,
-		//remove: remove,
+		remove: remove,
 		//update: update,
 		//get: get,
 		displayTime: displayTime

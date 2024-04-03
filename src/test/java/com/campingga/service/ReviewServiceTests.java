@@ -34,11 +34,11 @@ public class ReviewServiceTests {
 	public void registerTest() {
 	  ReviewVO vo = new ReviewVO();
 	  vo.setItem_no(1);
-	  vo.setContent("좋아요~~");
+	  vo.setContent("좋아요~~!!!!");
 	  vo.setWriter("user004");
-	  vo.setScore(4);
+	  vo.setScore(5);
 	  int result = reviewService.register(vo);
-	  log.info(result);
+	  log.info("---------------------결과 : "+result);
 	  testGetReviewListWithPaging();
 	}
 }
