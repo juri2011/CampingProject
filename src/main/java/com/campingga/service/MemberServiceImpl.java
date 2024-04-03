@@ -18,18 +18,11 @@ public class MemberServiceImpl implements MemberService{
 		membermapper.memberJoin(member);
 		
 	}
-<<<<<<< Updated upstream
-=======
 
 	@Override
 	public int idCheck(String mem_id) {
 		
 		return membermapper.idCheck(mem_id);
 	}
-	
-	
->>>>>>> Stashed changes
-	
-	
 	
 }

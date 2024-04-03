@@ -18,10 +18,7 @@ public class MemberVO {
 	private String phone;//휴대폰번호
 	private String gender;//성별
 	private String email;//이메일
-<<<<<<< Updated upstream
-=======
 	private String userStnum;
->>>>>>> Stashed changes
 	private String userAddr;//주소
 	private String userDaddr;//상세주소
 	private Date regdate;//가입일

@@ -5,5 +5,13 @@
 <configuration>
 	
 	<typeAliases>
+		<typeAlias type="com.campingga.domain.Criteria" alias="criteria"></typeAlias>
+		<typeAlias type="com.campingga.domain.ItemVO" alias="itemVO"></typeAlias>
+		<typeAlias type="com.campingga.domain.Authority" alias="Authority"></typeAlias>
+		<typeAlias type="com.campingga.domain.BillVO" alias="BillVO"></typeAlias>
+		<typeAlias type="com.campingga.domain.CartVO" alias="CartVO"></typeAlias>
+		<typeAlias type="com.campingga.domain.MemberVO" alias="MemberVO"></typeAlias>
+		<typeAlias type="com.campingga.domain.OrderListVO" alias="OrderListVO"></typeAlias>
+		<typeAlias type="com.campingga.domain.ReviewVO" alias="ReviewVO"></typeAlias>
 	</typeAliases>
 </configuration>
