@@ -25,4 +25,10 @@ public class CartServiceTests {
 		List<CartVO> list = cartService.getCartItemList("user003");
 		list.forEach(cart -> log.info(list));
 	}
+	
+	@Test
+	public void testRemoveCart() {
+		int result = cartService.removeCart(4);
+		log.info(result==1 ? "성공" : "실패");
+	}
 }

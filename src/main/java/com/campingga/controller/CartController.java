@@ -47,7 +47,7 @@ public class CartController {
 	public @ResponseBody ResponseEntity<String> removeCart(@PathVariable int cart_no){
 		log.info("remove: " + cart_no);
 		
-		return cartService.removeCart(cart_no)==1
+		return cartService.removeCart(cart_no) == 1
 				? new ResponseEntity<>("success", HttpStatus.OK)
 				: new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
