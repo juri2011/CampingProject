@@ -23,8 +23,9 @@ public class AdminMapperTests {
 	public void itemEnrollTest() throws Exception {
 		// 테스트할 ItemVO 객체 생성 및 설정
 		ItemVO item = new ItemVO();
-		item.setItem_no(999);
+		item.setItem_no(777);
 		item.setItem_name("Test Item");
+		item.setAmount(9);
 		item.setContent("Test content");
 		item.setPrice(10000);
 		item.setRegdate(new Date());

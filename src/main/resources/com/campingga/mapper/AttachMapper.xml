@@ -8,7 +8,7 @@
 	<select id="getAttachList"
 		resultType="com.campingga.domain.AttachImageVO">
 
-		select * from item_image where item_no = #{item_no}
+		select * from item_image where item_no = #{item_no} 
 
 	</select>
 
