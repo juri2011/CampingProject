@@ -111,6 +111,29 @@
 		.tab-content>div.active {
 		  display: block;
 		}
+		
+		/* 팝업창 기본 스타일 */
+	  .popup-overlay {
+	    position: fixed;
+	    top: 0;
+	    left: 0;
+	    width: 100%;
+	    height: 100%;
+	    background: rgba(0, 0, 0, 0.5);
+	    display: none;
+	    justify-content: center;
+	    align-items: center;
+	  }
+	  .popup-content {
+	    background: #fff;
+	    padding: 20px;
+	    border-radius: 5px;
+	    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+	  }
+	  .close-btn {
+	    cursor: pointer;
+	    float: right;
+	  }
     </style>
 </head>
 <body>
@@ -118,8 +141,8 @@
     <form name="actionForm" action="item/list" method="get">
     	<input type="hidden" name="pageNum" value="<c:out value='${cri.pageNum}' />" />
     	<input type="hidden" name="amount" value="<c:out value='${cri.amount}' />" />
-    	<input type="hidden" name="item_no" value="<c:out value='${item_no}' />" />
-    	<input type="hidden" name="category" value="<c:out value='${cri.category}' />" />
+    	<input type="hidden" name="item_no" value="<c:out value='${item.item_no}' />" />
+    	<input type="hidden" name="category" value="<c:out value='${item.category}' />" />
     </form>
     <div class="container">
     	
@@ -147,7 +170,7 @@
             
             </div>
             <hr />
-            <button>장바구니</button>
+            <button id="add-cart">장바구니</button>
             <button>바로결제</button>
         </div>
     </div>
@@ -185,7 +208,7 @@
       <div id="myTabContent3">
         <h2>리뷰 작성</h2>
         <form id="reviewForm" action="/review/write">
-	        <p>별점 <input id="reviewScore" type="number" value="5" min="1" max="5" /></p>
+	        <p>별점 <input id="reviewScore" name="score" type="number" value="5" min="1" max="5" /></p>
 	        <%-- 
 	        	(시큐리티, 회원관리 가능하면 추가할예정 : 로그인했을 시 자신의 이름이 써지고 수정 불가-readOnly)
 	        	<c:if test=""></c:if>
@@ -193,8 +216,9 @@
 	        	그 전까진 아이디를 직접 쓰는걸로
 	         --%>
 	        <p><label for="writer">작성자</label><input type="text" name="writer" id="reviewWriter" placeholder="작성자를 입력해주세요"/></p>
-	        <p><textarea name="reviewContent" id="reviewContent" cols="30" rows="10" placeholder="내용을 입력해주세요"></textarea><p/>
+	        <p><textarea name="content" id="reviewContent" cols="30" rows="10" placeholder="내용을 입력해주세요"></textarea><p/>
 	        <!-- 비회원 상태에서 작성 가능 -->
+	        <input type="hidden" name="rev_no" value=""/>
 	        <input type="submit" value="작성"/>
 	        <input type="reset" value="초기화" />
         </form>
@@ -202,23 +226,179 @@
       </div>
     </div>
   </div>
+  
+	<div class="popup-overlay" id="popup">
+	  <div class="popup-content">
+	    <p>장바구니에 추가되었습니다.</p>
+	    <button id="move-cart">이동하기</button>
+	    <button class="close-btn" id="closePopup">닫기</button>
+	  </div>
+	</div>
 </body>
 <script src="/resources/js/review.js"></script>
 <script>
-	$(document).ready(function(){
-		//가져와서 출력
-		const price = '<c:out value="${item.price}"/>';
-		var item_no = '<c:out value="${item.item_no}"/>';
-		const listTbody = $('#listTbody');
-		const reviewPageFooter = $('.panel-footer');
-		const reviewForm = $('#reviewForm');
+	//가져와서 출력
+	const price = '<c:out value="${item.price}"/>';
+	var item_no = '<c:out value="${item.item_no}"/>';
+	const listTbody = $('#listTbody');
+	const reviewPageFooter = $('.panel-footer');
+	const reviewForm = $('#reviewForm');
+	
+	const reviewWriter = $('#reviewWriter'); //작성자 input
+	const reviewContent = $('#reviewContent'); //내용 textarea
+	const reviewScore = $('#reviewScore'); //점수 input
+
+	let pageNum = 1;
+	const userID = 'user004' //임시
+	
+	
+	//동적으로 리뷰 리스트를 생성하기 전에 함수를 선언한다.
+	//$(document).ready() 안에 들어가게 되면
+	//리스트 안의 버튼이 이 함수를 실행하지 못한다.
+	if(userID != null || userID != ''){
+		$('#reviewWriter').attr('readonly','true');
+		$('#reviewWriter').attr('value',userID);
+	}
+	/*
+	function reviewUpdate(rno){
+		cosnt rev_no = rno;
+		reviewService.get(rno, function(review){
+			if(userID != null userID != ''){
+				reviewWriter.val(review.writer);
+			}
+			reviewContent.val(review.content);
+			reviewScore.val(review.score);
+		});
+		reviewScore.val();
+		reviewContent.val();
+		showTabMenu(3);
+	}
+	*/
+	function reviewDelete(rno){
+		const rev_no = rno;
+		if(confirm('정말 삭제하시겠습니까?')){
+			reviewService.remove(rev_no, function(result){
+				showList(pageNum);
+			});
+		};
+	}
+	
+	function showList(page){
+		reviewService.getList({item_no:item_no, page: page||1}, function(reviewCnt, list){
+			console.log("reviewCnt: "+reviewCnt);
+			console.log("list: "+list);
+			
+			//페이지 번호가 -1이면 마지막페이지를 호출
+			if(page == -1){
+				pageNum = Math.ceil(reviewCnt/5.0); //5개씩 한 페이지
+				showList(pageNum);
+				return;
+			}
+			let str = "";
+			//댓글이 없으면 댓글창 비우기
+			if(list == null || list.length == 0){
+				listTbody.html("");
+				
+				return;
+			}
+			for(let i=0, len=list.length || 0; i<len; i++){
+				str += "<tr><td>"+list[i].rownum+"</td>";
+				str += 		"<td>"+list[i].writer+"</td>";
+				str += 		"<td>"+list[i].content+"</td>";
+				str += 		"<td>"+list[i].score+"</td>";
+				str += 		"<td>"+reviewService.displayTime(list[i].regdate)+"</td>";
+				if(list[i].writerID === userID){
+					str += "<td><button class='review-update' onclick='reviewUpdate("+list[i].rev_no+")'>수정</button>";
+					str += "<button class='review-delete' onclick='reviewDelete("+list[i].rev_no+")'>삭제</button></td>";
+				}
+				
+				str += "</tr>";
+			}
+			
+			listTbody.html(str);
+			showReviewPage(reviewCnt);
+		});//end function
+	}//end showList
+	
+
+	
+	function showTabMenu(tab_id){
+		$('ul.tab-title li').removeClass('active');
+	    $('.tab-content div').removeClass('active');
+
+	    $("#myTabTitle"+tab_id).addClass('active');
+	    $("#myTabContent"+tab_id).addClass('active');
+	}
+	
+	function showReviewPage(reviewCnt){
+		let endNum = Math.ceil(pageNum/10.0) * 10; // 한 블록 끝페이지
+		const startNum = endNum - 9;// 한 블록 시작 페이지
 		
-		const reviewWriter = $('#reviewWriter'); //작성자 input
-		const reviewContent = $('#reviewContent'); //내용 textarea
-		const reviewScore = $('#reviewScore'); //점수 input
+		let prev = startNum != 1; //startNum이 1이면 prev없음, 그 외 존재
+		let next = false;
+		
+		if(endNum * 10 >= reviewCnt){//한 블록 끝페이지 마지막 게시물 번호가 실제 게시물 번호보다 크다면
+			endNum = Math.ceil(reviewCnt/5.0);//실제 마지막 게시물 번호로 맞춘다.
+		}
+		
+		if(endNum * 10 < reviewCnt){//마지막 블록이 아니라면 next 존재
+			next = true;
+		}
+		
+		console.log(startNum, endNum, prev, next);
+		
+		let str = "<ul class='pagination pull-right'>";
+		if(prev){//이전 블록이 있다면
+			str += "<li class='page-item'><a class='page-link' href='"+(startNum -1)+"'>Previous</a></li>"
+		}
+		
+		for(let i=startNum; i<=endNum; i++){
+			var active = pageNum == i? "page-active":"";
+			
+			//현재 페이지면 active 해제, 나머지 active
+			str+="<li class='page-item "+active+"'><a class='page-link' href='"+i+"'>"+i+"</a></li>";
+		}
+		if(next){//이전 블록이 있다면
+			str += "<li class='page-item'><a class='page-link' href='"+(endNum+1)+"'>Next</a></li>"
+		}
+		
+		str+="</ul>"
+		
+		console.log(str);
+		
+		reviewPageFooter.html(str);
+	}
+	reviewPageFooter.on("click","li a", function(e){
+		e.preventDefault();
+		console.log("page click");
+		var targetPageNum = $(this).attr("href");
+		console.log("targetPageNum: " + targetPageNum);
+		pageNum = targetPageNum;
+		showList(pageNum);
+	})
+	
+	
+	function addReview(){
+		const review = {
+			item_no: item_no,
+			writer: reviewWriter.val(),
+			content: reviewContent.val(),
+			score: reviewScore.val()
+		};
+		reviewService.add(review, function(result){
+			alert(result);
+			reviewScore.val(5);
+			reviewWriter.val('');
+			reviewContent.val('');
+			showList(1);
+			showTabMenu(2);
+		});
+	}
+	$(document).ready(function(){
+		
+			
 		//리뷰 출력
 		showList(1);
-		let pageNum = 1;
 		
 		listTbody.html("<tr><td>테스트</td><td>테스트2</td></tr>");
 		$('#cart-total').html(Number(price).toLocaleString());
@@ -235,110 +415,6 @@
 			const tab_id = $(this).attr('data-tab');
 			showTabMenu(tab_id);
 		});
-		
-		function showTabMenu(tab_id){
-			$('ul.tab-title li').removeClass('active');
-		    $('.tab-content div').removeClass('active');
-	
-		    $("#myTabTitle"+tab_id).addClass('active');
-		    $("#myTabContent"+tab_id).addClass('active');
-		}
-		
-		function showReviewPage(reviewCnt){
-			let endNum = Math.ceil(pageNum/10.0) * 10; // 한 블록 끝페이지
-			const startNum = endNum - 9;// 한 블록 시작 페이지
-			
-			let prev = startNum != 1; //startNum이 1이면 prev없음, 그 외 존재
-			let next = false;
-			
-			if(endNum * 10 >= reviewCnt){//한 블록 끝페이지 마지막 게시물 번호가 실제 게시물 번호보다 크다면
-				endNum = Math.ceil(reviewCnt/5.0);//실제 마지막 게시물 번호로 맞춘다.
-			}
-			
-			if(endNum * 10 < reviewCnt){//마지막 블록이 아니라면 next 존재
-				next = true;
-			}
-			
-			console.log(startNum, endNum, prev, next);
-			
-			let str = "<ul class='pagination pull-right'>";
-			if(prev){//이전 블록이 있다면
-				str += "<li class='page-item'><a class='page-link' href='"+(startNum -1)+"'>Previous</a></li>"
-			}
-			
-			for(let i=startNum; i<=endNum; i++){
-				var active = pageNum == i? "page-active":"";
-				
-				//현재 페이지면 active 해제, 나머지 active
-				str+="<li class='page-item "+active+"'><a class='page-link' href='"+i+"'>"+i+"</a></li>";
-			}
-			if(next){//이전 블록이 있다면
-				str += "<li class='page-item'><a class='page-link' href='"+(endNum+1)+"'>Next</a></li>"
-			}
-			
-			str+="</ul>"
-			
-			console.log(str);
-			
-			reviewPageFooter.html(str);
-		}
-		reviewPageFooter.on("click","li a", function(e){
-			e.preventDefault();
-			console.log("page click");
-			var targetPageNum = $(this).attr("href");
-			console.log("targetPageNum: " + targetPageNum);
-			pageNum = targetPageNum;
-			showList(pageNum);
-		})
-		
-		function showList(page){
-			reviewService.getList({item_no:item_no, page: page||1}, function(reviewCnt, list){
-				console.log("reviewCnt: "+reviewCnt);
-				console.log("list: "+list);
-				
-				//페이지 번호가 -1이면 마지막페이지를 호출
-				if(page == -1){
-					pageNum = Math.ceil(reviewCnt/5.0); //5개씩 한 페이지
-					showList(pageNum);
-					return;
-				}
-				let str = "";
-				//댓글이 없으면 댓글창 비우기
-				if(list == null || list.length == 0){
-					listTbody.html("");
-					
-					return;
-				}
-				for(let i=0, len=list.length || 0; i<len; i++){
-					str += "<tr><td>"+list[i].rownum+"</td>";
-					str += 		"<td>"+list[i].writer+"</td>";
-					str += 		"<td>"+list[i].content+"</td>";
-					str += 		"<td>"+list[i].score+"</td>";
-					str += 		"<td>"+reviewService.displayTime(list[i].regdate)+"</td>";
-					str += "</tr>";
-				}
-				
-				listTbody.html(str);
-				showReviewPage(reviewCnt);
-			});//end function
-		}//end showList
-		
-		function addReview(){
-			const review = {
-				item_no: item_no,
-				writer: reviewWriter.val(),
-				content: reviewContent.val(),
-				score: reviewScore.val()
-			};
-			reviewService.add(review, function(result){
-				alert(result);
-				reviewScore.val(5);
-				reviewWriter.val('');
-				reviewContent.val('');
-				showList(-1);
-				showTabMenu(2);
-			});
-		}
 		reviewForm.on('submit', function(e){
 			e.preventDefault();
 			//유효성 검사
@@ -353,6 +429,20 @@
 			else{
 				addReview();
 			}
+		});
+		
+		$('#add-cart').on('click',function(){
+			//장바구니 추가
+			
+			$('#popup').css('display','flex');
+		});
+		
+		$('#closePopup').on('click',function(){
+			$('#popup').css('display','none');
+		})
+		
+		$("#move-cart").on('click',function(){
+			self.location="/cart/list";
 		});
 	});
 </script>

@@ -48,11 +48,11 @@ const reviewService = (function(){
 				}
 			});
 	}
-	/*
-	function remove(rno, callback, error){
+	
+	function remove(rev_no, callback, error){
 		$.ajax({
 			type: 'delete',
-			url: '/replies/'+rno,
+			url: '/review/'+rev_no,
 			success:function(deleteResult, status, xhr){
 				if(callback){
 					callback(deleteResult);
@@ -65,7 +65,7 @@ const reviewService = (function(){
 			}
 		});
 	}
-	
+	/*
 	function update(review, callback, error){
 		console.log("RNO: "+review.rno);
 		$.ajax({
@@ -81,16 +81,16 @@ const reviewService = (function(){
 			}
 		});
 	}
-	
-	function get(rno, callback, error){
+	*/
+	function get(rev_no, callback, error){
 		//get메소드
-		$.get("/replies/"+rno+".json", function(result){
+		$.get("/replies/"+rev_no+".json", function(result){
 			if(callback) callback(result);
 		}).fail(function(xhr, status, err){
 			if(error) error();
 		});
 	}
-	*/
+	
 	function displayTime(timeValue){
 		const today = new Date();
 		const gap = today.getTime() - timeValue;
@@ -122,9 +122,9 @@ const reviewService = (function(){
 	return {
 		add:add,
 		getList: getList,
-		//remove: remove,
+		remove: remove,
 		//update: update,
-		//get: get,
+		get: get,
 		displayTime: displayTime
 	};
 })();

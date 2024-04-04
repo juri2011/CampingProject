@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.campingga.mapper.CartMapper">
+	<!-- 장바구니 목록 모두 가져오기 -->
+	<select id="selectAllCartItem" resultType="cartVO">
+		select * from cart;
+	</select>
+	<!-- 한 사용자에 대해서만 장바구니 목록 가져오기 -->
+	<select id="selectCartItemList" resultType="cartVO">
+		select c.cart_no, c.item_no, i.item_name, i.price, i.status, c.quantity
+		from cart c
+		inner join item i on c.item_no = i.item_no
+		where c.member_id = #{userId}
+		order by c.cart_no desc
+	</select>
+	
+	<select id="selectCountByMemberId" resultType="int">
+		select count(*) from cart where member_id = #{member_id}
+	</select>
+	
+	<delete id="deleteCartItem" parameterType="int">
+		delete from cart where cart_no = #{cart_no}
+	</delete>
+	
+	<delete id="deleteAllCart" parameterType="String">
+		delete from cart where member_id = #{member_id}
+	</delete>
+	
+	<update id="updateCart" parameterType="cartVO">
+		update cart set quantity = #{quantity} where cart_no = #{cart_no}
+	</update>
+</mapper>

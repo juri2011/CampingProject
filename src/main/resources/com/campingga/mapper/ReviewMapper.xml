@@ -12,19 +12,52 @@
 	
 	<!-- 페이징 처리로 해당 상품의 리뷰 리스트 가져오기 -->
 	<select id="selectReviewListWithPaging" resultType="reviewVO">
-		select * from (
-			select rev_no, i.item_no, concat(m.name,'(',m.mem_id ,')') as 'writer', r.content, score, r.regdate,
-				ROW_NUMBER() over(ORDER BY r.regdate) AS rownum
-			from review r
-			inner join item i on r.item_no = i.item_no
-			inner join member m on r.writer = m.mem_id
-			where i.item_no = #{item_no}
-		) rv
+		<!-- 
+			1. 해당 아이템의 리뷰 리스트를 받아온다 -> rv
+			2. 작성자가 member에 있는지 없는지를 판단해서 작성자를 출력한다 -> final_view
+				* member 테이블에 rv.writer가 없는 경우까지 조회해야 하므로 
+				  LEFT JOIN 사용 (rv 데이터 무조건 표시, member 테이블에 없는 경우 null 출력)
+				1) 회원이라면 이름(아이디)
+				2) 비회원이라면 이름(guest)
+			3. 검색기준(페이징)에 따라 리스트를 조회한다.
+		 -->
 		<![CDATA[
-			where rownum <= ( #{total} - ( #{cri.amount} * (#{cri.pageNum} - 1 ) ) )
+			SELECT * FROM (
+			  SELECT 
+			    rv.rev_no, 
+			    rv.item_no,
+			    CASE 
+			     WHEN m.mem_id IS NULL THEN 'guest'
+			     ELSE m.mem_id 
+			   	END AS writerID,
+			    CASE 
+			      WHEN m.mem_id IS NULL THEN CONCAT(rv.writer,'(guest)')
+			      ELSE CONCAT(m.name,'(', m.mem_id, ')') 
+			    END AS writer,
+			    rv.content, 
+			    rv.score, 
+			    rv.regdate,
+			    rv.rownum
+			  FROM (
+			    SELECT 
+			      rev_no, 
+			      i.item_no, 
+			      r.writer, 
+			      r.content, 
+			      score, 
+			      r.regdate,
+			      ROW_NUMBER() OVER(ORDER BY r.regdate) AS rownum
+			    FROM review r
+			    INNER JOIN item i ON r.item_no = i.item_no
+			    WHERE i.item_no = #{item_no}
+			  ) rv
+			  LEFT JOIN member m ON rv.writer = m.mem_id
+			) final_view
+			WHERE rownum <= ( #{total} - ( #{cri.amount} * (#{cri.pageNum} - 1 ) ) )
+			ORDER BY rownum DESC
+			limit #{cri.amount}
 		]]>
-		order by rownum desc
-		limit #{cri.amount}
+		
 	</select>
 	
 	<select id="selectCountByItemNo" resultType="int">
@@ -36,4 +69,8 @@
 		insert into review(item_no, writer, content, score) values
 		(#{item_no}, #{writer}, #{content}, #{score})
 	</insert>
+	
+	<delete id="deleteReview" parameterType="int">
+		delete from review where rev_no=#{rev_no}
+	</delete>
 </mapper>
