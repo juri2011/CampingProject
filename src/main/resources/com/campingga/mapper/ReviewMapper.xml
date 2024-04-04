@@ -65,6 +65,10 @@
 		where item_no = #{item_no}
 	</select>
 	
+	<select id="selectReview" resultType="reviewVO">
+		select writer, content, score from review where rev_no=#{rev_no}
+	</select>
+	
 	<insert id="insertReview" parameterType="reviewVO">
 		insert into review(item_no, writer, content, score) values
 		(#{item_no}, #{writer}, #{content}, #{score})

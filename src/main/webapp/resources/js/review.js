@@ -84,7 +84,7 @@ const reviewService = (function(){
 	*/
 	function get(rev_no, callback, error){
 		//get메소드
-		$.get("/replies/"+rev_no+".json", function(result){
+		$.get("/review/"+rev_no+".json", function(result){
 			if(callback) callback(result);
 		}).fail(function(xhr, status, err){
 			if(error) error();

@@ -261,21 +261,32 @@
 		$('#reviewWriter').attr('readonly','true');
 		$('#reviewWriter').attr('value',userID);
 	}
-	/*
+
 	function reviewUpdate(rno){
-		cosnt rev_no = rno;
+		//get에 전달해줄 리뷰 번호
+		const rev_no = rno;
+		//리뷰에서 가져오기
 		reviewService.get(rno, function(review){
-			if(userID != null userID != ''){
+			//userID가 있으면(회원이라면)
+			if(userID != null || userID != ''){
+				//작성자 아이디를 input태그에 넣는다
 				reviewWriter.val(review.writer);
 			}
+			//작성 내용을 input태그에 넣는다
 			reviewContent.val(review.content);
+			//평점을 input태그에 넣는다
 			reviewScore.val(review.score);
 		});
 		reviewScore.val();
 		reviewContent.val();
 		showTabMenu(3);
 	}
-	*/
+	
+	function showReviewUpdate(){
+		const copyReviewForm = $('#reviewForm').html();
+		console.log(copyReviewForm);
+	}
+	
 	function reviewDelete(rno){
 		const rev_no = rno;
 		if(confirm('정말 삭제하시겠습니까?')){

@@ -55,4 +55,11 @@ public class ReviewMapperTests {
 	  int result = reviewMapper.deleteReview(15);
 	  log.info("------------------------"+result);
 	}
+	
+	@Test
+	public void selectReviewTest() {
+	 ReviewVO vo = reviewMapper.selectReview(17);
+	 
+	 log.info(vo);
+	}
 }

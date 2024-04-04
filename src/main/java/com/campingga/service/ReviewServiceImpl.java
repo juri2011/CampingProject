@@ -44,8 +44,12 @@ public class ReviewServiceImpl implements ReviewService{
 
   @Override
   public int remove(int rev_no) {
-    // TODO Auto-generated method stub
     return reviewMapper.deleteReview(rev_no);
+  }
+
+  @Override
+  public ReviewVO get(int rev_no) {
+    return reviewMapper.selectReview(rev_no);
   }
 
 }

@@ -36,7 +36,15 @@ public class ReviewController {
 									HttpStatus.OK);
 	}
 	
-	//댓글 등록하기
+  //리뷰 읽기
+    @GetMapping(value="/{rev_no}")
+    public ResponseEntity<ReviewVO> get(@PathVariable("rno") int rev_no){
+      log.info("get: " + rev_no);
+      
+      return new ResponseEntity<>(reviewService.get(rev_no),HttpStatus.OK);
+    }
+	
+	//리뷰 등록하기
 		@PostMapping("/write")
 		public ResponseEntity<String> create(@RequestBody ReviewVO vo){
 			
