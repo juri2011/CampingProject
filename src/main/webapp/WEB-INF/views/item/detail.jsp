@@ -111,6 +111,29 @@
 		.tab-content>div.active {
 		  display: block;
 		}
+		
+		/* 팝업창 기본 스타일 */
+	  .popup-overlay {
+	    position: fixed;
+	    top: 0;
+	    left: 0;
+	    width: 100%;
+	    height: 100%;
+	    background: rgba(0, 0, 0, 0.5);
+	    display: none;
+	    justify-content: center;
+	    align-items: center;
+	  }
+	  .popup-content {
+	    background: #fff;
+	    padding: 20px;
+	    border-radius: 5px;
+	    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+	  }
+	  .close-btn {
+	    cursor: pointer;
+	    float: right;
+	  }
     </style>
 </head>
 <body>
@@ -118,8 +141,8 @@
     <form name="actionForm" action="item/list" method="get">
     	<input type="hidden" name="pageNum" value="<c:out value='${cri.pageNum}' />" />
     	<input type="hidden" name="amount" value="<c:out value='${cri.amount}' />" />
-    	<input type="hidden" name="item_no" value="<c:out value='${item_no}' />" />
-    	<input type="hidden" name="category" value="<c:out value='${cri.category}' />" />
+    	<input type="hidden" name="item_no" value="<c:out value='${item.item_no}' />" />
+    	<input type="hidden" name="category" value="<c:out value='${item.category}' />" />
     </form>
     <div class="container">
     	
@@ -147,7 +170,7 @@
             
             </div>
             <hr />
-            <button>장바구니</button>
+            <button id="add-cart">장바구니</button>
             <button>바로결제</button>
         </div>
     </div>
@@ -203,6 +226,14 @@
       </div>
     </div>
   </div>
+  
+	<div class="popup-overlay" id="popup">
+	  <div class="popup-content">
+	    <p>장바구니에 추가되었습니다.</p>
+	    <button id="move-cart">이동하기</button>
+	    <button class="close-btn" id="closePopup">닫기</button>
+	  </div>
+	</div>
 </body>
 <script src="/resources/js/review.js"></script>
 <script>
@@ -398,6 +429,20 @@
 			else{
 				addReview();
 			}
+		});
+		
+		$('#add-cart').on('click',function(){
+			//장바구니 추가
+			
+			$('#popup').css('display','flex');
+		});
+		
+		$('#closePopup').on('click',function(){
+			$('#popup').css('display','none');
+		})
+		
+		$("#move-cart").on('click',function(){
+			self.location="/cart/list";
 		});
 	});
 </script>
