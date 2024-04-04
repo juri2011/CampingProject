@@ -5,8 +5,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <title>Welcome Campingga</title>
-
 </head>
 <style>
 a {
@@ -38,8 +38,7 @@ a {
 .login_success_area span {
 	position: absolute;
 	right: 15%;
-	bottom:60%;
-	
+	bottom: 60%;
 }
 </style>
 <body>
@@ -59,21 +58,29 @@ a {
 					<div class="login_success_area">
 						<span>${member.mem_id}님, 환영합니다.</span>
 					</div>
-					<li><a href="/admin/main">관리자 페이지(수정 예정)</a></li>
-					<li><a class="logout" href="/member/logout.do">로그아웃</a></li>
+					<li><a href="/admin/adminPage">관리자 페이지(수정 예정)</a></li>
+					<li><a id="gnb_logout_button">로그아웃</a></li>
 					<li>마이페이지</li>
 					<li>장바구니</li>
 				</c:if>
 			</ul>
 		</div>
 	</div>
-<script>
-    const logoutLink = document.querySelector(".logout");
-
-    logoutLink.addEventListener("click", function(event) {
-        event.preventDefault(); // 링크의 기본 동작을 중단합니다.
-        alert("로그 아웃 되었습니다.");
-    });
+	<script>
+ 
+    
+/* gnb_area 로그아웃 버튼 작동 */
+$("#gnb_logout_button").click(function(){
+    //alert("버튼 작동");
+    $.ajax({
+        type:"POST",
+        url:"/member/logout.do",
+        success:function(data){
+            alert("로그아웃 성공");
+            document.location.reload();     
+        } 
+    }); // ajax 
+});
 </script>
 </body>
 </html>

@@ -40,7 +40,7 @@ public class AdminController {
 	private AdminService adminService;
 	
 	 /* 관리자 메인 페이지 이동 */
-    @GetMapping("/main")
+    @GetMapping("/adminPage")
     public void adminMainGET() throws Exception{
         
         log.info("관리자 페이지 이동");

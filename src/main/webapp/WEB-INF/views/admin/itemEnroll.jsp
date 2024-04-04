@@ -110,6 +110,11 @@
 }
 
 /* 판매가격 선택란 가로 크기 조정 */
+.form_section_content input[name='amount'] {
+	width: 5%; /* 원하는 가로 크기로 조정하세요 */
+}
+
+/* 판매가격 선택란 가로 크기 조정 */
 .form_section_content input[name='price'] {
 	width: 30%; /* 원하는 가로 크기로 조정하세요 */
 }
@@ -152,14 +157,14 @@
 				</div>
 			</div>
 
-			<!-- <div class="form_section">
+			<div class="form_section">
 				<div class="form_section_title">
-					<label>상품 재고</label>
+					<label>상품수량</label>
 				</div>
 				<div class="form_section_content">
-					<input name="bookStock" value="0">
+					<input type="number" name="amount" value="1" min="1" max="100"/>
 				</div>
-			</div> -->
+			</div> 
 
 			<div class="form_section">
 				<div class="form_section_title">
