@@ -218,7 +218,7 @@
 	const reviewScore = $('#reviewScore'); //점수 input
 
 	let pageNum = 1;
-	const userID = 'user003' //임시
+	const userID = 'user004' //임시
 	
 	
 	//동적으로 리뷰 리스트를 생성하기 전에 함수를 선언한다.
@@ -228,10 +228,21 @@
 		$('#reviewWriter').attr('readonly','true');
 		$('#reviewWriter').attr('value',userID);
 	}
-	
-	function reviewUpdate(){
-		alert('수정');
+	/*
+	function reviewUpdate(rno){
+		cosnt rev_no = rno;
+		reviewService.get(rno, function(review){
+			if(userID != null userID != ''){
+				reviewWriter.val(review.writer);
+			}
+			reviewContent.val(review.content);
+			reviewScore.val(review.score);
+		});
+		reviewScore.val();
+		reviewContent.val();
+		showTabMenu(3);
 	}
+	*/
 	function reviewDelete(rno){
 		const rev_no = rno;
 		if(confirm('정말 삭제하시겠습니까?')){

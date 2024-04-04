@@ -81,16 +81,16 @@ const reviewService = (function(){
 			}
 		});
 	}
-	
-	function get(rno, callback, error){
+	*/
+	function get(rev_no, callback, error){
 		//get메소드
-		$.get("/replies/"+rno+".json", function(result){
+		$.get("/replies/"+rev_no+".json", function(result){
 			if(callback) callback(result);
 		}).fail(function(xhr, status, err){
 			if(error) error();
 		});
 	}
-	*/
+	
 	function displayTime(timeValue){
 		const today = new Date();
 		const gap = today.getTime() - timeValue;
@@ -124,7 +124,7 @@ const reviewService = (function(){
 		getList: getList,
 		remove: remove,
 		//update: update,
-		//get: get,
+		get: get,
 		displayTime: displayTime
 	};
 })();
