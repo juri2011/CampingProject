@@ -24,4 +24,7 @@ public interface CartMapper {
 	//장바구니 수량 변경
 	public int updateCart(CartVO vo);
 
+	//장바구니 추가
+  public int insertCart(CartVO vo);
+
 }

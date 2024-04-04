@@ -235,11 +235,13 @@
 	  </div>
 	</div>
 </body>
+<script src="/resources/js/cart.js"></script>
 <script src="/resources/js/review.js"></script>
 <script>
 	//가져와서 출력
 	const price = '<c:out value="${item.price}"/>';
 	var item_no = '<c:out value="${item.item_no}"/>';
+	const amount = $('#amount').val();
 	const listTbody = $('#listTbody');
 	const reviewPageFooter = $('.panel-footer');
 	const reviewForm = $('#reviewForm');
@@ -249,7 +251,7 @@
 	const reviewScore = $('#reviewScore'); //점수 input
 
 	let pageNum = 1;
-	const userID = 'user004' //임시
+	const userID = 'user003' //임시
 	
 	
 	//동적으로 리뷰 리스트를 생성하기 전에 함수를 선언한다.
@@ -405,7 +407,6 @@
 		
 		//수량 바꾸면 총상품금액도 변경
 		$('#amount').on('change',function(){
-			const amount = $(this).val();
 			$('#cart-total').html((price * amount).toLocaleString());
 		});
 		
@@ -433,8 +434,11 @@
 		
 		$('#add-cart').on('click',function(){
 			//장바구니 추가
-			
-			$('#popup').css('display','flex');
+			const cart = {member_id: userID, item_no: item_no, quantity: amount};
+			cartService.add(cart, function(result){
+				console.log(result);
+				$('#popup').css('display','flex');
+			});
 		});
 		
 		$('#closePopup').on('click',function(){
@@ -442,6 +446,7 @@
 		})
 		
 		$("#move-cart").on('click',function(){
+			$('#popup').css('display','flex');
 			self.location="/cart/list";
 		});
 	});

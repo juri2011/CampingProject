@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.campingga.domain.CartDTO;
 import com.campingga.domain.CartVO;
+import com.campingga.domain.ReviewVO;
 import com.campingga.service.CartService;
 
 import lombok.extern.log4j.Log4j;
@@ -39,6 +41,21 @@ public class CartController {
 		
 		return "cart/cart"; 
 	}
+	 //댓글 등록하기
+  @PostMapping("/add")
+  public @ResponseBody ResponseEntity<String> create(@RequestBody CartVO vo){
+    
+    log.info("CartVO: "+vo);
+    int insertCount = cartService.add(vo);
+    
+    log.info("Cart INSERT COUNT : "+insertCount);
+    
+    return insertCount == 1
+        ? new ResponseEntity<>("success", HttpStatus.OK)
+        : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    //삼항연산자
+  }
+	
 	
 	//비동기로 장바구니 리스트를 가져오는 메소드
 	@GetMapping("/cartList/{member_id}")
