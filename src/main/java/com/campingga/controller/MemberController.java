@@ -82,23 +82,54 @@ public class MemberController {
 	@PostMapping("/login")
 	public String loginPOST(HttpServletRequest request, MemberVO member, RedirectAttributes rttr) throws Exception {
 
-		//System.out.println("login 메서드 진입");
-		//System.out.println("전달된 데이터 : " + member);
-		
+		// System.out.println("login 메서드 진입");
+		// System.out.println("전달된 데이터 : " + member);
+
 		HttpSession session = request.getSession();
 		MemberVO lvo = memberservice.memberLogin(member);
 
+		// 일치하지 않는 아이디, 비밀번호 입력 경우
+		if (lvo == null) {
 
-        if(lvo == null) {                                // 일치하지 않는 아이디, 비밀번호 입력 경우
-            
-            int result = 0;
-            rttr.addFlashAttribute("result", result);
-            return "redirect:/member/login";
-            
-        }
-        
-        session.setAttribute("member", lvo);             // 일치하는 아이디, 비밀번호 경우 (로그인 성공)
-        
-        return "redirect:/main";
+			int result = 0;
+			rttr.addFlashAttribute("result", result);
+			return "redirect:/member/login";
+
+		}
+
+		// 일치하는 아이디, 비밀번호 경우 (로그인 성공)
+		session.setAttribute("member", lvo);
+
+		return "redirect:/main";
+	}
+
+	/*
+	 * 메인페이지 로그아웃
+	 * 
+	 * @GetMapping("/logout.do") public String logoutMainGET(HttpServletRequest
+	 * request) throws Exception{
+	 * 
+	 * log.info("logoutMainGET메서드 진입");
+	 * 
+	 * HttpSession session = request.getSession();
+	 * 
+	 * session.invalidate();
+	 * 
+	 * return "redirect:/main";
+	 * 
+	 * }
+	 */
+
+	/* 비동기방식 로그아웃 메서드 */
+	@PostMapping("/logout.do")
+	@ResponseBody
+	public void logoutPOST(HttpServletRequest request) throws Exception {
+
+		log.info("비동기 로그아웃 메서드 진입");
+
+		HttpSession session = request.getSession();
+
+		session.invalidate();
+
 	}
 }

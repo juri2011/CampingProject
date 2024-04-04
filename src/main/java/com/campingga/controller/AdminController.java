@@ -38,6 +38,14 @@ public class AdminController {
 	
 	@Autowired
 	private AdminService adminService;
+	
+	 /* 관리자 메인 페이지 이동 */
+    @GetMapping("/adminPage")
+    public void adminMainGET() throws Exception{
+        
+        log.info("관리자 페이지 이동");
+        
+    }
 
 	// 상품등록 페이지 이동
 	@GetMapping("/itemEnroll")
