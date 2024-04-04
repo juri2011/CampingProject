@@ -9,9 +9,11 @@
 </head>
 <style>
 
+
+ 
 /* 로그인 실패시 경고글 */
-.login_warn {
-	color: red;
+.login_warn{
+    margin-top: 30px;
 }
 </style>
 <body>
@@ -34,14 +36,13 @@
 							<input class="pw_iput" type="password" autocomplete="current-password" name="pwd" placeholder="비밀번호">
 						</div>
 					</div>
-
-					<c:if test="${result == 0 }">
-						<div class="login_warn">사용자 ID 또는 비밀번호를 잘못 입력하셨습니다.</div>
-					</c:if>
-
+					
 					<div class="login_button_wrap">
 						<input type="button" class="login_button" value="로그인">
 					</div>
+					<c:if test="${result == 0 }">
+						<div class="login_warn">사용자 ID 또는 비밀번호를 잘못 입력하셨습니다.</div>
+					</c:if>
 				</div>
 			</form>
 

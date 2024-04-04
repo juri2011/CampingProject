@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.campingga.domain.AttachImageVO;
 import com.campingga.domain.Criteria;
@@ -42,7 +43,7 @@ public class ItemController {
 		//페이지네이션 정보 전달
 		model.addAttribute("pageMaker", new PageDTO(cri,itemService.getTotalCount(cri)));
 		//listTest.jsp로 이동(기존 list.jsp로 합치면 수정할 예정)
-		return "listTest";
+		return "/item/list";
 	}
 	
 	/* 이미지 정보 반환 */
@@ -54,4 +55,13 @@ public class ItemController {
 		return new ResponseEntity<List<AttachImageVO>>(attachMapper.getAttachList(item_no), HttpStatus.OK);
 		
 	}
+	
+	//int -> Integer/long형
+	@GetMapping("/detail")
+	public void get(@RequestParam("item_no") int item_no, @ModelAttribute("cri") Criteria cri, Model model) {
+	    
+	    log.info("/get or /modify");
+	    model.addAttribute("item",itemService.get(item_no));
+	    model.addAttribute("cri",cri);
+	  }
 }

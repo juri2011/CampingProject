@@ -19,6 +19,17 @@
 	color: red;
 	display: none;
 }
+
+/* 비밀번호 확인 일치 유효성검사 */
+.pwck_input_re_1 {
+	color: green;
+	display: none;
+}
+
+.pwck_input_re_2 {
+	color: red;
+	display: none;
+}
 </style>
 
 
@@ -51,6 +62,9 @@
 						<input class="pwck_input" type="password"
 							autocomplete="current-password">
 					</div>
+					<span class="pwck_input_re_1">비밀번호가 일치합니다.</span>
+				    <span class="pwck_input_re_2">비밀번호가 일치하지 않습니다.</span>
+						
 				</div>
 				<div class="user_wrap">
 					<div class="user_name">이름</div>
@@ -82,7 +96,7 @@
 				<div class="mail_wrap">
 					<div class="mail_name">이메일</div>
 					<div class="mail_input_box">
-						<input class="mail_input" name="email">
+						<input class="mail_input1" name="email">
 					</div>
 
 				</div>
@@ -162,6 +176,28 @@
 
 				});// function 종료
 
+
+		/* 비밀번호 확인 일치 유효성 검사 */
+		$('.pwck_input').on("propertychange change keyup paste input", function() {
+		    let pw = $('.pw_input').val().trim(); // 비밀번호 입력란의 값
+		    let pwck = $(this).val().trim(); // 비밀번호 확인 입력란의 값
+		    if (pw === "" || pwck === "") {
+		        // 입력값이 없을 때는 결과와 메시지를 숨깁니다.
+		        $('.pwck_input_re_1, .pwck_input_re_2').css('display', 'none');
+		        $('.pwck_ck').css('display', 'block').text('비밀번호를 입력해주세요.');
+		    } else {
+		        // 입력값이 있을 때는 결과를 보여줍니다.
+		        if (pw === pwck) {
+		            $('.pwck_input_re_1').css('display', 'block');
+		            $('.pwck_input_re_2').css('display', 'none');
+		            pwckcorCheck = true;
+		        } else {
+		            $('.pwck_input_re_1').css('display', 'none');
+		            $('.pwck_input_re_2').css('display', 'block').text('비밀번호가 일치하지 않습니다.');
+		            pwckcorCheck = false;
+		        }
+		    }
+		});
 		/* 다음 주소 연동 */
 		function execution_daum_address() {
 
@@ -220,6 +256,8 @@
 					}).open();
 
 		}
+
+	
 	</script>
 
 </body>

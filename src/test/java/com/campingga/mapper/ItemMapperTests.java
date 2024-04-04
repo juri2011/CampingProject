@@ -36,4 +36,10 @@ public class ItemMapperTests {
 		//cri.setCategory("텐트");
 		log.info(itemMapper.selectTotalCount(cri));
 	}
+	
+	//아이템 하나의 정보 가져오기
+	@Test
+	public void testSelectOneItem() {
+		log.info(itemMapper.selectOneItem(10));
+	}
 }

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.campingga.mapper.ReviewMapper">
+	<!-- 리스트 컬럼 -->
+	<select id="selectReviewList" resultType="reviewVO">
+		select * from review
+	</select>
+	
+	<!-- 페이징 처리로 해당 상품의 리뷰 리스트 가져오기 -->
+	<select id="selectReviewListWithPaging" resultType="reviewVO">
+		select * from (
+			select rev_no, i.item_no, concat(m.name,'(',m.mem_id ,')') as 'writer', r.content, score, r.regdate,
+				ROW_NUMBER() over(ORDER BY r.regdate) AS rownum
+			from review r
+			inner join item i on r.item_no = i.item_no
+			inner join member m on r.writer = m.mem_id
+			where i.item_no = #{item_no}
+		) rv
+		<![CDATA[
+			where rownum <= ( #{total} - ( #{cri.amount} * (#{cri.pageNum} - 1 ) ) )
+		]]>
+		order by rownum desc
+		limit #{cri.amount}
+	</select>
+	
+	<select id="selectCountByItemNo" resultType="int">
+		select count(*) from review
+		where item_no = #{item_no}
+	</select>
+	
+	<insert id="insertReview" parameterType="reviewVO">
+		insert into review(item_no, writer, content, score) values
+		(#{item_no}, #{writer}, #{content}, #{score})
+	</insert>
+</mapper>
