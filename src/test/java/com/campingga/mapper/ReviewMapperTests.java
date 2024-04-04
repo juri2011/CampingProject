@@ -56,6 +56,7 @@ public class ReviewMapperTests {
 	  log.info("------------------------"+result);
 	}
 	
+	//리뷰 한 개 조회 테스트
 	@Test
 	public void selectReviewTest() {
 	 ReviewVO vo = reviewMapper.selectReview(17);

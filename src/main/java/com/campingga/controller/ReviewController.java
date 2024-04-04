@@ -37,8 +37,8 @@ public class ReviewController {
 	}
 	
   //리뷰 읽기
-    @GetMapping(value="/{rev_no}")
-    public ResponseEntity<ReviewVO> get(@PathVariable("rno") int rev_no){
+    @GetMapping("/{rev_no}")
+    public ResponseEntity<ReviewVO> get(@PathVariable("rev_no") int rev_no){
       log.info("get: " + rev_no);
       
       return new ResponseEntity<>(reviewService.get(rev_no),HttpStatus.OK);

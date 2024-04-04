@@ -218,9 +218,11 @@
 	        <p><label for="writer">작성자</label><input type="text" name="writer" id="reviewWriter" placeholder="작성자를 입력해주세요"/></p>
 	        <p><textarea name="content" id="reviewContent" cols="30" rows="10" placeholder="내용을 입력해주세요"></textarea><p/>
 	        <!-- 비회원 상태에서 작성 가능 -->
-	        <input type="hidden" name="rev_no" value=""/>
-	        <input type="submit" value="작성"/>
-	        <input type="reset" value="초기화" />
+	        <p id="inputBox">
+		        <input type="hidden" name="rev_no" value=""/>
+		        <input type="submit" value="작성"/>
+		        <input type="reset" value="초기화" />
+	        </p>
         </form>
         
       </div>
@@ -239,6 +241,7 @@
 <script src="/resources/js/review.js"></script>
 <script>
 	//가져와서 출력
+	let mode = 'add';
 	const price = '<c:out value="${item.price}"/>';
 	var item_no = '<c:out value="${item.item_no}"/>';
 	const amount = $('#amount').val();
@@ -249,9 +252,11 @@
 	const reviewWriter = $('#reviewWriter'); //작성자 input
 	const reviewContent = $('#reviewContent'); //내용 textarea
 	const reviewScore = $('#reviewScore'); //점수 input
+	
+	const copyFormTab = $('#myTabContent3').html();
 
 	let pageNum = 1;
-	const userID = 'user003' //임시
+	const userID = 'user004' //임시
 	
 	
 	//동적으로 리뷰 리스트를 생성하기 전에 함수를 선언한다.
@@ -276,17 +281,24 @@
 			reviewContent.val(review.content);
 			//평점을 input태그에 넣는다
 			reviewScore.val(review.score);
+			showReviewUpdate(rno);
+			showTabMenu(3);
 		});
-		reviewScore.val();
-		reviewContent.val();
-		showTabMenu(3);
 	}
 	
-	function showReviewUpdate(){
-		const copyReviewForm = $('#reviewForm').html();
-		console.log(copyReviewForm);
+	function showReviewUpdate(rno){
+		mode = 'modify';
+		const tab = $('#myTabContent3');
+		tab.find('h2').html('리뷰 수정');
+		tab.find('input[type=submit]').val('수정');
+		tab.find('#inputBox').append('<button type="button" onclick="goToList()">목록으로</button>');
+		
 	}
-	
+	function goToList(){
+		showList(pageNum);
+		showTabMenu(2);
+		console.log('gotoList');
+	}
 	function reviewDelete(rno){
 		const rev_no = rno;
 		if(confirm('정말 삭제하시겠습니까?')){
@@ -336,6 +348,7 @@
 
 	
 	function showTabMenu(tab_id){
+		
 		$('ul.tab-title li').removeClass('active');
 	    $('.tab-content div').removeClass('active');
 
@@ -407,6 +420,13 @@
 			showTabMenu(2);
 		});
 	}
+	
+	function modifyReview(){
+		if($('#myTabContent').css('display') === 'none')
+			console.log('no');
+		
+		mode = 'add';
+	};
 	$(document).ready(function(){
 		
 			
@@ -439,7 +459,8 @@
 				reviewContent.focus();
 			}
 			else{
-				addReview();
+				if(mode === "add") addReview();
+				else if(mode === "modify") modifyReview();
 			}
 		});
 		
