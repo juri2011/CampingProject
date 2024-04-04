@@ -1,14 +1,13 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<link rel="stylesheet" href="/resources/css/member/join.css">
 </head>
-<script src="https://code.jquery.com/jquery-3.4.1.js"
-	integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
-	crossorigin="anonymous"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <style>
 /* 중복아이디 존재하지 않는경우 */
 .id_input_re_1 {
@@ -40,15 +39,17 @@
 				<span class="id_input_re_1">사용 가능한 아이디입니다.</span> <span
 					class="id_input_re_2">이미 존재하는 아이디입니다.</span>
 				<div class="pw_wrap">
-					<div class="pw_name">비밀번호(*****로 인코딩 수정!)</div>
+					<div class="pw_name">비밀번호</div>
 					<div class="pw_input_box">
-						<input class="pw_input" name="pwd">
+						<input class="pw_input" name="pwd" type="password"
+							autocomplete="current-password">
 					</div>
 				</div>
 				<div class="pwck_wrap">
 					<div class="pwck_name">비밀번호 확인</div>
 					<div class="pwck_input_box">
-						<input class="pwck_input">
+						<input class="pwck_input" type="password"
+							autocomplete="current-password">
 					</div>
 				</div>
 				<div class="user_wrap">
@@ -70,9 +71,12 @@
 					</div>
 				</div>
 				<div class="gender_wrap">
-					<div class="gender_name">성별(버튼 선택으로 바꿀예정)</div>
+					<div class="gender_name">성별</div>
 					<div class="gender_input_box">
-						<input class="gender_input" name="gender">
+						<label><input type="radio" class="gender_input"
+							name="gender" value="남성"> 남성</label> <label><input
+							type="radio" class="gender_input" name="gender" value="여성">
+							여성</label>
 					</div>
 				</div>
 				<div class="mail_wrap">
@@ -90,7 +94,7 @@
 								readonly="readonly">
 						</div>
 						<div class="address_button" onclick="execution_daum_address()">
-							<span>주소 찾기</span>
+							<span>주소찾기</span>
 						</div>
 						<div class="clearfix"></div>
 					</div>
@@ -217,5 +221,6 @@
 
 		}
 	</script>
+
 </body>
 </html>

@@ -1,0 +1,75 @@
+@charset "UTF-8";
+
+/* 전체 래퍼 */
+.wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+}
+
+/* 로그인 창 래퍼 */
+.wrap {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 로고 */
+.logo_wrap {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.logo_wrap span {
+    font-size: 32px;
+    font-weight: bold;
+    color: #0070c9; /* 네이버 로고 색상 */
+}
+
+/* 아이디, 비밀번호 입력란 */
+.login_wrap {
+    margin-bottom: 20px;
+}
+
+/* 입력란 스타일 */
+.id_wrap,
+.pw_wrap {
+    margin-bottom: 15px;
+}
+.id_input_box,
+.pw_input_box {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.id_input,
+.pw_input {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border: none;
+    outline: none;
+}
+.id_input::placeholder,
+.pw_input::placeholder {
+    color: #aaa;
+}
+
+/* 로그인 버튼 */
+.login_button_wrap {
+    text-align: center;
+}
+.login_button {
+    background-color: #0070c9; /* 네이버 로고 색상 */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+.login_button:hover {
+    background-color: #005aa7; /* 네이버 로그인 버튼 호버 색상 */
+}

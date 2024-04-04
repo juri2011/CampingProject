@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.campingga.mapper.AdminMapper">
+	<!-- 상품 등록 -->
+	<insert id="itemEnroll">
+	
+		<selectKey resultType="int" keyProperty="item_no" order="AFTER">
+  		
+  			SELECT LAST_INSERT_ID()
+  		
+  		</selectKey>
+
+		INSERT INTO item(item_no, item_name, content, price, regdate,
+		category, status)
+		VALUES (#{item_no}, #{item_name}, #{content},
+		#{price}, #{regdate},
+		#{category},#{status})
+
+	</insert>
+
+	<!-- 이미지 등록 -->
+	<insert id="imageEnroll">
+
+		insert into item_image(item_no, fileName, uploadPath, uuid) values
+		(#{item_no}, #{fileName}, #{uploadPath}, #{uuid})
+
+	</insert>
+
+
+</mapper>
