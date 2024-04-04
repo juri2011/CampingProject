@@ -65,12 +65,12 @@ const reviewService = (function(){
 			}
 		});
 	}
-	/*
+	
 	function update(review, callback, error){
-		console.log("RNO: "+review.rno);
+		console.log("RNO: "+review.rev_no);
 		$.ajax({
 			type: 'put',
-			url:'/replies/'+review.rno,
+			url:'/review/'+review.rev_no,
 			data: JSON.stringify(review),
 			contentType: "application/json; charset=utf-8",
 			success: function(result, status, xhr){
@@ -81,7 +81,7 @@ const reviewService = (function(){
 			}
 		});
 	}
-	*/
+	
 	function get(rev_no, callback, error){
 		//get메소드
 		$.get("/review/"+rev_no+".json", function(result){
@@ -123,7 +123,7 @@ const reviewService = (function(){
 		add:add,
 		getList: getList,
 		remove: remove,
-		//update: update,
+		update: update,
 		get: get,
 		displayTime: displayTime
 	};

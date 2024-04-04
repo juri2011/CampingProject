@@ -21,4 +21,7 @@ public interface ReviewService {
 
   //리뷰 조회
   public ReviewVO get(int rev_no);
+
+  //리뷰 수정
+  public int modify(ReviewVO vo);
 }

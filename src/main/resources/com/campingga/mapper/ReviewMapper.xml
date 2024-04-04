@@ -77,4 +77,8 @@
 	<delete id="deleteReview" parameterType="int">
 		delete from review where rev_no=#{rev_no}
 	</delete>
+	
+	<update id="updateReview" parameterType="reviewVO">
+		update review set content=#{content}, score=#{score} where rev_no=#{rev_no}
+	</update>
 </mapper>

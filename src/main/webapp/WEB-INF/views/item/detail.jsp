@@ -219,9 +219,12 @@
 	        <p><textarea name="content" id="reviewContent" cols="30" rows="10" placeholder="내용을 입력해주세요"></textarea><p/>
 	        <!-- 비회원 상태에서 작성 가능 -->
 	        <p id="inputBox">
-		        <input type="hidden" name="rev_no" value=""/>
-		        <input type="submit" value="작성"/>
+		        <input id="rev_no" type="text" name="rev_no" value=""/>
+		        <input class="addBtn" type="submit" value="작성"/>
+		        <button class="modifyBtn" id="modify">수정</button>
 		        <input type="reset" value="초기화" />
+		        <!-- submit하면 안되기 때문에 type을 button으로 지정했다 -->
+		        <button class="modifyBtn" id="toList" type="button">목록으로</button>
 	        </p>
         </form>
         
@@ -249,11 +252,12 @@
 	const reviewPageFooter = $('.panel-footer');
 	const reviewForm = $('#reviewForm');
 	
+	const reviewNo = $('#rev_no'); //리뷰 번호 input
 	const reviewWriter = $('#reviewWriter'); //작성자 input
 	const reviewContent = $('#reviewContent'); //내용 textarea
 	const reviewScore = $('#reviewScore'); //점수 input
 	
-	const copyFormTab = $('#myTabContent3').html();
+	const copyFormTab = $('#myTabContent3>form').html();
 
 	let pageNum = 1;
 	const userID = 'user004' //임시
@@ -263,42 +267,66 @@
 	//$(document).ready() 안에 들어가게 되면
 	//리스트 안의 버튼이 이 함수를 실행하지 못한다.
 	if(userID != null || userID != ''){
+		console.log('user004');
 		$('#reviewWriter').attr('readonly','true');
 		$('#reviewWriter').attr('value',userID);
 	}
 
+	//리뷰 수정(하기 전에 데이터 가져오기)
 	function reviewUpdate(rno){
 		//get에 전달해줄 리뷰 번호
 		const rev_no = rno;
 		//리뷰에서 가져오기
 		reviewService.get(rno, function(review){
 			//userID가 있으면(회원이라면)
-			if(userID != null || userID != ''){
+			if(userID != null && userID != ''){
 				//작성자 아이디를 input태그에 넣는다
-				reviewWriter.val(review.writer);
+				reviewWriter.val(userID);
 			}
 			//작성 내용을 input태그에 넣는다
 			reviewContent.val(review.content);
 			//평점을 input태그에 넣는다
 			reviewScore.val(review.score);
-			showReviewUpdate(rno);
-			showTabMenu(3);
+			//input에 리뷰 번호 적기
+			reviewNo.val(rno);
+			//수정모드로 변경하고 화면 구조 변경
+			changeMode('modify');
+			//3번째 탭으로 이동
+			showTabMenu(3,true);
 		});
 	}
 	
-	function showReviewUpdate(rno){
-		mode = 'modify';
+	//모드 변경(탭 3번의 화면 구성 및 기능 변경)
+	function changeMode(m){
 		const tab = $('#myTabContent3');
-		tab.find('h2').html('리뷰 수정');
-		tab.find('input[type=submit]').val('수정');
-		tab.find('#inputBox').append('<button type="button" onclick="goToList()">목록으로</button>');
-		
+		if(m === 'add'){
+			mode = 'add';
+			//탭메뉴 타이틀 변경
+			$('#myTabTitle3>a').html('리뷰작성');
+			//탭메뉴 제목 변경
+			tab.find('h2').html('리뷰 작성');
+			reviewScore.val(5);
+			reviewWriter.val(userID);
+			reviewContent.val('');
+			reviewNo.val('');
+			//수정에 들어가는 버튼 숨기기
+			$('.modifyBtn').hide();
+			//작성에 들어가는 버튼 살리기
+			$('.addBtn').show();
+			
+		}else if(m === 'modify'){
+			mode = 'modify';
+			//탭메뉴 타이틀 변경
+			$('#myTabTitle3>a').html('리뷰수정');
+			//탭메뉴 제목 변경
+			tab.find('h2').html('리뷰 수정');
+			//작성에 들어가는 버튼은 숨기기
+			$('.addBtn').hide();
+			//수정에 들어가는 버튼 보여주기
+			$('.modifyBtn').show();
+		}
 	}
-	function goToList(){
-		showList(pageNum);
-		showTabMenu(2);
-		console.log('gotoList');
-	}
+	
 	function reviewDelete(rno){
 		const rev_no = rno;
 		if(confirm('정말 삭제하시겠습니까?')){
@@ -346,8 +374,13 @@
 	}//end showList
 	
 
-	
-	function showTabMenu(tab_id){
+	function showTabMenu(tab_id, isModify){
+		
+		if(isModify){
+			changeMode('modify');
+		}else{
+			changeMode('add');
+		}
 		
 		$('ul.tab-title li').removeClass('active');
 	    $('.tab-content div').removeClass('active');
@@ -412,24 +445,32 @@
 			score: reviewScore.val()
 		};
 		reviewService.add(review, function(result){
+
 			alert(result);
-			reviewScore.val(5);
-			reviewWriter.val('');
-			reviewContent.val('');
 			showList(1);
 			showTabMenu(2);
 		});
 	}
 	
+	//리뷰 수정(리뷰 번호를 받아서)
 	function modifyReview(){
-		if($('#myTabContent').css('display') === 'none')
-			console.log('no');
-		
-		mode = 'add';
+		const review = {
+			rev_no: reviewNo.val(),
+			content: reviewContent.val(),
+			score: reviewScore.val()
+		};
+		reviewService.update(review ,function(result){
+			alert('리뷰 등록: ',result);
+			changeMode("add");
+			showList(1);
+			showTabMenu(2);
+		});
 	};
+	
 	$(document).ready(function(){
 		
-			
+		//초기 설정을 '작성모드'로 한다.
+		changeMode('add');
 		//리뷰 출력
 		showList(1);
 		
@@ -447,6 +488,8 @@
 			const tab_id = $(this).attr('data-tab');
 			showTabMenu(tab_id);
 		});
+		
+		
 		reviewForm.on('submit', function(e){
 			e.preventDefault();
 			//유효성 검사

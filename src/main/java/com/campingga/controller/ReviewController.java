@@ -9,8 +9,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.campingga.domain.CartVO;
 import com.campingga.domain.Criteria;
 import com.campingga.domain.ReviewPageDTO;
 import com.campingga.domain.ReviewVO;
@@ -67,4 +70,14 @@ public class ReviewController {
 	        ? new ResponseEntity<>("success", HttpStatus.OK)
 	        : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	  }
+		
+		@RequestMapping(method = {RequestMethod.PUT, RequestMethod.PATCH}, value="/{rev_no}")
+		public @ResponseBody String updateCart(@PathVariable int rev_no, @RequestBody ReviewVO vo) {
+			vo.setRev_no(rev_no);
+			log.info("rev_no: " + rev_no);
+			log.info("modify: " + vo);
+			
+			return reviewService.modify(vo) == 1
+					? "success" : "error";
+		}
 }

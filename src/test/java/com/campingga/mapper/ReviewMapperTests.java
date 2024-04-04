@@ -63,4 +63,13 @@ public class ReviewMapperTests {
 	 
 	 log.info(vo);
 	}
+	
+	@Test
+	public void updateReviewTest() {
+		ReviewVO vo = new ReviewVO();
+		vo.setContent("새로 수정하는 내용입니ㅏ~!~!~!~!~!~!~");
+		vo.setRev_no(6);
+		vo.setScore(5);
+		log.info(reviewMapper.updateReview(vo));
+	}
 }
