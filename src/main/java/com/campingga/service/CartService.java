@@ -24,4 +24,6 @@ public interface CartService {
 	//장바구니 추가
   public int add(CartVO vo);
 
+public int getTotalPrice(List<CartVO> cartList);
+
 }

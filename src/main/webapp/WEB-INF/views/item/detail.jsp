@@ -144,6 +144,14 @@
     	<input type="hidden" name="item_no" value="<c:out value='${item.item_no}' />" />
     	<input type="hidden" name="category" value="<c:out value='${item.category}' />" />
     </form>
+    <form id="purchaseForm" name="purchaseForm" action="/order/purchase/direct" method="get">
+    	<%-- <input type="hidden" name="item_img" value="<c:out value='${item.item_name}' />" /> --%>
+    	<input type="hidden" name="quantity" value="" />
+    	<input type="hidden" name="status" value="<c:out value='${item.status}' />" />
+    	<input type="hidden" name="price" value="<c:out value='${item.price}' />" />
+    	<input type="hidden" name="item_no" value="<c:out value='${item.item_no}' />" />
+    	<input type="hidden" name="item_name" value="<c:out value='${item.item_name}' />" />
+    </form>
     <div class="container">
     	
         <div class="product-image">
@@ -162,7 +170,7 @@
             	수량 변경과 동시에 가격도 변경
              -->
             <hr />
-            수량 <input type="number" id="amount" name="amount" value="1" min="1" max="10"/>
+            수량 <input type="number" id="amount" name="amount" value="1" min="1" max="100"/>
             <div>
 	      		<label class="total_price">총상품금액</label>
 	     		 <div class="total_price" style="float:right;">원</div>
@@ -171,7 +179,7 @@
             </div>
             <hr />
             <button id="add-cart">장바구니</button>
-            <button>바로결제</button>
+            <button id="direct-purchase">바로결제</button>
         </div>
     </div>
     
@@ -247,7 +255,6 @@
 	let mode = 'add';
 	const price = '<c:out value="${item.price}"/>';
 	var item_no = '<c:out value="${item.item_no}"/>';
-	const amount = $('#amount').val();
 	const listTbody = $('#listTbody');
 	const reviewPageFooter = $('.panel-footer');
 	const reviewForm = $('#reviewForm');
@@ -476,10 +483,15 @@
 		
 		listTbody.html("<tr><td>테스트</td><td>테스트2</td></tr>");
 		$('#cart-total').html(Number(price).toLocaleString());
-		
 		//수량 바꾸면 총상품금액도 변경
 		$('#amount').on('change',function(){
+		
+			const amount = Number($(this).val());
+			console.log('changing');
+			console.log(price , amount);
+			$('input[name=quantity]').val(amount.toString());
 			$('#cart-total').html((price * amount).toLocaleString());
+			console.log('change end');
 		});
 		
 		//탭메뉴
@@ -529,6 +541,10 @@
 			showList(pageNum);
 			showTabMenu(2);
 			
+		});
+		
+		$('#direct-purchase').on('click',function(){
+			$('#purchaseForm').submit();
 		});
 	});
 </script>
