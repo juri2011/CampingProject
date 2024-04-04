@@ -219,10 +219,10 @@
 	        <p><textarea name="content" id="reviewContent" cols="30" rows="10" placeholder="내용을 입력해주세요"></textarea><p/>
 	        <!-- 비회원 상태에서 작성 가능 -->
 	        <p id="inputBox">
-		        <input id="rev_no" type="text" name="rev_no" value=""/>
+		        <input id="rev_no" type="hidden" name="rev_no" value=""/>
 		        <input class="addBtn" type="submit" value="작성"/>
 		        <button class="modifyBtn" id="modify">수정</button>
-		        <input type="reset" value="초기화" />
+		        <input class="addBtn" type="reset" value="초기화" />
 		        <!-- submit하면 안되기 때문에 type을 button으로 지정했다 -->
 		        <button class="modifyBtn" id="toList" type="button">목록으로</button>
 	        </p>
@@ -460,7 +460,7 @@
 			score: reviewScore.val()
 		};
 		reviewService.update(review ,function(result){
-			alert('리뷰 등록: ',result);
+			alert(result);
 			changeMode("add");
 			showList(1);
 			showTabMenu(2);
@@ -523,6 +523,12 @@
 		$("#move-cart").on('click',function(){
 			$('#popup').css('display','flex');
 			self.location="/cart/list";
+		});
+		
+		$('#toList').on('click',function(){
+			showList(pageNum);
+			showTabMenu(2);
+			
 		});
 	});
 </script>

@@ -62,6 +62,7 @@ public class ReviewController {
 			//삼항연산자
 		}
 		
+		//리뷰 삭제
 		@DeleteMapping("/{rev_no}")
 	  public ResponseEntity<String> remove(@PathVariable("rev_no") int rev_no){
 	    log.info("remove: " + rev_no);
@@ -71,6 +72,7 @@ public class ReviewController {
 	        : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	  }
 		
+		//리뷰 수정
 		@RequestMapping(method = {RequestMethod.PUT, RequestMethod.PATCH}, value="/{rev_no}")
 		public @ResponseBody String updateCart(@PathVariable int rev_no, @RequestBody ReviewVO vo) {
 			vo.setRev_no(rev_no);
