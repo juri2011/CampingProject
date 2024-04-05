@@ -146,7 +146,7 @@
     </form>
     <form id="purchaseForm" name="purchaseForm" action="/order/purchase/direct" method="get">
     	<%-- <input type="hidden" name="item_img" value="<c:out value='${item.item_name}' />" /> --%>
-    	<input type="hidden" name="quantity" value="" />
+    	<input type="hidden" name="quantity" value="1" />
     	<input type="hidden" name="status" value="<c:out value='${item.status}' />" />
     	<input type="hidden" name="price" value="<c:out value='${item.price}' />" />
     	<input type="hidden" name="item_no" value="<c:out value='${item.item_no}' />" />
