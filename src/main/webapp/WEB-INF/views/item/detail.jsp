@@ -144,6 +144,14 @@
     	<input type="hidden" name="item_no" value="<c:out value='${item.item_no}' />" />
     	<input type="hidden" name="category" value="<c:out value='${item.category}' />" />
     </form>
+    <form id="purchaseForm" name="purchaseForm" action="/order/purchase/direct" method="post">
+    	<%-- <input type="hidden" name="item_img" value="<c:out value='${item.item_name}' />" /> --%>
+    	<input type="hidden" name="quantity" value="1" />
+    	<input type="hidden" name="status" value="<c:out value='${item.status}' />" />
+    	<input type="hidden" name="price" value="<c:out value='${item.price}' />" />
+    	<input type="hidden" name="item_no" value="<c:out value='${item.item_no}' />" />
+    	<input type="hidden" name="item_name" value="<c:out value='${item.item_name}' />" />
+    </form>
     <div class="container">
     	
         <div class="product-image">
@@ -162,7 +170,7 @@
             	수량 변경과 동시에 가격도 변경
              -->
             <hr />
-            수량 <input type="number" id="amount" name="amount" value="1" min="1" max="10"/>
+            수량 <input type="number" id="amount" name="amount" value="1" min="1" max="100"/>
             <div>
 	      		<label class="total_price">총상품금액</label>
 	     		 <div class="total_price" style="float:right;">원</div>
@@ -171,7 +179,7 @@
             </div>
             <hr />
             <button id="add-cart">장바구니</button>
-            <button>바로결제</button>
+            <button id="direct-purchase">바로결제</button>
         </div>
     </div>
     
@@ -218,9 +226,14 @@
 	        <p><label for="writer">작성자</label><input type="text" name="writer" id="reviewWriter" placeholder="작성자를 입력해주세요"/></p>
 	        <p><textarea name="content" id="reviewContent" cols="30" rows="10" placeholder="내용을 입력해주세요"></textarea><p/>
 	        <!-- 비회원 상태에서 작성 가능 -->
-	        <input type="hidden" name="rev_no" value=""/>
-	        <input type="submit" value="작성"/>
-	        <input type="reset" value="초기화" />
+	        <p id="inputBox">
+		        <input id="rev_no" type="hidden" name="rev_no" value=""/>
+		        <input class="addBtn" type="submit" value="작성"/>
+		        <button class="modifyBtn" id="modify">수정</button>
+		        <input class="addBtn" type="reset" value="초기화" />
+		        <!-- submit하면 안되기 때문에 type을 button으로 지정했다 -->
+		        <button class="modifyBtn" id="toList" type="button">목록으로</button>
+	        </p>
         </form>
         
       </div>
@@ -235,18 +248,23 @@
 	  </div>
 	</div>
 </body>
+<script src="/resources/js/cart.js"></script>
 <script src="/resources/js/review.js"></script>
 <script>
 	//가져와서 출력
+	let mode = 'add';
 	const price = '<c:out value="${item.price}"/>';
 	var item_no = '<c:out value="${item.item_no}"/>';
 	const listTbody = $('#listTbody');
 	const reviewPageFooter = $('.panel-footer');
 	const reviewForm = $('#reviewForm');
 	
+	const reviewNo = $('#rev_no'); //리뷰 번호 input
 	const reviewWriter = $('#reviewWriter'); //작성자 input
 	const reviewContent = $('#reviewContent'); //내용 textarea
 	const reviewScore = $('#reviewScore'); //점수 input
+	
+	const copyFormTab = $('#myTabContent3>form').html();
 
 	let pageNum = 1;
 	const userID = 'user004' //임시
@@ -256,24 +274,66 @@
 	//$(document).ready() 안에 들어가게 되면
 	//리스트 안의 버튼이 이 함수를 실행하지 못한다.
 	if(userID != null || userID != ''){
+		console.log('user004');
 		$('#reviewWriter').attr('readonly','true');
 		$('#reviewWriter').attr('value',userID);
 	}
-	/*
+
+	//리뷰 수정(하기 전에 데이터 가져오기)
 	function reviewUpdate(rno){
-		cosnt rev_no = rno;
+		//get에 전달해줄 리뷰 번호
+		const rev_no = rno;
+		//리뷰에서 가져오기
 		reviewService.get(rno, function(review){
-			if(userID != null userID != ''){
-				reviewWriter.val(review.writer);
+			//userID가 있으면(회원이라면)
+			if(userID != null && userID != ''){
+				//작성자 아이디를 input태그에 넣는다
+				reviewWriter.val(userID);
 			}
+			//작성 내용을 input태그에 넣는다
 			reviewContent.val(review.content);
+			//평점을 input태그에 넣는다
 			reviewScore.val(review.score);
+			//input에 리뷰 번호 적기
+			reviewNo.val(rno);
+			//수정모드로 변경하고 화면 구조 변경
+			changeMode('modify');
+			//3번째 탭으로 이동
+			showTabMenu(3,true);
 		});
-		reviewScore.val();
-		reviewContent.val();
-		showTabMenu(3);
 	}
-	*/
+	
+	//모드 변경(탭 3번의 화면 구성 및 기능 변경)
+	function changeMode(m){
+		const tab = $('#myTabContent3');
+		if(m === 'add'){
+			mode = 'add';
+			//탭메뉴 타이틀 변경
+			$('#myTabTitle3>a').html('리뷰작성');
+			//탭메뉴 제목 변경
+			tab.find('h2').html('리뷰 작성');
+			reviewScore.val(5);
+			reviewWriter.val(userID);
+			reviewContent.val('');
+			reviewNo.val('');
+			//수정에 들어가는 버튼 숨기기
+			$('.modifyBtn').hide();
+			//작성에 들어가는 버튼 살리기
+			$('.addBtn').show();
+			
+		}else if(m === 'modify'){
+			mode = 'modify';
+			//탭메뉴 타이틀 변경
+			$('#myTabTitle3>a').html('리뷰수정');
+			//탭메뉴 제목 변경
+			tab.find('h2').html('리뷰 수정');
+			//작성에 들어가는 버튼은 숨기기
+			$('.addBtn').hide();
+			//수정에 들어가는 버튼 보여주기
+			$('.modifyBtn').show();
+		}
+	}
+	
 	function reviewDelete(rno){
 		const rev_no = rno;
 		if(confirm('정말 삭제하시겠습니까?')){
@@ -321,8 +381,14 @@
 	}//end showList
 	
 
-	
-	function showTabMenu(tab_id){
+	function showTabMenu(tab_id, isModify){
+		
+		if(isModify){
+			changeMode('modify');
+		}else{
+			changeMode('add');
+		}
+		
 		$('ul.tab-title li').removeClass('active');
 	    $('.tab-content div').removeClass('active');
 
@@ -386,27 +452,47 @@
 			score: reviewScore.val()
 		};
 		reviewService.add(review, function(result){
+
 			alert(result);
-			reviewScore.val(5);
-			reviewWriter.val('');
-			reviewContent.val('');
 			showList(1);
 			showTabMenu(2);
 		});
 	}
+	
+	//리뷰 수정(리뷰 번호를 받아서)
+	function modifyReview(){
+		const review = {
+			rev_no: reviewNo.val(),
+			content: reviewContent.val(),
+			score: reviewScore.val()
+		};
+		console.log(review);
+		reviewService.update(review ,function(result){
+			alert(result);
+			changeMode("add");
+			showList(1);
+			showTabMenu(2);
+		});
+	};
+	
 	$(document).ready(function(){
 		
-			
+		//초기 설정을 '작성모드'로 한다.
+		changeMode('add');
 		//리뷰 출력
 		showList(1);
 		
 		listTbody.html("<tr><td>테스트</td><td>테스트2</td></tr>");
 		$('#cart-total').html(Number(price).toLocaleString());
-		
 		//수량 바꾸면 총상품금액도 변경
 		$('#amount').on('change',function(){
-			const amount = $(this).val();
+		
+			const amount = Number($(this).val());
+			console.log('changing');
+			console.log(price , amount);
+			$('input[name=quantity]').val(amount.toString());
 			$('#cart-total').html((price * amount).toLocaleString());
+			console.log('change end');
 		});
 		
 		//탭메뉴
@@ -415,6 +501,8 @@
 			const tab_id = $(this).attr('data-tab');
 			showTabMenu(tab_id);
 		});
+		
+		
 		reviewForm.on('submit', function(e){
 			e.preventDefault();
 			//유효성 검사
@@ -427,14 +515,19 @@
 				reviewContent.focus();
 			}
 			else{
-				addReview();
+				if(mode === "add") addReview();
+				else if(mode === "modify") modifyReview();
 			}
 		});
 		
 		$('#add-cart').on('click',function(){
 			//장바구니 추가
-			
-			$('#popup').css('display','flex');
+			const amount = Number($('#amount').val());
+			const cart = {member_id: userID, item_no: item_no, quantity: amount};
+			cartService.add(cart, function(result){
+				console.log(result);
+				$('#popup').css('display','flex');
+			});
 		});
 		
 		$('#closePopup').on('click',function(){
@@ -442,7 +535,19 @@
 		})
 		
 		$("#move-cart").on('click',function(){
+			$('#popup').css('display','none');
+			showTabMenu(1);
 			self.location="/cart/list";
+		});
+		
+		$('#toList').on('click',function(){
+			showList(pageNum);
+			showTabMenu(2);
+			
+		});
+		
+		$('#direct-purchase').on('click',function(){
+			$('#purchaseForm').submit();
 		});
 	});
 </script>

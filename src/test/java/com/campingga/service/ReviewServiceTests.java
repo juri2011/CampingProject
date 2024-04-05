@@ -47,4 +47,14 @@ public class ReviewServiceTests {
 	  int result = reviewService.remove(13);
 	  log.info("======================"+result);
 	}
+	
+	@Test
+	public void modifyTest() {
+		ReviewVO vo = new ReviewVO();
+		vo.setContent("새로 수정하는 내용입니다!!!!!!!!!");
+		vo.setRev_no(6);
+		vo.setScore(4);
+		int result = reviewService.modify(vo);
+		log.info("======================"+result);
+	}
 }

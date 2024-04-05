@@ -43,4 +43,19 @@ public class CartServiceImpl implements CartService{
 		return cartMapper.updateCart(vo);
 	}
 
+  @Override
+  public int add(CartVO vo) {
+    return cartMapper.insertCart(vo);
+  }
+
+@Override
+public int getTotalPrice(List<CartVO> cartList) {
+	int result = 0;
+	for(CartVO vo : cartList) {
+		result += vo.getPrice();
+	}
+	return result;
+}
+  
+
 }

@@ -53,4 +53,15 @@ public class CartMapperTests {
 		int result = cartMapper.updateCart(vo);
 		log.info(result);
 	}
+	
+	@Test
+	public void testInsertCart() {
+	  CartVO vo = new CartVO();
+	  vo.setMember_id("user003");
+	  vo.setItem_no(13);
+	  vo.setQuantity(3);
+	  
+	  int result = cartMapper.insertCart(vo);
+	  log.info(result);
+	}
 }

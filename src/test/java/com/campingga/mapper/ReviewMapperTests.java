@@ -55,4 +55,21 @@ public class ReviewMapperTests {
 	  int result = reviewMapper.deleteReview(15);
 	  log.info("------------------------"+result);
 	}
+	
+	//리뷰 한 개 조회 테스트
+	@Test
+	public void selectReviewTest() {
+	 ReviewVO vo = reviewMapper.selectReview(17);
+	 
+	 log.info(vo);
+	}
+	
+	@Test
+	public void updateReviewTest() {
+		ReviewVO vo = new ReviewVO();
+		vo.setContent("새로 수정하는 내용입니다~!~!~!~!~!~!~");
+		vo.setRev_no(6);
+		vo.setScore(5);
+		log.info(reviewMapper.updateReview(vo));
+	}
 }

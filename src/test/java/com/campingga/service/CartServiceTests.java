@@ -47,4 +47,15 @@ public class CartServiceTests {
 		int result = cartService.modify(vo);
 		log.info(result);
 	}
+	
+	@Test
+  public void testAdd() {
+    CartVO vo = new CartVO();
+    vo.setMember_id("user003");
+    vo.setItem_no(14);
+    vo.setQuantity(4);
+    
+    int result = cartService.add(vo);
+    log.info(result);
+  }
 }

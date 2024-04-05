@@ -9,8 +9,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.campingga.domain.CartVO;
 import com.campingga.domain.Criteria;
 import com.campingga.domain.ReviewPageDTO;
 import com.campingga.domain.ReviewVO;
@@ -36,7 +39,15 @@ public class ReviewController {
 									HttpStatus.OK);
 	}
 	
-	//댓글 등록하기
+  //리뷰 읽기
+    @GetMapping("/{rev_no}")
+    public ResponseEntity<ReviewVO> get(@PathVariable("rev_no") int rev_no){
+      log.info("get: " + rev_no);
+      
+      return new ResponseEntity<>(reviewService.get(rev_no),HttpStatus.OK);
+    }
+	
+	//리뷰 등록하기
 		@PostMapping("/write")
 		public ResponseEntity<String> create(@RequestBody ReviewVO vo){
 			
@@ -51,6 +62,7 @@ public class ReviewController {
 			//삼항연산자
 		}
 		
+		//리뷰 삭제
 		@DeleteMapping("/{rev_no}")
 	  public ResponseEntity<String> remove(@PathVariable("rev_no") int rev_no){
 	    log.info("remove: " + rev_no);
@@ -59,4 +71,15 @@ public class ReviewController {
 	        ? new ResponseEntity<>("success", HttpStatus.OK)
 	        : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	  }
+		
+		//리뷰 수정
+		@RequestMapping(method = {RequestMethod.PUT, RequestMethod.PATCH}, value="/{rev_no}")
+		public @ResponseBody String updateCart(@PathVariable int rev_no, @RequestBody ReviewVO vo) {
+			vo.setRev_no(rev_no);
+			log.info("rev_no: " + rev_no);
+			log.info("modify: " + vo);
+			
+			return reviewService.modify(vo) == 1
+					? "success" : "error";
+		}
 }
