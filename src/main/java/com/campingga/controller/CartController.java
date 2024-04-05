@@ -36,7 +36,7 @@ public class CartController {
 		//Authentication auth = SecurityContextHolder.getContext().getAuthentication();		
 		
 		//String userId = auth.getName();
-		String userId = "user003"; //임시(원래는 세션에서 id를 가져와야 함)
+		String userId = "user004"; //임시(원래는 세션에서 id를 가져와야 함)
 		model.addAttribute("userId", userId);
 		
 		return "cart/cart"; 

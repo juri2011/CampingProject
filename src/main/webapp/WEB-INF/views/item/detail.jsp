@@ -466,6 +466,7 @@
 			content: reviewContent.val(),
 			score: reviewScore.val()
 		};
+		console.log(review);
 		reviewService.update(review ,function(result){
 			alert(result);
 			changeMode("add");
@@ -521,6 +522,7 @@
 		
 		$('#add-cart').on('click',function(){
 			//장바구니 추가
+			const amount = Number($('#amount').val());
 			const cart = {member_id: userID, item_no: item_no, quantity: amount};
 			cartService.add(cart, function(result){
 				console.log(result);
@@ -533,7 +535,8 @@
 		})
 		
 		$("#move-cart").on('click',function(){
-			$('#popup').css('display','flex');
+			$('#popup').css('display','none');
+			showTabMenu(1);
 			self.location="/cart/list";
 		});
 		
