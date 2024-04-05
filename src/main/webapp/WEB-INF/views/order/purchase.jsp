@@ -75,6 +75,7 @@
                 <th>상품명</th>
                 <th>수량</th>
                 <th>가격</th>
+                <th>상태</th>
             </tr>
             <c:forEach var="cart" items="${cartList}">
             	<tr>
@@ -91,7 +92,7 @@
             </c:forEach>
             <tr>
                 <td colspan="3"><b>총 상품 금액:</b></td>
-                <td><fmt:formatNumber value="${totalPrice}" pattern="#,###원" /></td>
+                <td colspan="2"><fmt:formatNumber value="${totalPrice}" pattern="#,###원" /></td>
             </tr>
             
         </table>

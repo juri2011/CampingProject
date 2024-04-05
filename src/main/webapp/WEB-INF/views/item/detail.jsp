@@ -144,7 +144,7 @@
     	<input type="hidden" name="item_no" value="<c:out value='${item.item_no}' />" />
     	<input type="hidden" name="category" value="<c:out value='${item.category}' />" />
     </form>
-    <form id="purchaseForm" name="purchaseForm" action="/order/purchase/direct" method="get">
+    <form id="purchaseForm" name="purchaseForm" action="/order/purchase/direct" method="post">
     	<%-- <input type="hidden" name="item_img" value="<c:out value='${item.item_name}' />" /> --%>
     	<input type="hidden" name="quantity" value="1" />
     	<input type="hidden" name="status" value="<c:out value='${item.status}' />" />

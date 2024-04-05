@@ -32,7 +32,7 @@ public class OrderController {
 	
 	@GetMapping("/purchase")
 	public String orderListForm(Model model) {
-		String userId = "user003";//임시
+		String userId = "user004";//임시
 		List<CartVO> cartList = cartService.getCartItemList(userId);
 		int totalPrice = cartService.getTotalPrice(cartList);
 		model.addAttribute("totalPrice",totalPrice);
@@ -40,7 +40,7 @@ public class OrderController {
 		return "order/purchase";
 	}
 	
-	@GetMapping("/purchase/direct")
+	@PostMapping("/purchase/direct")
 	public String orderListFormDirect(CartVO cartVO, Model model) {
 		//String userId = "user003"; 임시
 		
@@ -72,4 +72,10 @@ public class OrderController {
 		return AjaxRes.builder().status("SUCCESS").data(paymentItem).build();
 	}
 	*/
+	
+	@GetMapping("/orderList")
+	public String orderList() {
+	  
+	  return "order/orderList";
+	}
 }

@@ -97,10 +97,11 @@
 		});// end of deleteAll
 		
 		$('#purchase').on('click', function(){
-			
+			// 선택된 체크박스만 필터링
+		    
 			cartService.getList(member_id, function(cartCnt, list){
 				console.log("cartCnt: "+cartCnt);
-				console.log("list: "+list);
+				
 				
 				if(list == null || list.length == 0){
 					return;
@@ -118,9 +119,22 @@
 						//purchase로 이동
 						self.location="/order/purchase";
 					});
+					
 				}
 			});//get
-		})
+		});
+		
+		// '#selectAll' 체크박스를 클릭했을 때 실행될 함수
+	    $('#selectAll').click(function() {
+	        // '#selectAll' 체크박스의 체크 상태에 따라
+	        if ($(this).is(':checked')) {
+	            // 모든 '.product-checkbox' 체크박스를 체크 상태로 만듦
+	            $('.product-checkbox').prop('checked', true);
+	        } else {
+	            // 모든 '.product-checkbox' 체크박스의 체크를 해제함
+	            $('.product-checkbox').prop('checked', false);
+	        }
+	    });
 	});
 </script>
 </html>
