@@ -47,7 +47,7 @@ public class ItemController {
 	}
 	
 	/* 이미지 정보 반환 */
-	@GetMapping(value="/getAttachList", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@GetMapping(value="/getAttachList", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<AttachImageVO>> getAttachList(int item_no){
 		
 		log.info("getAttachList.........." + item_no);
