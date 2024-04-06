@@ -83,8 +83,9 @@
                 <td>
                 	<c:out value='${cart.item_name}'/>
                 	<input type="hidden" name="cart_no" id="cart_no" value="${cart.cart_no}" />
+                	<input type="hidden" name="item_no" id="item_no" value="${cart.item_no}" />
                 </td>
-                <td><c:out value='${cart.quantity}'/></td>
+                <td id="item-quantity"><c:out value='${cart.quantity}'/></td>
                 <td><fmt:formatNumber value="${cart.price}" pattern="#,###원" /></td>
                 <td><c:out value='${cart.status eq 1 ? "판매중" : "판매중단"}'/></td>
                 
@@ -98,12 +99,21 @@
         </table>
     </div>
     <h2>배송 정보</h2>
+    <%-- <div class="shipping-details">
+        <input id="name" type="text" placeholder="받으실 분" value='<c:out value="${sessionScope.member.name}"/>'>
+        <input id="phone" type="tel" placeholder="전화번호" value='<c:out value="${sessionScope.member.phone}"/>'>
+        <input id="stnum" type="text" placeholder="주소" value='<c:out value="${sessionScope.member.userStnum}"/>'>
+        <input id="addr1" type="text" placeholder="주소" value='<c:out value="${sessionScope.member.userAddr}"/>'>
+        <input id="addr2" type="text" placeholder="상세주소" value='<c:out value="${sessionScope.member.userDaddr}"/>'>
+        <textarea id="memo" placeholder="배송 메시지">파손되지 않게 조심히 배송해주세요</textarea>
+    </div> --%>
     <div class="shipping-details">
-        <input id="name" type="text" placeholder="받으실 분">
-        <input id="phone" type="tel" placeholder="전화번호">
-        <input id="addr1" type="text" placeholder="주소">
-        <input id="addr2" type="text" placeholder="상세주소">
-        <textarea id="memo" placeholder="배송 메시지"></textarea>
+        <input id="name" type="text" placeholder="받으실 분" value='<c:out value=""/>'>
+        <input id="phone" type="tel" placeholder="전화번호" value='<c:out value=""/>'>
+        <input id="stnum" type="text" placeholder="주소" value='<c:out value=""/>'>
+        <input id="addr1" type="text" placeholder="주소" value='<c:out value=""/>'>
+        <input id="addr2" type="text" placeholder="상세주소" value='<c:out value=""/>'>
+        <textarea id="memo" placeholder="배송 메시지">파손되지 않게 조심히 배송해주세요</textarea>
     </div>
     <div class="btn-container">
         <button class="btn" id="purchase">결제</button>
@@ -201,18 +211,41 @@
 			
 				$("[name=cart_no]").each(function(idx){
 					const data = {
-							name: $("#name").val(),
-							phone: $("#phone").val(),
-							addr1: $("#addr1").val(),
-							addr2: $("#addr2").val(),
-							memo: $("#memo").val(),
-							cart: $("[name=cart_no]:eq(" + idx + ")").val()
-						};
+						name: $("#name").val(),
+						phone: $("#phone").val(),
+						stnum: $("#stnum").val(),
+						userAddr: $("#addr1").val(),
+						userDaddr: $("#addr2").val(),
+						d_memo: $("#memo").val(),
+						cart_no: Number($("[name=cart_no]:eq(" + idx + ")").val()),
+						item_no: Number($("[name=item_no]:eq(" + idx + ")").val()),
+						amount: Number($("#item-quantity").html())
+					};
 					console.log(data.cart);
 					list.push(data);
 				});
 				console.log(list);
-				alert('결제가 완료되었습니다.');
+				/*
+				if(location.pathname === '/order/purchase/direct'){
+					console.log('단일상품');
+				} */
+				
+				$.ajax({
+				    url: '/order/addOrder',
+				    type: 'POST',
+				    contentType: 'application/json',
+				    data: JSON.stringify(list),
+				    success: function(response) {
+				        // 성공적으로 데이터를 전송한 후 실행할 코드
+				        console.log(response);
+				        alert('결제가 완료되었습니다.');
+				        self.location='/order/orderList';
+				    },
+				    error: function(xhr, status, error) {
+				        // 에러 처리
+				        console.error(error);
+				    }
+				});
 				/*
     			$.ajax({
     				type: "POST",

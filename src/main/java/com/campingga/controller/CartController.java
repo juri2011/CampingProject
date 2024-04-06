@@ -1,5 +1,8 @@
 package com.campingga.controller;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.campingga.domain.CartDTO;
 import com.campingga.domain.CartVO;
-import com.campingga.domain.ReviewVO;
+import com.campingga.domain.MemberVO;
 import com.campingga.service.CartService;
 
 import lombok.extern.log4j.Log4j;
@@ -31,13 +34,16 @@ public class CartController {
 	
 	//단순히 이동만 하는 메소드
 	@GetMapping("/list")
-	public String cartList(Model model){
+	public String cartList(HttpServletRequest request, Model model){
 		//로그인 유저 체크
 		//Authentication auth = SecurityContextHolder.getContext().getAuthentication();		
-		
+		HttpSession session = request.getSession();
 		//String userId = auth.getName();
-		String userId = "user004"; //임시(원래는 세션에서 id를 가져와야 함)
-		model.addAttribute("userId", userId);
+		if(session.getAttribute("member") != null) {
+			MemberVO user = (MemberVO) session.getAttribute("member"); //임시(원래는 세션에서 id를 가져와야 함)
+			String userId = user.getMem_id();
+			model.addAttribute("userId", userId);
+		}
 		
 		return "cart/cart"; 
 	}

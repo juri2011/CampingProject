@@ -96,31 +96,56 @@
 			}
 		});// end of deleteAll
 		
+		//클릭하면 장바구니 수량 수정하고 구매페이지로 이동
 		$('#purchase').on('click', function(){
 			// 선택된 체크박스만 필터링
 		    
+			//장바구니 DB로부터 장바구니 리스트를 가져옴
 			cartService.getList(member_id, function(cartCnt, list){
 				console.log("cartCnt: "+cartCnt);
 				
-				
+				//리스트가 없으면 종료
 				if(list == null || list.length == 0){
 					return;
 				}
+				
+				//순서대로 cart 객체에 담음
 				for(let i=0, len=list.length || 0; i<len; i++){
+					//페이지로부터 수량 가져옴
 					const quantity = $('#cart-'+list[i].cart_no).find("input[name='quantity']").val();
+					//전달할 cart 객체
 					const cart = {cart_no: list[i].cart_no,
 								quantity: quantity};
+					//품절된 상품을 구매하려고 하면 구매페이지 이동 불가
 					if(list[i].status === '2'){
 						alert('품절된 상품이 포함되어 있습니다.');
 						return;
 					}
+					//위의 조건문 통과했으면 장바구니 DB에서 구매수량 수정
 					cartService.update(cart, function(result){
+						//콘솔에 출력
 						console.log('cart_no: ',list[i].cart_no , result);
-						//purchase로 이동
 						self.location="/order/purchase";
 					});
-					
-				}
+				}//end for
+				
+				//수정 완료했으면 구매 테이블에 삽입(비동기로)
+				//이때, list를 보내준다
+				/*$.ajax({
+					type: 'post',
+					url: '/order/addBill',
+					contentType: 'application/json',
+				    data: JSON.stringify(list),
+					success:function(result, status, xhr){
+						//purchase로 이동
+						
+					},
+					error:function(xhr, status, er){
+						if(error){
+							error(er);
+						}
+					}
+				});*/
 			});//get
 		});
 		

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.campingga.mapper.OrderMapper">
+	<insert id="insertOrder" parameterType="OrderListVO">
+		INSERT INTO orderList
+		(item_no,
+		name,
+		phone,
+		stnum,
+		userAddr, 
+		userDaddr, 
+		mem_id, 
+		cart_no, 
+		d_memo, 
+		amount)
+		
+		values(#{item_no},
+		#{name},
+		#{phone},
+		#{stnum},
+		#{addr1},
+		#{addr2},
+		#{mem_id},
+		#{cart_no},
+		#{d_memo},
+		#{amount});
+	</insert>
+	<select id="getOrderList" parameterType="String" resultType="OrderListVO">
+		select
+			ord_no,
+			item_no,
+			amount,
+			name,
+			phone,
+			stnum,
+			userAddr,
+			userDaddr,
+			d_memo,
+			regdate
+		from orderList 
+		where mem_id = #{mem_id};
+	</select>
+</mapper>
