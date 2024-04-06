@@ -1,7 +1,11 @@
 package com.campingga.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -17,9 +21,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.campingga.domain.CartVO;
+import com.campingga.domain.ItemVO;
 import com.campingga.domain.MemberVO;
 import com.campingga.domain.OrderListVO;
 import com.campingga.service.CartService;
+import com.campingga.service.ItemService;
 import com.campingga.service.OrderService;
 
 import lombok.extern.log4j.Log4j;
@@ -34,6 +40,9 @@ public class OrderController {
 	
 	@Autowired
 	public CartService cartService;
+	
+	@Autowired
+	public ItemService itemService;
 	
 	//구매 화면으로 이동
 	@GetMapping("/purchase")
@@ -95,24 +104,59 @@ public class OrderController {
 		if(session.getAttribute("member") == null) {	
 			return "/main";
 		}
-		//OrderListVO order = orderService.getOrderList();
+		String mem_id = ((MemberVO)session.getAttribute("member")).getMem_id();
+		List<OrderListVO> orderList = orderService.getOrderList(mem_id);
+		Map<String, List<OrderListVO>> orderMap = new HashMap<>();
+		Map<String, Integer> totalPriceMap = new HashMap<>();
 		
-		//model.addAttribute(model);
+		
+		//주문번호별로 그룹화
+		for(OrderListVO order : orderList) {
+			//order의 item_no를 이용해서 아이템정보(이름, 가격)등을 받아온다.
+			ItemVO item = itemService.get(order.getItem_no());
+			order.setItem_name(item.getItem_name());
+			order.setPrice(item.getPrice());
+			
+			//주문번호로 key 생성
+			String orderKey = order.getOrd_no();
+			
+			//아직 주문번호로 key값이 만들어지지 않았으면 생성 (초기화)
+			if (!orderMap.containsKey(orderKey)) {
+                orderMap.put(orderKey, new ArrayList<>());
+                totalPriceMap.put(orderKey, 0);
+            }
+			//주문번호 key로 ArrayList value에 현재 order를 추가
+			orderMap.get(orderKey).add(order);
+			
+			int totalPrice = totalPriceMap.get(orderKey) + (order.getPrice() * order.getAmount());
+			totalPriceMap.put(orderKey, totalPrice);
+		}
+		
+		
+		
+		//orderList.forEach(order -> log.info(order));
+		model.addAttribute("orderMap",orderMap);
+		model.addAttribute("totalPriceMap", totalPriceMap);
+		//model.addAttribute("orderList",orderList);
 		return "order/orderList";
 	}
 	
 
 	
 	@PostMapping("/addOrder")
-	public @ResponseBody ResponseEntity<String> addOrder(HttpSession session, @RequestBody List<OrderListVO> orderList, Model model){
+	public @ResponseBody ResponseEntity<String> addOrder(HttpSession session, @RequestBody List<OrderListVO> orderList){
 		
 		MemberVO member = (MemberVO) session.getAttribute("member");
 		String userId = member.getMem_id();
 		int insertCount = 0;
 		//name, phone, addr1, addr2, memo, item_no, amount
+		
 		for(OrderListVO order : orderList) {
 			log.info(order);
 			order.setMem_id(userId);
+			Date now = new Date();
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+			order.setOrd_no(userId + "_" + dateFormat.format(now));
 			if(orderService.addOrder(order) == 1) insertCount++;
 		}
 			

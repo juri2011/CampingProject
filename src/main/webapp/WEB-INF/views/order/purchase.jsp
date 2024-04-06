@@ -224,11 +224,6 @@
 					console.log(data.cart);
 					list.push(data);
 				});
-				console.log(list);
-				/*
-				if(location.pathname === '/order/purchase/direct'){
-					console.log('단일상품');
-				} */
 				
 				$.ajax({
 				    url: '/order/addOrder',
@@ -239,13 +234,20 @@
 				        // 성공적으로 데이터를 전송한 후 실행할 코드
 				        console.log(response);
 				        alert('결제가 완료되었습니다.');
-				        self.location='/order/orderList';
+		    		    self.location='/order/orderList';
 				    },
 				    error: function(xhr, status, error) {
 				        // 에러 처리
 				        console.error(error);
 				    }
 				});
+
+		        
+				/*
+				if(location.pathname === '/order/purchase/direct'){
+					console.log('단일상품');
+				} */
+				
 				/*
     			$.ajax({
     				type: "POST",

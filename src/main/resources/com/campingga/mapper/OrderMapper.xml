@@ -7,7 +7,8 @@
 <mapper namespace="com.campingga.mapper.OrderMapper">
 	<insert id="insertOrder" parameterType="OrderListVO">
 		INSERT INTO orderList
-		(item_no,
+		(ord_no,
+		item_no,
 		name,
 		phone,
 		stnum,
@@ -18,12 +19,13 @@
 		d_memo, 
 		amount)
 		
-		values(#{item_no},
+		values(#{ord_no},
+		#{item_no},
 		#{name},
 		#{phone},
 		#{stnum},
-		#{addr1},
-		#{addr2},
+		#{userAddr},
+		#{userDaddr},
 		#{mem_id},
 		#{cart_no},
 		#{d_memo},
@@ -40,8 +42,10 @@
 			userAddr,
 			userDaddr,
 			d_memo,
-			regdate
+			regdate,
+			status
 		from orderList 
-		where mem_id = #{mem_id};
+		where mem_id = #{mem_id}
+		order by regdate desc;
 	</select>
 </mapper>

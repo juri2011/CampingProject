@@ -9,7 +9,6 @@ public interface OrderService {
 	public int addOrder(OrderListVO vo);
 	
 	public List<OrderListVO> getOrderList(String mem_id);
-	
 	/*
 	 * //구매 테이블에 저장 public int addBill(BillVO bill);
 	 * 
