@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -179,17 +180,17 @@
 					</select>
 				</div>
 			</div>
-
+			<!-- 입력값에 ','을 넣어도, 가격이 DB에 저장되게 수정 -->
 			<div class="form_section">
 				<div class="form_section_title">
 					<label>상품 가격</label>
 				</div>
 				<div class="form_section_content">
-					<input name="price" value="0">
+					<input type="text" id="price" name="price"
+						value="<c:out value='${item.price}' />"> <span
+						id="priceDisplay"><c:out value='${item.price}' /></span>
 				</div>
 			</div>
-
-
 
 			<div class="form_section">
 				<div class="form_section_title">
@@ -206,6 +207,7 @@
 						multiple="multiple" style="height: 30px;">
 				</div>
 			</div>
+			
 			<div class="form_section">
 				<div class="form_section_title">
 					<label>상품 소개</label>
@@ -234,9 +236,17 @@
 		/* 상품 등록 버튼 */
 		$("#enrollBtn").on("click", function(e) {
 
-			e.preventDefault();
-
-			enrollForm.submit();
+			  e.preventDefault();
+			    
+			    // 상품 가격 값을 가져와서 숫자로 변환
+			    let priceInput = document.getElementById('price');
+			    let priceValue = parseInt(priceInput.value.replace(/,/g, ''), 10); // 쉼표(,) 제거 후 숫자로 변환
+			    
+			    // 변환된 값을 다시 입력란에 설정
+			    priceInput.value = priceValue;
+			    
+			    // 폼 제출
+			    enrollForm.submit();
 
 		});
 		

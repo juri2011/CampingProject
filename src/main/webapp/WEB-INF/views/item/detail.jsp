@@ -26,16 +26,14 @@
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        .product-image {
-        	width: 300px;
-        	height: 300px;
-        	background-color: yellow;
-            text-align: center;
-        }
-        .product-image img {
-            max-width: 100%;
-            height: auto;
-        }
+        #result_card img{
+			max-width: 100%;
+		    height: auto;
+		    display: block;
+		    padding: 5px;
+		    margin-top: 10px;
+		    margin: auto;	
+		}
         .product-info {
         	width: 100%;
         	height: 300px;
@@ -154,8 +152,10 @@
     </form>
     <div class="container">
     	
-        <div class="product-image">
-            <img src="product_image.jpg" alt="Product Image">
+        <div class="form_section">
+            <div class="form_section_content">
+				<div id="uploadReslut"></div>
+            </div>                    			        			
         </div>
         <div class="product-info">
             <h2><c:out value="${item.item_name}" /></h2>
@@ -251,10 +251,41 @@
 <script src="/resources/js/cart.js"></script>
 <script src="/resources/js/review.js"></script>
 <script>
+
+	let item_no = '<c:out value="${item.item_no}"/>';
+	let uploadReslut = $("#uploadReslut");	
+
+	$(document).ready(function(){
+    /* 이미지 정보 호출 */
+    $.getJSON("/item/getAttachList", {item_no : item_no}, function(arr){	
+        //이미지가 없는 경우
+        if(arr.length === 0){		
+            let str = "";
+            str += "<div id='result_card'>";
+            str += "<img src='/resources/img/itemNoImage.png'>";
+            str += "</div>";
+            uploadReslut.html(str);	
+            return;
+        }
+
+        let str = "";
+        let obj = arr[0];	
+        
+        let fileCallPath = encodeURIComponent(obj.uploadPath + "/thumbs_" + obj.uuid + "_" + obj.fileName);
+        str += "<div id='result_card'";
+        str += "data-path='" + obj.uploadPath + "' data-uuid='" + obj.uuid + "' data-filename='" + obj.fileName + "'";
+        str += ">";
+        str += "<img src='/display?fileName=" + fileCallPath +"'>";
+        str += "</div>";		
+        
+        uploadReslut.html(str);						
+    	}); // 이 부분의 중괄호가 올바르게 닫혀있어야 합니다.
+	}); // $(document).ready() 함수의 중괄호도 제대로 닫혀있습니다.
+	
 	//가져와서 출력
 	let mode = 'add';
 	const price = '<c:out value="${item.price}"/>';
-	var item_no = '<c:out value="${item.item_no}"/>';
+	//var item_no = '<c:out value="${item.item_no}"/>';
 	const listTbody = $('#listTbody');
 	const reviewPageFooter = $('.panel-footer');
 	const reviewForm = $('#reviewForm');

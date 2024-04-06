@@ -5,10 +5,14 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <title>Welcome Campingga</title>
 </head>
 <style>
+header {
+	text-align: center;
+}
 a {
 	text-decoration: none;
 }
@@ -44,6 +48,9 @@ a {
 <body>
 
 	<div class="wrapper">
+			<header>
+			<h1>캠핑용품 쇼핑몰</h1>
+		</header>
 		<div class="top_gnb_area">
 			<ul class="list">
 				<!-- 비로그인 상태 -->
@@ -65,22 +72,22 @@ a {
 				</c:if>
 			</ul>
 		</div>
+
+	
 	</div>
 	<script>
- 
-    
-/* gnb_area 로그아웃 버튼 작동 */
-$("#gnb_logout_button").click(function(){
-    //alert("버튼 작동");
-    $.ajax({
-        type:"POST",
-        url:"/member/logout.do",
-        success:function(data){
-            alert("로그아웃 성공");
-            document.location.reload();     
-        } 
-    }); // ajax 
-});
-</script>
+		/* gnb_area 로그아웃 버튼 작동 */
+		$("#gnb_logout_button").click(function() {
+			//alert("버튼 작동");
+			$.ajax({
+				type : "POST",
+				url : "/member/logout.do",
+				success : function(data) {
+					alert("로그아웃 성공");
+					document.location.reload();
+				}
+			}); // ajax 
+		});
+	</script>
 </body>
 </html>

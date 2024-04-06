@@ -161,7 +161,7 @@ public class AdminController {
 				BufferedImage bo_image = ImageIO.read(saveFile);
 
 				// 비율
-				double ratio = 3;
+				double ratio = 1.5;
 				// 넓이 높이
 				int width = (int) (bo_image.getWidth() / ratio);
 				int height = (int) (bo_image.getHeight() / ratio);
