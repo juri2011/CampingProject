@@ -126,17 +126,20 @@
 <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
 <script>
 	function initPayment() {
+		//포트원과 상호작용하는 변수
 		const IMP = window.IMP;
-		IMP.init("imp65002722");
+		//가맹점 식별코드로 초기화
+		IMP.init("imp48221435");
 	}
 
 	$(function () {
 		initPayment();
 	})
 
-	function callPayment(data) {
+	//function callPayment(data) {
+	function callPayment() {
 		//상품명 가공
-
+/*
 		let prdCount = 0;
 		let prdName = "";
 
@@ -147,14 +150,24 @@
 				prdName = input.parent().parent().siblings('.column-2').text();
 			}
 		});
-
+*/
 		const paymentData = {
+			pg: "kakaopay",
+			pay_method: "card",
+			merchant_uid: "ORD20240407-000001",
+			name: "라면",
+			amount: "60000",
+		}
+/* 		const paymentData = {
 			pg: "kcp.A52CY",
 			pay_method: "card",
 			merchant_uid: data.orderNo,
 			name: prdName + (prdCount > 1 ? "외 " + (prdCount - 1) + "건" : ""),
-			amount: data.totalPrice
-		}
+			amount: data.totalPrice,
+			buyer_email : data.email,
+	        buyer_name : data.name,
+	        buyer_tel : data.phone,
+		} */
 
 		IMP.request_pay(paymentData, function (rsp) {
 		});
@@ -233,6 +246,8 @@
 				    success: function(response) {
 				        // 성공적으로 데이터를 전송한 후 실행할 코드
 				        console.log(response);
+				        //callPayment(response.data);
+				        //callPayment();
 				        alert('결제가 완료되었습니다.');
 		    		    self.location='/order/orderList';
 				    },

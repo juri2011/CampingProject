@@ -15,4 +15,6 @@ public interface ItemMapper {
 
 	public ItemVO selectOneItem(int item_no);
 
+	public List<ItemVO> selectNewItems();
+
 }

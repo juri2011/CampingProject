@@ -6,6 +6,9 @@ import com.campingga.domain.Criteria;
 import com.campingga.domain.ItemVO;
 
 public interface ItemService {
+	//신상품 세 개만
+	public List<ItemVO> getNewItems();
+	
 	//상품 전체 리스트
 	public List<ItemVO> getList();
 	

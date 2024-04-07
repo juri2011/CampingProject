@@ -20,6 +20,7 @@
 		<table>
 			<thead>
 				<tr>
+					<!-- <th>전체선택<input id="selectAll" type="checkbox" checked/></th> -->
 					<th>상품 이미지</th>
 					<th>상품명</th>
 					<th>가격</th>
@@ -63,6 +64,7 @@
 			}
 			for(let i=0, len=list.length || 0; i<len; i++){
 				str += "<tr class='cartItem' id='cart-"+list[i].cart_no+"'>";
+				//str += "<td><input class='product-checkbox' type='checkbox' value='"+list[i].cart_no+"' checked/></td>"
 				//img src에 list[i].item_img를 넣으려니 405에러 발생(이미지가 아직 없기 때문에)
 				str += "	<td><img src='' alt='"+list[i].item_name+"'></td>";
 				str += "	<td>"+list[i].item_name+"</td>";
@@ -99,7 +101,16 @@
 		//클릭하면 장바구니 수량 수정하고 구매페이지로 이동
 		$('#purchase').on('click', function(){
 			// 선택된 체크박스만 필터링
+		    /*
+			const selectedCarts = $('.product-checkbox:checked').map(function() {
+		        return $(this).val(); // 체크박스의 value (cart_no)를 가져옴
+		    }).get(); // jQuery 객체를 일반 배열로 변환
 		    
+		    if(selectedCarts.length === 0){
+		        alert('구매할 상품을 선택해주세요.');
+		        return;
+		    }
+		    */
 			//장바구니 DB로부터 장바구니 리스트를 가져옴
 			cartService.getList(member_id, function(cartCnt, list){
 				console.log("cartCnt: "+cartCnt);
@@ -109,6 +120,8 @@
 					return;
 				}
 				
+				//list = list.filter(item => selectedCarts.includes(item.cart_no.toString())); // 선택된 cart_no만 포함하는 항목으로 필터링
+				console.log("========================",list);
 				//순서대로 cart 객체에 담음
 				for(let i=0, len=list.length || 0; i<len; i++){
 					//페이지로부터 수량 가져옴
@@ -123,9 +136,9 @@
 					}
 					//위의 조건문 통과했으면 장바구니 DB에서 구매수량 수정
 					cartService.update(cart, function(result){
-						//콘솔에 출력
+						//콘솔에 출력 
 						console.log('cart_no: ',list[i].cart_no , result);
-						self.location="/order/purchase";
+						//self.location="/order/purchase";
 					});
 				}//end for
 				
