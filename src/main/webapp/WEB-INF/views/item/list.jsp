@@ -22,6 +22,7 @@
 		<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum}" />
 		<input type="hidden" name="amount" value="${pageMaker.cri.amount}" />
 		<input type="hidden" name="category" value='<c:out value="${pageMaker.cri.category}"/>'/>
+		<input type="hidden" name="keyword" value='<c:out value="${pageMaker.cri.keyword}"/>'/>
 	</form>
 	<!-- 로고 -->
 	<a href="${pageContext.request.contextPath}/home">
@@ -31,8 +32,12 @@
 	<!-- 상품카테고리 선택 -->
 	<!-- 임의.location.href에 값을 설정하면 해당 값으로 페이지가 이동(리다이렉트).브라우저으이 현재 위치를 가져오거나 설정할 떄 사용. -->
 	<select name="category" id="category">
+		<!-- 키워드 검색으로 들어왔을 때만 생성 -->
+		<c:if test="${pageMaker.cri.keyword != ''}">
+			<option value="검색결과" selected>검색결과</option>
+		</c:if>
 		<option value=""
-			<c:out value="${pageMaker.cri.category == null?'selected':''}" />
+			<c:out value="${pageMaker.cri.category == 'null'?'selected':''}" />
 		>전체상품</option>
 		<option value="캠핑가구"
 			<c:out value="${pageMaker.cri.category == '캠핑가구'?'selected':''}" />
@@ -119,7 +124,7 @@
 		actionForm.submit();
 	});
 	//카테고리 선택 시 카테고리로 리스트 출력
-	$("#category").on("change", function(e){
+	$("#category").on("input", function(e){
 		//select에서 선택된 값이 들어옴
 		const selectedCategory = $(this).val();
 		
@@ -127,6 +132,7 @@
 		actionForm.find("input[name='category']").val(selectedCategory);
 		//항상 첫번째 페이지로 이동
 		actionForm.find("input[name='pageNum']").val(1);
+		actionForm.find("input[name='keyword']").val('');
 		actionForm.submit();
 	});
 	

@@ -56,8 +56,8 @@
 	
 	        <!-- 검색 메뉴(임의!) -->
 	        <div class="search-menu">
-	            <form action="${pageContext.request.contextPath}/search" method="get">
-	                <input type="text" name="query" placeholder="검색...">
+	            <form action="/item/list" method="get">
+	                <input type="text" name="keyword" placeholder="검색...">
 	                <button type="submit">검색</button>
 	            </form>
 	        </div>        
