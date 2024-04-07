@@ -9,6 +9,11 @@
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <style type="text/css">
+
+h1 {
+	text-align: center;
+}
+
 /* 관리자 컨텐츠 메인 영역 */
 .admin_content_main {
 	width: 70%;
@@ -129,6 +134,7 @@
 
 <body>
 	<div class="admin_content_main">
+		<h1>상품등록 페이지</h1>
 		<form action="/admin/itemEnroll" method="post" id="enrollForm">
 			<div class="form_section">
 				<div class="form_section_title">

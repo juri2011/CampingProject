@@ -18,15 +18,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.campingga.domain.AttachImageVO;
 import com.campingga.domain.ItemVO;
+import com.campingga.domain.MemberPagingVO;
 import com.campingga.service.AdminService;
+import com.campingga.service.MemberService;
 
 import lombok.extern.log4j.Log4j;
 import net.coobird.thumbnailator.Thumbnails;
@@ -38,6 +42,9 @@ public class AdminController {
 	
 	@Autowired
 	private AdminService adminService;
+	
+	@Autowired
+	private MemberService memberService;
 	
 	 /* 관리자 메인 페이지 이동 */
     @GetMapping("/adminPage")
@@ -79,7 +86,7 @@ public class AdminController {
 
 	/* 첨부 파일 업로드 */
 	// 이미지 파일 이름이 한글인 경우, 한글깨짐 방지위한 속성값을 부여(JSON데이터가 UTF8인코딩이 된 채로 전송)
-	@PostMapping(value = "/uploadAjaxAction", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@PostMapping(value = "/uploadAjaxAction", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<AttachImageVO>> uploadAjaxActionPOST(MultipartFile[] uploadFile) {
 
 		log.info("uploadAjaxActionPOST..........");
@@ -127,7 +134,7 @@ public class AdminController {
 		}
 
 		/* 이미저 정보 담는 객체 */
-		List<AttachImageVO> list = new ArrayList();
+		List<AttachImageVO> list = new ArrayList<AttachImageVO>();
 
 		// for문
 		for (MultipartFile multipartFile : uploadFile) {
@@ -215,5 +222,27 @@ public class AdminController {
 		
 		return new ResponseEntity<String>("success", HttpStatus.OK);
 	}
+	
+		
+	@GetMapping("/memberManager")
+	public String memberList(MemberPagingVO vo, Model model,
+	        @RequestParam(value="nowPage", required=false) String nowPage,
+	        @RequestParam(value="cntPerPage", required=false) String cntPerPage) {
+	    
+	    int total = memberService.countMember();
+	    if (nowPage == null && cntPerPage == null) {
+	        nowPage = "1";
+	        cntPerPage = "5";
+	    } else if (nowPage == null) {
+	        nowPage = "1";
+	    } else if (cntPerPage == null) { 
+	        cntPerPage = "5";
+	    }
+	    vo = new MemberPagingVO(total, Integer.parseInt(nowPage), Integer.parseInt(cntPerPage));
+	    model.addAttribute("paging", vo);
+	    model.addAttribute("viewAll", memberService.selectMember(vo));
+	    return "admin/memberManager";
+	}
+	
 
 }

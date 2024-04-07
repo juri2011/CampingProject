@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -70,7 +71,10 @@
 	       <td>
 	           <a class="item-img" href="<c:out value='${item.item_no}'/>">item_img: (추가예정)</a>
 	           <p><c:out value="${item.item_name}" /></p>
-	           <p><c:out value="${item.price}" /></p>
+	           <p>
+		           <c:out value="${item.price}" />
+		           <fmt:formatNumber value="${price}" type="number" />
+	           </p>
 	       </td>
 	       <!-- 행이 끝났거나 마지막 데이터라면 tr태그 close -->
 	       <c:if test="${(loop.index + 1) % 4 == 0 || loop.last}">

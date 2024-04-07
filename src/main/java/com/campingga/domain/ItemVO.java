@@ -20,7 +20,7 @@ public class ItemVO {
 	private String category;//카테고리
 	private String status;// 상태 (판매중, 품절)
 	
-	/* 이미지 정보 */
-	private List<AttachImageVO> imageList;
+		/* 이미지 정보 */
+		private List<AttachImageVO> imageList;
 	
 }

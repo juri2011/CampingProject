@@ -1,8 +1,11 @@
 package com.campingga.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.campingga.domain.MemberPagingVO;
 import com.campingga.domain.MemberVO;
 import com.campingga.mapper.MemberMapper;
 
@@ -32,6 +35,15 @@ public class MemberServiceImpl implements MemberService{
         return membermapper.memberLogin(member);
     }
 
+    @Override
+    public int countMember() {
+    	return membermapper.countMember();
+    }
+
+    @Override
+    public List<MemberVO> selectMember(MemberPagingVO vo) {
+    	return membermapper.selectMember(vo);
+    }
 	
 	
 	
