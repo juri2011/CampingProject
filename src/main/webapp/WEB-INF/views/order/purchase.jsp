@@ -85,7 +85,7 @@
                 	<input type="hidden" name="cart_no" id="cart_no" value="${cart.cart_no}" />
                 	<input type="hidden" name="item_no" id="item_no" value="${cart.item_no}" />
                 </td>
-                <td id="item-quantity"><c:out value='${cart.quantity}'/></td>
+                <td class="item-quantity"><c:out value='${cart.quantity}'/></td>
                 <td><fmt:formatNumber value="${cart.price}" pattern="#,###원" /></td>
                 <td><c:out value='${cart.status eq 1 ? "판매중" : "판매중단"}'/></td>
                 
@@ -219,7 +219,7 @@
 						d_memo: $("#memo").val(),
 						cart_no: Number($("[name=cart_no]:eq(" + idx + ")").val()),
 						item_no: Number($("[name=item_no]:eq(" + idx + ")").val()),
-						amount: Number($("#item-quantity").html())
+						amount: Number($(".item-quantity").eq(idx).html())
 					};
 					console.log(data.cart);
 					list.push(data);

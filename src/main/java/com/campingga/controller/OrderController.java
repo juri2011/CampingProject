@@ -2,10 +2,13 @@ package com.campingga.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpSession;
 
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.campingga.common.CommonUtils;
 import com.campingga.domain.CartVO;
 import com.campingga.domain.ItemVO;
 import com.campingga.domain.MemberVO;
@@ -52,7 +56,9 @@ public class OrderController {
 		MemberVO user = (MemberVO) session.getAttribute("member");//임시
 		String userId = user.getMem_id();	
 		List<CartVO> cartList = cartService.getCartItemList(userId);
+		log.info(cartList);
 		int totalPrice = cartService.getTotalPrice(cartList);
+		log.info(totalPrice);
 		model.addAttribute("totalPrice",totalPrice);
 		model.addAttribute("cartList",cartList);
 		return "order/purchase";
@@ -106,12 +112,15 @@ public class OrderController {
 		}
 		String mem_id = ((MemberVO)session.getAttribute("member")).getMem_id();
 		List<OrderListVO> orderList = orderService.getOrderList(mem_id);
-		Map<String, List<OrderListVO>> orderMap = new HashMap<>();
+		
+		//TreeMap은 기본적으로 오름차순이기 때문에 내림차순으로 정렬하도록 지정
+		Map<String, List<OrderListVO>> orderMap = new TreeMap<>(Collections.reverseOrder());
 		Map<String, Integer> totalPriceMap = new HashMap<>();
 		
 		
 		//주문번호별로 그룹화
 		for(OrderListVO order : orderList) {
+			
 			//order의 item_no를 이용해서 아이템정보(이름, 가격)등을 받아온다.
 			ItemVO item = itemService.get(order.getItem_no());
 			order.setItem_name(item.getItem_name());
@@ -125,13 +134,14 @@ public class OrderController {
                 orderMap.put(orderKey, new ArrayList<>());
                 totalPriceMap.put(orderKey, 0);
             }
+			log.info("================================"+order.getAmount());
 			//주문번호 key로 ArrayList value에 현재 order를 추가
 			orderMap.get(orderKey).add(order);
 			
 			int totalPrice = totalPriceMap.get(orderKey) + (order.getPrice() * order.getAmount());
 			totalPriceMap.put(orderKey, totalPrice);
+			
 		}
-		
 		
 		
 		//orderList.forEach(order -> log.info(order));
@@ -154,10 +164,15 @@ public class OrderController {
 		for(OrderListVO order : orderList) {
 			log.info(order);
 			order.setMem_id(userId);
+			
 			Date now = new Date();
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 			order.setOrd_no(userId + "_" + dateFormat.format(now));
+			
 			if(orderService.addOrder(order) == 1) insertCount++;
+			
+			//이 경로로 왔다는 것은 결제 처리가 정상적으로 되었다는 뜻이므로 removeCart로 삭제
+			cartService.removeCart(order.getCart_no());
 		}
 			
 		return insertCount == orderList.size()
@@ -181,4 +196,6 @@ public class OrderController {
 		return "success";
 	}
 */
+	
+
 }

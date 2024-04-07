@@ -71,7 +71,7 @@
     <h2>결제 내역</h2>
     <c:forEach items="${orderMap}" var="entry">
     <div class="table-wrapper">
-    <h3>주문번호 : <c:out value="${entry.key}" /></h3>
+    <h3>주문번호 : <c:out value="${entry.value[0].ord_no}" /></h3>
       <table class="table">
         <thead>
           <tr>
@@ -87,7 +87,7 @@
 	        <c:forEach items="${entry.value}" var="order">
 	            <tr>
 		        	<td><img src="" alt="이미지" /></td>
-		        	<td class="order-date"><fmt:formatDate value="${order.regdate}" pattern="yyyy-MM-dd" /></td>
+		        	<td class="order-date"><fmt:formatDate value="${order.regdate}" pattern="yyyy-MM-dd hh:mm:ss" /></td>
 		        	<td class="product-name"><c:out value="${order.item_name}" /></td>
 		        	<td><c:out value="${order.amount}"/></td>
 		        	<td class="price"><fmt:formatNumber value="${order.price}" pattern="#,###원" /></td>

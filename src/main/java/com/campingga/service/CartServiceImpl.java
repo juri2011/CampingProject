@@ -52,7 +52,7 @@ public class CartServiceImpl implements CartService{
 public int getTotalPrice(List<CartVO> cartList) {
 	int result = 0;
 	for(CartVO vo : cartList) {
-		result += vo.getPrice();
+		result += vo.getPrice() * vo.getQuantity();
 	}
 	return result;
 }
