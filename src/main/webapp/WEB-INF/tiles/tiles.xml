@@ -2,15 +2,16 @@
 <!DOCTYPE tiles-definitions PUBLIC
 "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
 "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
-<!-- 
+
 <tiles-definitions>
 
-<definition name="layout" template="/WEB-INF/views/tiles/template.jsp" preparer="menuPreparer" >
+<!-- <definition name="layout" template="/WEB-INF/views/tiles/template.jsp" preparer="menuPreparer" > -->
+<definition name="layout" template="/WEB-INF/views/tiles/template.jsp" >
 	<put-attribute name="header" value="/WEB-INF/views/tiles/header.jsp" />
 	<put-attribute name="body" value="" />
 	<put-attribute name="footer" value="/WEB-INF/views/tiles/footer.jsp" />
 </definition>
-
+<!-- 
 
 
 
@@ -63,13 +64,14 @@
 	<put-attribute name="title" value="home" />
 	<put-attribute name="body" value="/WEB-INF/views/review/form.jsp" />
 </definition>
+-->
 
-
-<definition name="home" extends="layout">
+<definition name="main" extends="layout">
 <put-attribute name="title" value="home" />
-<put-attribute name="body" value="/WEB-INF/views/main/home.jsp" />
+<put-attribute name="body" value="/WEB-INF/views/main.jsp" />
 </definition>
 
+<!--
 <definition name="registerGoods" extends="layout">
 <put-attribute name="title" value="상품 등록 페이지" /> 
 <put-attribute name="header" value="/WEB-INF/views/tiles/header.jsp" />
@@ -96,6 +98,6 @@
 	<put-attribute name="title" value="shop" />
 	<put-attribute name="body" value="/WEB-INF/views/{1}/{2}.jsp" />
 </definition>
+-->
 
-
-</tiles-definitions> -->
+</tiles-definitions> 
