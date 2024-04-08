@@ -5,10 +5,11 @@
  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.campingga.mapper.ItemMapper">
-<!-- 리스트 컬럼 -->
-<sql id="cols">
-	item_no, item_name, content, price, regdate, category, status 
-</sql>
+	<!-- 리스트 컬럼 -->
+	<sql id="cols">
+		item_no, item_name, content, price, regdate, category,
+		status
+	</sql>
 
 	<!-- 신상품 3개 select -->
 	<select id="selectNewItems" resultType="itemVO">
@@ -22,23 +23,26 @@
 	
 	<!-- 전체 리스트 select -->
 	<select id="selectList" resultType="itemVO">
-		select 
+		select
 		<include refid="cols" />
 		from item
 	</select>
-	
+
 	<!-- 검색기준으로 리스트 select -->
-	<select id="selectListWithPaging" parameterType="criteria" resultType="itemVO">
-		
-			select item_no, item_name, price, category
-			from (
-				select
-					item_no,
-					item_name,
-					price,
-					category,
-					ROW_NUMBER() over(ORDER BY regdate desc) AS rownum
-				from item i
+	<select id="selectListWithPaging" parameterType="criteria"
+		resultType="itemVO">
+
+		select item_no, item_name, img_name, price, category
+		from (
+		select
+		item_no,
+		item_name,
+		img_name,
+		price,
+		category,
+		ROW_NUMBER() over(ORDER BY regdate desc) AS
+		rownum
+		from item i
 				<where>
 		            <!-- 카테고리 조건 -->
 		            <if test="category != null and category != ''">
@@ -55,12 +59,13 @@
 			 rownum > (#{pageNum}-1) * #{amount} and
 				  rownum <= #{amount} * #{pageNum}
 		]]>
-			order by rownum
-		
+		order by rownum
+
 	</select>
-	
+
 	<!-- 검색기준 적용한 전체 상품 수 -->
-	<select id="selectTotalCount" parameterType="criteria" resultType="int">
+	<select id="selectTotalCount" parameterType="criteria"
+		resultType="int">
 		select count(*) from item
 		<where>
             <!-- 카테고리 조건 -->
@@ -72,13 +77,59 @@
                 AND item_name LIKE CONCAT ('%',#{keyword},'%')
             </if>
         </where>
-		
 	</select>
-	
-	<select id="selectOneItem" parameterType="int" resultType="itemVO">
-		select 
+
+	<select id="selectOneItem" parameterType="int"
+		resultType="itemVO">
+		select
 		<include refid="cols" />
 		from item
 		where item_no = #{item_no}
 	</select>
+
+
+
+	<!-- 검색기준 적용한 전체 상품 수 -->
+	<select id="countItem" parameterType="criteria" resultType="int">
+
+		select count(*) from item
+
+	</select>
+
+	<!-- 리스트 select -->
+	<select id="selectItem" parameterType="criteria"
+		resultType="itemVO">
+
+		SELECT item_no, item_name, img_name, amount, price, regdate, category
+		FROM (
+		SELECT item_no, item_name, img_name, amount, price, regdate, category,
+		(@row_number:=@row_number + 1) AS row_num
+		FROM item
+		CROSS JOIN (SELECT
+		@row_number := 0) AS rn
+		ORDER BY regdate DESC
+		) AS ranked
+		ORDER BY
+		regdate DESC
+		LIMIT #{start}, #{cntPerPage}
+
+
+	</select>
+	<!-- 상품 수정 -->
+	<update id="itemUpdate">
+		UPDATE item SET
+		item_name = #{item_name},
+		img_name = #{img_name},
+		amount = #{amount},
+		content = #{content},
+		price = #{price},
+		category = #{category},
+		status = #{status},
+		regdate = NOW() -- 현재 시간으로 등록일 업데이트
+		WHERE item_no = #{item_no}
+	</update>
+	<!-- 상품 삭제 -->
+	<delete id="deleteItem" parameterType="int">
+		delete from item where item_no=#{item_no}
+	</delete>
 </mapper>

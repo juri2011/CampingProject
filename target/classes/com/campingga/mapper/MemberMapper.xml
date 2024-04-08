@@ -6,25 +6,67 @@
 	<!-- 회원가입 -->
 	<insert id="memberJoin"
 		parameterType="com.campingga.domain.MemberVO">
-		INSERT INTO member (mem_id, pwd, name, birth, phone, gender, email,
+		INSERT INTO member (mem_id, pwd, name, birth, phone,
+		gender, email,
 		userStnum, userAddr, userDaddr)
-		VALUES (#{mem_id}, #{pwd}, #{name}, #{birth}, #{phone}, #{gender}, #{email},
+		VALUES (#{mem_id},
+		#{pwd}, #{name}, #{birth}, #{phone}, #{gender}, #{email},
 		#{userStnum}, #{userAddr}, #{userDaddr})
 	</insert>
 
 	<!-- 아이디 중복검사 -->
 	<select id="idCheck" resultType="int">
 
-		select count(*) from member where mem_id = #{mem_id}
+		select count(*) from member
+		where mem_id = #{mem_id}
 
 	</select>
 
 	<!-- 로그인 -->
-	<select id="memberLogin" resultType="com.campingga.domain.MemberVO">
+	<select id="memberLogin"
+		resultType="com.campingga.domain.MemberVO">
 
-		select * from member where mem_id = #{mem_id} and pwd = #{pwd}
+		select * from member where mem_id = #{mem_id} and pwd =
+		#{pwd}
 
 	</select>
+
+	<!-- 목록조회 -->
+	<select id="getList" resultType="com.campingga.domain.MemberVO">
+
+		select * from member
+
+	</select>
+
+	<!-- 검색기준 적용한 전체 상품 수 -->
+	<select id="countMember" parameterType="criteria"
+		resultType="int">
+
+		select count(*) from member
+
+	</select>
+
+	<!-- 목록 조회 - 페이징 처리 -->
+	<select id="selectMember" parameterType="criteria"
+		resultType="com.campingga.domain.MemberVO">
+
+		SELECT mem_id, name, email, phone, regdate, mem_status
+		FROM (
+		SELECT mem_id, name, email, phone, regdate, mem_status,
+		(@row_number:=@row_number + 1) AS row_num
+		FROM member
+		CROSS JOIN (SELECT @row_number := 0) AS rn
+		ORDER BY regdate DESC
+		) AS ranked
+		ORDER BY regdate DESC
+		LIMIT #{start}, #{cntPerPage}
+
+
+	</select>
+	
+	
+
+
 </mapper>
 
 	

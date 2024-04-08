@@ -1,5 +1,8 @@
 package com.campingga.service;
 
+import java.util.List;
+
+import com.campingga.domain.PagingVO;
 import com.campingga.domain.MemberVO;
 
 public interface MemberService {
@@ -12,5 +15,11 @@ public interface MemberService {
 	
 	//로그인 
     public MemberVO memberLogin(MemberVO member) throws Exception;
+
+    // 회원 총 
+    public int countMember();
+
+    // 페이징 처리 게시글 조회
+    public List<MemberVO> selectMember(PagingVO vo);
 	
 }

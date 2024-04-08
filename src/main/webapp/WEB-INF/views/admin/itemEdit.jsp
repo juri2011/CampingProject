@@ -9,7 +9,6 @@
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <style type="text/css">
-
 h1 {
 	text-align: center;
 }
@@ -71,12 +70,12 @@ h1 {
 	line-height: 40px;
 }
 
-.enroll_btn {
+.update_btn {
 	background-color: #dbdde2;
 	margin-left: 15px;
 }
 
-#enrollBtn:hover {
+#updateBtn:hover {
 	background-color: #c9cbd0;
 }
 
@@ -87,10 +86,6 @@ h1 {
 	padding: 5px;
 	margin-top: 10px;
 	margin: auto;
-}
-
-#result_card {
-	position: relative;
 }
 
 .imgDeleteBtn {
@@ -110,28 +105,33 @@ h1 {
 	cursor: pointer;
 }
 
+/* 상품명 선택란 가로 크기 조정 */
+.form_section_content input[name='item_name'] {
+	width: 50%; /* 원하는 가로 크기로 조정하세요 */
+}
+
 /* 판매 카테고리 선택란 가로 크기 조정 */
 .form_section_content select[name='category'] {
 	width: 15%; /* 원하는 가로 크기로 조정하세요 */
 }
 
-/* 판매가격 선택란 가로 크기 조정 */
+/* 판매수량 선택란 가로 크기 조정 */
 .form_section_content input[name='amount'] {
 	width: 5%; /* 원하는 가로 크기로 조정하세요 */
 }
 
 /* 판매가격 선택란 가로 크기 조정 */
 .form_section_content input[name='price'] {
-	width: 13%; /* 원하는 가로 크기로 조정하세요 */
-}
-
-/* 상품 이미지 제목 선택란 가로 크기 조정 */
-.form_section_content input[name='img_name'] {
-	width: 30%; /* 원하는 가로 크기로 조정하세요 */
+	width: 10%; /* 원하는 가로 크기로 조정하세요 */
 }
 
 /* 판매상태 선택란 가로 크기 조정 */
 .form_section_content select[name='status'] {
+	width: 15%; /* 원하는 가로 크기로 조정하세요 */
+}
+
+/* 상품 이미지명 선택란 가로 크기 조정 */
+.form_section_content input[name='img_name'] {
 	width: 15%; /* 원하는 가로 크기로 조정하세요 */
 }
 </style>
@@ -139,14 +139,14 @@ h1 {
 
 <body>
 	<div class="admin_content_main">
-		<h1>상품등록 페이지</h1>
-		<form action="/admin/itemEnroll" method="post" id="enrollForm">
+		<h1>상품정보 수정페이지</h1>
+		<form action="/admin/itemEdit" method="post" id="editForm">
 			<div class="form_section">
 				<div class="form_section_title">
 					<label>상품명</label>
 				</div>
 				<div class="form_section_content">
-					<input name="item_name">
+					<input name="item_name" value="<c:out value='${item.item_name}' />">
 				</div>
 			</div>
 			<div class="form_section">
@@ -155,29 +155,24 @@ h1 {
 				</div>
 				<div class="form_section_content">
 					<select name="category">
-
-						<option value="캠핑가구">캠핑가구</option>
-						<option value="조리도구">조리도구</option>
-						<option value="랜턴">랜턴</option>
-						<option value="전자제품">전자제품</option>
-						<option value="텐트">텐트</option>
-						<option value="텐트">침낭</option>
-						<option value="매트">매트</option>
-						<option value="난로">난로</option>
-
+						<option value="">선택하세요</option>
+						<c:forEach items="${categories}" var="category">
+							<option value="${category}"
+								<c:if test="${category eq item.category}">selected</c:if>>${category}</option>
+						</c:forEach>
 					</select>
 				</div>
 			</div>
-
 			<div class="form_section">
 				<div class="form_section_title">
 					<label>상품수량</label>
 				</div>
 				<div class="form_section_content">
-					<input type="number" name="amount" value="1" min="1" max="100"/>
+					<input type="number" id="amount" name="amount"
+						value="<c:out value='${item.amount}'/>" min="1" max="100" />
 				</div>
-			</div> 
 
+			</div>
 			<div class="form_section">
 				<div class="form_section_title">
 					<label>판매상태</label>
@@ -185,45 +180,45 @@ h1 {
 				<div class="form_section_content">
 					<select name="status">
 						<option value="">선택하세요</option>
-						<option value="1">판매중</option>
-						<option value="2">판매중단(품절)</option>
-
+						<option value="1"
+							<c:if test="${item.status eq '1'}">selected</c:if>>판매중</option>
+						<option value="2"
+							<c:if test="${item.status eq '2'}">selected</c:if>>판매중단(품절)</option>
 					</select>
 				</div>
 			</div>
-			<!-- 입력값에 ','을 넣어도, 가격이 DB에 저장되게 수정 -->
 			<div class="form_section">
 				<div class="form_section_title">
 					<label>상품 가격</label>
 				</div>
 				<div class="form_section_content">
 					<input type="text" id="price" name="price"
-						value="<c:out value='${item.price}' />"> <span
-						id="priceDisplay"><c:out value='${item.price}' /></span>
+						value="<c:out value='${item.price}' />">
 				</div>
 			</div>
-				<div class="form_section">
+
+
+			<input type="hidden" name="item_no"
+				value="<c:out value='${item.item_no}' />">
+
+			<div class="form_section">
 				<div class="form_section_title">
-					<label>상품 이미지명</label>
+					<label>상품 이미지</label>
+					<div id="uploadResult"></div>
 				</div>
 				<div class="form_section_content">
-					<input name="img_name">
+					<input type="file" id="fileItem" name='uploadFile'
+						multiple="multiple" style="height: 30px;">
 				</div>
 			</div>
 
 			<div class="form_section">
 				<div class="form_section_title">
-					<label>상품 이미지</label>
-					<div id="uploadResult">
-					<!-- 	<div id="result_card">
-							<div class="imgDeleteBtn">x</div>
-							<img src="/display?fileName=test.JPG">
-						</div> -->
-					</div>
+					<label>상품 이미지명</label>
 				</div>
 				<div class="form_section_content">
-					<input type="file" id="fileItem" name='uploadFile'
-						multiple="multiple" style="height: 30px;">
+					<input type="text" name="img_name" id="img_name" 
+						value="<c:out value='${item.img_name}' />">
 				</div>
 			</div>
 			
@@ -232,59 +227,56 @@ h1 {
 					<label>상품 소개</label>
 				</div>
 				<div class="form_section_content">
-					<input name="content">
+					<input name="content" value="<c:out value='${item.content}' />">
 				</div>
 			</div>
+			<input type="hidden" name="modDate" value="<%=new java.util.Date()%>">
 
 		</form>
 		<div class="btn_section">
 			<button id="cancelBtn" class="btn">취 소</button>
-			<button id="enrollBtn" class="btn enroll_btn">등 록</button>
+			<button id="updateBtn" class="btn update_btn">수 정</button>
 		</div>
 	</div>
 	<script>
-		let enrollForm = $("#enrollForm")
+		let editForm = $("#editForm")
 
 		/* 취소 버튼 */
 		$("#cancelBtn").click(function() {
-
 			location.href = "/admin/itemManager"
-
 		});
 
-		/* 상품 등록 버튼 */
-		$("#enrollBtn").on("click", function(e) {
+		/* 상품 수정 버튼 */
+		$("#updateBtn").on("click", function(e) {
+			e.preventDefault();
 
-			  e.preventDefault();
-			    
-			    // 상품 가격 값을 가져와서 숫자로 변환
-			    let priceInput = document.getElementById('price');
-			    let priceValue = parseInt(priceInput.value.replace(/,/g, ''), 10); // 쉼표(,) 제거 후 숫자로 변환
-			    
-			    // 변환된 값을 다시 입력란에 설정
-			    priceInput.value = priceValue;
-			    
-			    // 폼 제출
-			    enrollForm.submit();
+			// 상품 가격 값을 가져와서 숫자로 변환
+			let priceInput = document.getElementById('price');
+			let priceValue = parseInt(priceInput.value.replace(/,/g, ''), 10); // 쉼표(,) 제거 후 숫자로 변환
 
+			// 변환된 값을 다시 입력란에 설정
+			priceInput.value = priceValue;
+			
+
+			// 폼 제출
+			editForm.submit();
 		});
-		
+
 		/* 판매 상태 미선택시 */
 		$(document).ready(function() {
-		    $("form").submit(function(event) {
-		        const selectedStatus = $("select[name='status']").val();
-		        if (selectedStatus === "") {
-		            alert("판매상태를 선택해주세요.");
-		            event.preventDefault(); // 폼 제출을 취소합니다.
-		        }
-		    });
+			$("form").submit(function(event) {
+				const selectedStatus = $("select[name='status']").val();
+				if (selectedStatus === "") {
+					alert("판매상태를 선택해주세요.");
+					event.preventDefault(); // 폼 제출을 취소합니다.
+				}
+			});
 		});
 
 		/* 이미지 업로드 */
 		$("input[type='file']").on("change", function(e) {
-			
 			/* 이미지 존재시 삭제 */
-			if($(".imgDeleteBtn").length > 0){
+			if ($(".imgDeleteBtn").length > 0) {
 				deleteFile();
 			}
 
@@ -337,64 +329,56 @@ h1 {
 			return true;
 
 		}
-		
+
 		/* 이미지 출력 */
-		function showUploadImage(uploadResultArr){
-			
+		function showUploadImage(uploadResultArr) {
 			/* 전달받은 데이터 검증 */
-			if(!uploadResultArr || uploadResultArr.length == 0){return}
-			
+			if (!uploadResultArr || uploadResultArr.length == 0) {
+				return
+			}
+
 			let uploadResult = $("#uploadResult");
-			
 			let obj = uploadResultArr[0];
-			
 			let str = "";
-			
-			let fileCallPath = encodeURIComponent(obj.uploadPath.replace(/\\/g, '/') +
-					"/thumbs_" + obj.uuid + "_" + obj.fileName);
-			
+			let fileCallPath = encodeURIComponent(obj.uploadPath.replace(/\\/g,
+					'/')
+					+ "/thumbs_" + obj.uuid + "_" + obj.fileName);
+
 			str += "<input type='hidden' name='imageList[0].fileName' value='"+ obj.fileName +"'>";
 			str += "<input type='hidden' name='imageList[0].uuid' value='"+ obj.uuid +"'>";
-			str += "<input type='hidden' name='imageList[0].uploadPath' value='"+ obj.uploadPath +"'>";		
-			
+			str += "<input type='hidden' name='imageList[0].uploadPath' value='"+ obj.uploadPath +"'>";
+
 			str += "<div id='result_card'>";
-			str += "<img src='/display?fileName=" + fileCallPath +"'>";
+			str += "<img src='/display?fileName=" + fileCallPath + "'>";
 			str += "<div class='imgDeleteBtn' data-file='" + fileCallPath + "'>x</div>";
-			str += "</div>";		
-			
-	   		uploadResult.append(str);     
-	        
-		}	
-		
+			str += "</div>";
+
+			uploadResult.append(str);
+		}
+
 		/* 이미지 삭제 버튼 동작 */
-		$("#uploadResult").on("click", ".imgDeleteBtn", function(e){
-			
+		$("#uploadResult").on("click", ".imgDeleteBtn", function(e) {
 			deleteFile();
-			
 		});
-		
+
 		/* 파일 삭제 메서드 */
-		function deleteFile(){
-			
+		function deleteFile() {
 			let targetFile = $(".imgDeleteBtn").data("file");
-			
 			let targetDiv = $("#result_card");
-			
 			$.ajax({
-				url: '/admin/deleteFile',
-				data : {fileName : targetFile},
+				url : '/admin/deleteFile',
+				data : {
+					fileName : targetFile
+				},
 				dataType : 'text',
 				type : 'POST',
-				success : function(result){
+				success : function(result) {
 					console.log(result);
-					
 					targetDiv.remove();
 					$("input[type='file']").val("");
-					
 				},
-				error : function(result){
+				error : function(result) {
 					console.log(result);
-					
 					alert("파일을 삭제하지 못하였습니다.")
 				}
 			});
