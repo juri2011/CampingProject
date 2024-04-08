@@ -3,9 +3,11 @@ package com.campingga.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.campingga.domain.PagingVO;
+import com.campingga.domain.Authority;
 import com.campingga.domain.MemberVO;
 import com.campingga.mapper.MemberMapper;
 
@@ -18,7 +20,13 @@ public class MemberServiceImpl implements MemberService{
 	@Override
 	public void memberJoin(MemberVO member) throws Exception {
 		
+		//사용자 권한
+		Authority auth = new Authority();
+		auth.setAuth("ROLE_MEMBER");
+		auth.setMem_id(member.getMem_id());
+		
 		membermapper.memberJoin(member);
+		membermapper.insertAuth(auth); //사용자 권한 추가
 		
 	}
 

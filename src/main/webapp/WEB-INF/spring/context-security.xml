@@ -5,36 +5,15 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<bean id="loginSuccess" class="com.campingga.security.LoginSuccessHandler"></bean>
-<!-- 
-	<bean id="customPasswordEncoder" class="com.campingga.security.CustomPasswordEncoder"></bean>
-	<bean id="customUserDetailService" class="com.campingga.security.CustomUserDetailsService"></bean>
- -->	
-	<bean id="customAccessDenied" class="com.campingga.security.CustomAccessDeniedHandler"></bean>
-	
- 	
 	<security:http>
  		
-		<security:intercept-url pattern="/*" access="permitAll"/>
-		 
-		<security:intercept-url pattern="/admin" access="hasRole('ROLE_ADMIN')"/>
-		<security:intercept-url pattern="/admin/*" access="hasRole('ROLE_ADMIN')"/>
-		<security:intercept-url pattern="/admin/*/*" access="hasRole('ROLE_ADMIN')"/>
-		<security:intercept-url pattern="/cart" access="hasRole('ROLE_MEMBER')" />
-		<security:intercept-url pattern="/cart/*" access="hasRole('ROLE_MEMBER')" />
-		<security:intercept-url pattern="/order" access="hasRole('ROLE_MEMBER')" />
-		<security:intercept-url pattern="/order/*" access="hasRole('ROLE_MEMBER')" />
+ 		<security:intercept-url pattern="/admin/adminPage" access="permitAll"/>
+ 		<security:intercept-url pattern="/admin/pageEnroll" access="hasRole('ROLE_ADMIN')"/>
+ 		
+		<security:form-login />
 		
-		<security:form-login login-page="/member/login" authentication-success-handler-ref="loginSuccess" />
-		<security:logout logout-url="/logout.do" invalidate-session="true" />
-				
-		<security:access-denied-handler ref="customAccessDenied"/>
 	</security:http>
 
-
 	<security:authentication-manager>
-		<security:authentication-provider  user-service-ref="customUserDetailService" >	
-			<security:password-encoder ref="customPasswordEncoder"/>
-		</security:authentication-provider>
 	</security:authentication-manager>
 </beans>

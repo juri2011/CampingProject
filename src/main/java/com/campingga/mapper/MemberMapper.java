@@ -3,6 +3,7 @@ package com.campingga.mapper;
 import java.util.List;
 
 import com.campingga.domain.PagingVO;
+import com.campingga.domain.Authority;
 import com.campingga.domain.MemberVO;
 
 public interface MemberMapper {
@@ -24,5 +25,11 @@ public interface MemberMapper {
 
 	// 페이징 처리 게시글 조회
 	public List<MemberVO> selectMember(PagingVO vo);
+	
+	//회원 정보 가져오기
+	public MemberVO read(String member_id);
+	
+	//권한 설정
+	public MemberVO insertAuth(Authority auth);
 	
 }

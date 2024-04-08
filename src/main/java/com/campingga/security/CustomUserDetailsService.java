@@ -12,26 +12,22 @@ import com.campingga.security.domain.CustomUser;
 import lombok.extern.log4j.Log4j;
 
 @Log4j
-public class CustomUserDetailsService implements UserDetailsService {
+public class CustomUserDetailsService implements UserDetailsService{
+  
+  @Autowired
+  private MemberMapper memberMapper;
 
-	@Autowired
-	private MemberMapper mapper;
-
-
-	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		
-		log.warn("Load User By UserName: " + username);
-		
-		MemberVO member = mapper.r(username);
-		
-		log.warn("queried by member mapper: " + member);
-		
-		if (member == null) {
-            throw new UsernameNotFoundException("User not found");
-        }
-
-		return member == null ? null : new CustomUser(member);
-	}
-	
+  @Override
+  public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+    
+    log.warn("Load User By UserName : " + userName);
+    
+    //userName means userid
+    MemberVO vo = memberMapper.read(userName);
+    
+    log.warn(memberMapper.read(userName));
+    
+    return vo == null ? null : new CustomUser(vo);
+  }
+  
 }

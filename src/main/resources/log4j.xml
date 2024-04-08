@@ -11,6 +11,8 @@
 			<param name="ConversionPattern" value="%-5p: %c - %m%n" />
 		</layout>
 	</appender>
+	
+	<logger name="org.springframework.security" level="DEBUG"/>
 
 	<!-- Application Loggers -->
 	<logger name="com.campingga.controller">
@@ -20,7 +22,21 @@
 	<logger name="com.campingga.controller.AdminController">
 		<level value="info" />
 	</logger>
-
+	
+	<!-- level : warn - 필요없는 info log를 안 보이게 할 수 있다.
+			src/test/resources에도 log4j 파일이 있으니 확인
+		-->
+		<!-- 추가내용 -->
+		<logger name="jdbc.audit">
+			<level value="warn" />
+		</logger>
+		<logger name="jdbc.resultset">
+			<level value="warn" />
+		</logger>
+		<logger name="jdbc.connection">
+			<level value="warn" />
+		</logger>
+		
 	<!-- 3rdparty Loggers -->
 	<logger name="org.springframework.core">
 		<level value="info" />
@@ -40,7 +56,7 @@
 	
 	<!-- Root Logger -->
 	<root>
-		<priority value="info" />
+		<priority value="warn" />
 		<appender-ref ref="console" />
 	</root>
 
