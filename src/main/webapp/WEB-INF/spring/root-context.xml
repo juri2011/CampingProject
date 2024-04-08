@@ -32,7 +32,8 @@
 		base-package="com.campingga.mapper" />
 	<context:component-scan base-package="com.campingga.domain" />	
 	<context:component-scan base-package="com.campingga.service" />
-
-	<bean id="PasswordEncoer" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"></bean>
+	
+	<!-- 비밀번호 암호화 테스트 -->
+	<!-- <bean id="PasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"></bean> -->
 </beans>
 
