@@ -10,6 +10,16 @@
 	item_no, item_name, content, price, regdate, category, status 
 </sql>
 
+	<!-- 신상품 3개 select -->
+	<select id="selectNewItems" resultType="itemVO">
+		select
+		<include refid="cols" />
+		from item
+		order by regdate desc
+		limit 3
+	</select>
+	
+	
 	<!-- 전체 리스트 select -->
 	<select id="selectList" resultType="itemVO">
 		select 
@@ -29,9 +39,16 @@
 					category,
 					ROW_NUMBER() over(ORDER BY regdate desc) AS rownum
 				from item i
-				<if test='category != null and category != ""'>
-					where category like #{category}
-				</if>
+				<where>
+		            <!-- 카테고리 조건 -->
+		            <if test="category != null and category != ''">
+		                AND category LIKE #{category}
+		            </if>
+		            <!-- 키워드 조건 -->
+		            <if test="keyword != null and keyword != ''">
+		                AND item_name LIKE CONCAT ('%',#{keyword},'%')
+		            </if>
+		        </where>
 			) i
 			WHERE
 		<![CDATA[
@@ -45,9 +62,16 @@
 	<!-- 검색기준 적용한 전체 상품 수 -->
 	<select id="selectTotalCount" parameterType="criteria" resultType="int">
 		select count(*) from item
-		<if test='category != null and category != ""'>
-			where category like #{category}
-		</if>
+		<where>
+            <!-- 카테고리 조건 -->
+            <if test="category != null and category != ''">
+                AND category LIKE #{category}
+            </if>
+            <!-- 키워드 조건 -->
+            <if test="keyword != null and keyword != ''">
+                AND item_name LIKE CONCAT ('%',#{keyword},'%')
+            </if>
+        </where>
 		
 	</select>
 	

@@ -91,7 +91,22 @@
 		        	<td class="product-name"><c:out value="${order.item_name}" /></td>
 		        	<td><c:out value="${order.amount}"/></td>
 		        	<td class="price"><fmt:formatNumber value="${order.price}" pattern="#,###원" /></td>
-		        	<td class="shipping"><c:out value="${order.status}"/></td>
+		        	<td class="shipping">
+		        		<c:choose>
+		        			<c:when test="${order.status == 1}">
+		        				결제완료
+		        			</c:when>
+		        			<c:when test="${order.status == 2}">
+		        				배송준비
+		        			</c:when>
+		        			<c:when test="${order.status == 3}">
+		        				배송중
+		        			</c:when>
+		        			<c:when test="${order.status == 4}">
+		        				배송완료
+		        			</c:when>
+		        		</c:choose>
+		        	</td>
 	          	</tr>
 	        </c:forEach>
 	          	<tr>

@@ -11,10 +11,6 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 <body>
-	<!-- 로고 -->
-	<a href="${pageContext.request.contextPath}/home">
-	    <img src="${pageContext.request.contextPath}/resources/images/캠핑가로고1.png" alt="Logo">
-	</a>
 	<h1>cart</h1>
 	
 		<table>
@@ -138,7 +134,7 @@
 					cartService.update(cart, function(result){
 						//콘솔에 출력 
 						console.log('cart_no: ',list[i].cart_no , result);
-						//self.location="/order/purchase";
+						self.location="/order/purchase";
 					});
 				}//end for
 				

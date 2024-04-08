@@ -61,6 +61,8 @@ public class OrderController {
 		log.info(totalPrice);
 		model.addAttribute("totalPrice",totalPrice);
 		model.addAttribute("cartList",cartList);
+		model.addAttribute("member", user);
+		
 		return "order/purchase";
 	}
 	
@@ -160,14 +162,15 @@ public class OrderController {
 		String userId = member.getMem_id();
 		int insertCount = 0;
 		//name, phone, addr1, addr2, memo, item_no, amount
+		Date now = new Date();
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+    String orderNoDate = dateFormat.format(now);
 		
-		for(OrderListVO order : orderList) {
+    for(OrderListVO order : orderList) {
 			log.info(order);
 			order.setMem_id(userId);
 			
-			Date now = new Date();
-			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-			order.setOrd_no(userId + "_" + dateFormat.format(now));
+			order.setOrd_no(userId + "_" + orderNoDate);
 			
 			if(orderService.addOrder(order) == 1) insertCount++;
 			

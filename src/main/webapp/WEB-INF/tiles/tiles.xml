@@ -11,6 +11,31 @@
 	<put-attribute name="body" value="" />
 	<put-attribute name="footer" value="/WEB-INF/views/tiles/footer.jsp" />
 </definition>
+<definition name="main" extends="layout">
+	<put-attribute name="title" value="home" />
+	<put-attribute name="body" value="/WEB-INF/views/main.jsp" />
+</definition>
+<definition name="item/list" extends="layout">
+	<put-attribute name="title" value="상품 목록" />
+	<put-attribute name="body" value="/WEB-INF/views/item/list.jsp" />
+</definition>
+<definition name="item/detail" extends="layout">
+	<put-attribute name="title" value="상세 페이지" />
+	<put-attribute name="body" value="/WEB-INF/views/item/detail.jsp" />
+</definition>
+<definition name="order/purchase" extends="layout">
+	<put-attribute name="title" value="주문 확인" />
+	<put-attribute name="body" value="/WEB-INF/views/order/purchase.jsp" />
+</definition>
+<definition name="order/orderList" extends="layout">
+	<put-attribute name="title" value="주문내역" />
+	<put-attribute name="body" value="/WEB-INF/views/order/orderList.jsp" />
+</definition>
+<definition name="cart/cart" extends="layout">
+	<put-attribute name="title" value="주문내역" />
+	<put-attribute name="body" value="/WEB-INF/views/cart/cart.jsp" />
+</definition>
+
 <!-- 
 
 
@@ -64,14 +89,7 @@
 	<put-attribute name="title" value="home" />
 	<put-attribute name="body" value="/WEB-INF/views/review/form.jsp" />
 </definition>
--->
 
-<definition name="main" extends="layout">
-<put-attribute name="title" value="home" />
-<put-attribute name="body" value="/WEB-INF/views/main.jsp" />
-</definition>
-
-<!--
 <definition name="registerGoods" extends="layout">
 <put-attribute name="title" value="상품 등록 페이지" /> 
 <put-attribute name="header" value="/WEB-INF/views/tiles/header.jsp" />
