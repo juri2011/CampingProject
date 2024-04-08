@@ -1,0 +1,93 @@
+@charset "UTF-8";
+
+/* header영역 */
+.header{
+	padding: 20px;
+}
+
+/* 헤더 상단메뉴(로고,회원가입,로그인,마이페이지,장바구니) */
+.header-top{
+	display: flex;
+	justify-content: space-between;/* 양쪽끝에 배치 */
+	align-items: center;/* 세로방향 중앙에배치 */
+}
+
+/* 로고컨테이너 */
+.logo-container{
+	flex-grow: 1;/* 가능한 모든 공간을 차지하도록 설정. */
+	text-align: center;
+}
+/* 로고 이미지 */
+.logo-container img{
+	height: 150px;
+}
+
+/* 인증링크(로그인,회원가입,마이페이지,장바구니) */
+.auth-links{
+	display: flex;
+	flex-direction: column;/* 세로정렬 */
+	align-items: flex-end;/* 요소사이 각격 설정 */
+}
+.auth-links:nth-child(1){}
+
+
+/* 마이페이지 장바구니*/
+.icon-group{
+	margin-top: 30px;
+	margin-bottom: 25px;
+}
+
+.icon-group>a{
+	width: 30px;
+	height: 30px;
+	margin-right: 10px;
+}
+
+/* 마이페이지,장바구니 이미지 */
+.icon-group>a>img{height: 30px}
+
+/* 카테고리 영역 */
+.header-bottom{
+	display: flex;
+	justify-content: space-between;/* 내용을 양 끝으로 정렬 */
+	align-items: center;/* 세로방향 중앙정렬 */
+	width: 100%;/* 부모 컨테이너 전체너비 사용 */
+	background-color: #0f5a22;
+}
+
+.category-menu{
+	display: flex;
+	gap: 20px;/* 메뉴 항목사이 간격 */
+	
+}
+.dropdown{
+	position: relative;/* 드롭다운 위치 기준점 */
+	display: inline-block;	
+}
+
+/* 카테고리 드롭다운 내용 숨김 */
+.dropdown-content{
+	display: none; /* 숨김처리 */
+	position: absolute; /* 상위요소인 드롭다운기준으로 위치설정 */
+	/* background-color: #0f5a22; */
+	min-width: 166px;/* 최소 너비 설정 */
+	z-index: 1; /* 다른 요소 위에 표시 */
+}
+
+/* 드롭다운 항목 스타일 */
+.drop-content>a{
+	color: #fff;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

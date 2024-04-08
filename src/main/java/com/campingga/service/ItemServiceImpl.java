@@ -17,6 +17,11 @@ public class ItemServiceImpl implements ItemService{
 	private ItemMapper itemMapper;
 	
 	@Override
+	public List<ItemVO> getNewItems(){
+		return itemMapper.selectNewItems();
+	}
+	
+	@Override
 	public List<ItemVO> getList() {
 		return itemMapper.selectList();
 	}

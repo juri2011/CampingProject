@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -45,6 +46,40 @@ a {
 	bottom: 60%;
 }
 </style>
+
+<!-- 메인 3 개 출력 -->
+<style>
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px; /* 요소 사이의 간격 설정 */
+    }
+    .card {
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        width: 320px;
+        margin-bottom: 20px;
+        cursor: pointer;
+    }
+    .card img {
+        max-width: 100%;
+        height: auto;
+    }
+    .card-title {
+        font-size: 18px;
+        font-weight: bold;
+        margin: 10px 0;
+    }
+    .card-price {
+        font-size: 16px;
+        color: #888;
+    }
+</style>
 <body>
 
 	<div class="wrapper">
@@ -72,10 +107,32 @@ a {
 				</c:if>
 			</ul>
 		</div>
-
+	
+	<!-- 최신 3개 -->
+	<hr />
+	<h2>최신 상품</h2>
+	<div class="container">
+		<c:forEach var="item" items="${newItem}">
+			<div class="card" data-no="<c:out value='${item.item_no}' />">
+		        <img src="product3.jpg" alt="<c:out value='${item.item_name}' />">
+		        <div class="card-details">
+		            <div class="card-title"><c:out value="${item.item_name}" /></div>
+		            <div class="card-price">가격: <fmt:formatNumber value="${item.price}" pattern="#,###원" /></div>
+		        </div>
+		    </div>
+		</c:forEach>
+	</div>
 	
 	</div>
 	<script>
+		/* 상품 목록 클릭하면 상세페이지로 이동 */
+		$(document).ready(function(){
+			$('.card').click(function(){
+				const item_no = $(this).data("no");
+				location.href="/item/detail?item_no="+item_no;
+			});
+		});
+		
 		/* gnb_area 로그아웃 버튼 작동 */
 		$("#gnb_logout_button").click(function() {
 			//alert("버튼 작동");

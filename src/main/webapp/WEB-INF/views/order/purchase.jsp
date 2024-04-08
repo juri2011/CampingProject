@@ -83,8 +83,9 @@
                 <td>
                 	<c:out value='${cart.item_name}'/>
                 	<input type="hidden" name="cart_no" id="cart_no" value="${cart.cart_no}" />
+                	<input type="hidden" name="item_no" id="item_no" value="${cart.item_no}" />
                 </td>
-                <td><c:out value='${cart.quantity}'/></td>
+                <td class="item-quantity"><c:out value='${cart.quantity}'/></td>
                 <td><fmt:formatNumber value="${cart.price}" pattern="#,###원" /></td>
                 <td><c:out value='${cart.status eq 1 ? "판매중" : "판매중단"}'/></td>
                 
@@ -98,12 +99,21 @@
         </table>
     </div>
     <h2>배송 정보</h2>
+    <%-- <div class="shipping-details">
+        <input id="name" type="text" placeholder="받으실 분" value='<c:out value="${sessionScope.member.name}"/>'>
+        <input id="phone" type="tel" placeholder="전화번호" value='<c:out value="${sessionScope.member.phone}"/>'>
+        <input id="stnum" type="text" placeholder="주소" value='<c:out value="${sessionScope.member.userStnum}"/>'>
+        <input id="addr1" type="text" placeholder="주소" value='<c:out value="${sessionScope.member.userAddr}"/>'>
+        <input id="addr2" type="text" placeholder="상세주소" value='<c:out value="${sessionScope.member.userDaddr}"/>'>
+        <textarea id="memo" placeholder="배송 메시지">파손되지 않게 조심히 배송해주세요</textarea>
+    </div> --%>
     <div class="shipping-details">
-        <input id="name" type="text" placeholder="받으실 분">
-        <input id="phone" type="tel" placeholder="전화번호">
-        <input id="addr1" type="text" placeholder="주소">
-        <input id="addr2" type="text" placeholder="상세주소">
-        <textarea id="memo" placeholder="배송 메시지"></textarea>
+        <input id="name" type="text" placeholder="받으실 분" value='<c:out value="${member.name}"/>'>
+        <input id="phone" type="tel" placeholder="전화번호" value='<c:out value="${member.phone}"/>'>
+        <input class="popup-address address_input_1" readonly id="stnum" type="text" placeholder="지번" value='<c:out value="${member.userStnum}"/>'>
+        <input class="popup-address address_input_2" readonly id="addr1" type="text" placeholder="주소" value='<c:out value="${member.userAddr}"/>'>
+        <input class="address_input_3" readonly id="addr2" type="text" placeholder="상세주소" value='<c:out value="${member.userDaddr}"/>'>
+        <textarea id="memo" placeholder="배송 메시지">파손되지 않게 조심히 배송해주세요</textarea>
     </div>
     <div class="btn-container">
         <button class="btn" id="purchase">결제</button>
@@ -114,19 +124,25 @@
 </body>
 <!-- 결제  -->
 <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
+<!-- API 외부 스크립트 파일 연결 코드 -->
+<script
+	src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
 	function initPayment() {
+		//포트원과 상호작용하는 변수
 		const IMP = window.IMP;
-		IMP.init("imp65002722");
+		//가맹점 식별코드로 초기화
+		IMP.init("imp48221435");
 	}
 
 	$(function () {
 		initPayment();
 	})
 
-	function callPayment(data) {
+	//function callPayment(data) {
+	function callPayment() {
 		//상품명 가공
-
+/*
 		let prdCount = 0;
 		let prdName = "";
 
@@ -137,17 +153,87 @@
 				prdName = input.parent().parent().siblings('.column-2').text();
 			}
 		});
-
+*/
 		const paymentData = {
+			pg: "kakaopay",
+			pay_method: "card",
+			merchant_uid: "ORD20240407-000001",
+			name: "라면",
+			amount: "60000",
+		}
+/* 		const paymentData = {
 			pg: "kcp.A52CY",
 			pay_method: "card",
 			merchant_uid: data.orderNo,
 			name: prdName + (prdCount > 1 ? "외 " + (prdCount - 1) + "건" : ""),
-			amount: data.totalPrice
-		}
+			amount: data.totalPrice,
+			buyer_email : data.email,
+	        buyer_name : data.name,
+	        buyer_tel : data.phone,
+		} */
 
 		IMP.request_pay(paymentData, function (rsp) {
 		});
+	}
+	
+	
+	/* 다음 주소 연동 */
+	function execution_daum_address() {
+
+		new daum.Postcode(
+				{
+					oncomplete : function(data) {
+						// 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분입니다.
+
+						// 각 주소의 노출 규칙에 따라 주소를 조합한다.
+						// 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+						var addr = ''; // 주소 변수
+						var extraAddr = ''; // 참고항목 변수
+
+						//사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+						if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+							addr = data.roadAddress;
+						} else { // 사용자가 지번 주소를 선택했을 경우(J)
+							addr = data.jibunAddress;
+						}
+
+						// 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+						if (data.userSelectedType === 'R') {
+							// 법정동명이 있을 경우 추가한다. (법정리는 제외)
+							// 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+							if (data.bname !== ''
+									&& /[동|로|가]$/g.test(data.bname)) {
+								extraAddr += data.bname;
+							}
+							// 건물명이 있고, 공동주택일 경우 추가한다.
+							if (data.buildingName !== ''
+									&& data.apartment === 'Y') {
+								extraAddr += (extraAddr !== '' ? ', '
+										+ data.buildingName
+										: data.buildingName);
+							}
+							// 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+							if (extraAddr !== '') {
+								extraAddr = ' (' + extraAddr + ')';
+							}
+							// 주소변수 문자열과 참고항목 문자열 합치기
+							addr += extraAddr;
+
+						} else {
+							addr += ' ';
+						}
+
+						$(".address_input_1").val(data.zonecode);
+						//$("[name=memberAddr1]").val(data.zonecode);    // 대체가능
+						$(".address_input_2").val(addr);
+						//$("[name=memberAddr2]").val(addr);            // 대체가능
+						// 커서를 상세주소 필드로 이동한다.
+						$(".address_input_3").attr("readonly", false);
+						$(".address_input_3").focus();
+
+					}
+				}).open();
+
 	}
 </script>
 <script>
@@ -177,6 +263,11 @@
 	}
 
 	$(document).ready(function(){
+		
+		$('.shipping-details').on('click', '.popup-address', function(e) {
+		    execution_daum_address();
+		});
+		
 		$('#cancel').on('click',function(){
 			history.back();
 		});
@@ -201,18 +292,45 @@
 			
 				$("[name=cart_no]").each(function(idx){
 					const data = {
-							name: $("#name").val(),
-							phone: $("#phone").val(),
-							addr1: $("#addr1").val(),
-							addr2: $("#addr2").val(),
-							memo: $("#memo").val(),
-							cart: $("[name=cart_no]:eq(" + idx + ")").val()
-						};
+						name: $("#name").val(),
+						phone: $("#phone").val(),
+						stnum: $("#stnum").val(),
+						userAddr: $("#addr1").val(),
+						userDaddr: $("#addr2").val(),
+						d_memo: $("#memo").val(),
+						cart_no: Number($("[name=cart_no]:eq(" + idx + ")").val()),
+						item_no: Number($("[name=item_no]:eq(" + idx + ")").val()),
+						amount: Number($(".item-quantity").eq(idx).html())
+					};
 					console.log(data.cart);
 					list.push(data);
 				});
-				console.log(list);
-				alert('결제가 완료되었습니다.');
+				
+				$.ajax({
+				    url: '/order/addOrder',
+				    type: 'POST',
+				    contentType: 'application/json',
+				    data: JSON.stringify(list),
+				    success: function(response) {
+				        // 성공적으로 데이터를 전송한 후 실행할 코드
+				        console.log(response);
+				        //callPayment(response.data);
+				        //callPayment();
+				        alert('결제가 완료되었습니다.');
+		    		    self.location='/order/orderList';
+				    },
+				    error: function(xhr, status, error) {
+				        // 에러 처리
+				        console.error(error);
+				    }
+				});
+
+		        
+				/*
+				if(location.pathname === '/order/purchase/direct'){
+					console.log('단일상품');
+				} */
+				
 				/*
     			$.ajax({
     				type: "POST",

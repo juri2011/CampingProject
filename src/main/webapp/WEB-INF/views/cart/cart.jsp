@@ -11,15 +11,12 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 <body>
-	<!-- 로고 -->
-	<a href="${pageContext.request.contextPath}/home">
-	    <img src="${pageContext.request.contextPath}/resources/images/캠핑가로고1.png" alt="Logo">
-	</a>
 	<h1>cart</h1>
 	
 		<table>
 			<thead>
 				<tr>
+					<!-- <th>전체선택<input id="selectAll" type="checkbox" checked/></th> -->
 					<th>상품 이미지</th>
 					<th>상품명</th>
 					<th>가격</th>
@@ -63,6 +60,7 @@
 			}
 			for(let i=0, len=list.length || 0; i<len; i++){
 				str += "<tr class='cartItem' id='cart-"+list[i].cart_no+"'>";
+				//str += "<td><input class='product-checkbox' type='checkbox' value='"+list[i].cart_no+"' checked/></td>"
 				//img src에 list[i].item_img를 넣으려니 405에러 발생(이미지가 아직 없기 때문에)
 				str += "	<td><img src='' alt='"+list[i].item_name+"'></td>";
 				str += "	<td>"+list[i].item_name+"</td>";
@@ -96,31 +94,67 @@
 			}
 		});// end of deleteAll
 		
+		//클릭하면 장바구니 수량 수정하고 구매페이지로 이동
 		$('#purchase').on('click', function(){
 			// 선택된 체크박스만 필터링
+		    /*
+			const selectedCarts = $('.product-checkbox:checked').map(function() {
+		        return $(this).val(); // 체크박스의 value (cart_no)를 가져옴
+		    }).get(); // jQuery 객체를 일반 배열로 변환
 		    
+		    if(selectedCarts.length === 0){
+		        alert('구매할 상품을 선택해주세요.');
+		        return;
+		    }
+		    */
+			//장바구니 DB로부터 장바구니 리스트를 가져옴
 			cartService.getList(member_id, function(cartCnt, list){
 				console.log("cartCnt: "+cartCnt);
 				
-				
+				//리스트가 없으면 종료
 				if(list == null || list.length == 0){
 					return;
 				}
+				
+				//list = list.filter(item => selectedCarts.includes(item.cart_no.toString())); // 선택된 cart_no만 포함하는 항목으로 필터링
+				console.log("========================",list);
+				//순서대로 cart 객체에 담음
 				for(let i=0, len=list.length || 0; i<len; i++){
+					//페이지로부터 수량 가져옴
 					const quantity = $('#cart-'+list[i].cart_no).find("input[name='quantity']").val();
+					//전달할 cart 객체
 					const cart = {cart_no: list[i].cart_no,
 								quantity: quantity};
+					//품절된 상품을 구매하려고 하면 구매페이지 이동 불가
 					if(list[i].status === '2'){
 						alert('품절된 상품이 포함되어 있습니다.');
 						return;
 					}
+					//위의 조건문 통과했으면 장바구니 DB에서 구매수량 수정
 					cartService.update(cart, function(result){
+						//콘솔에 출력 
 						console.log('cart_no: ',list[i].cart_no , result);
-						//purchase로 이동
 						self.location="/order/purchase";
 					});
-					
-				}
+				}//end for
+				
+				//수정 완료했으면 구매 테이블에 삽입(비동기로)
+				//이때, list를 보내준다
+				/*$.ajax({
+					type: 'post',
+					url: '/order/addBill',
+					contentType: 'application/json',
+				    data: JSON.stringify(list),
+					success:function(result, status, xhr){
+						//purchase로 이동
+						
+					},
+					error:function(xhr, status, er){
+						if(error){
+							error(er);
+						}
+					}
+				});*/
 			});//get
 		});
 		

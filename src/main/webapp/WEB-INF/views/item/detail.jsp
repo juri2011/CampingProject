@@ -149,6 +149,7 @@
     	<input type="hidden" name="price" value="<c:out value='${item.price}' />" />
     	<input type="hidden" name="item_no" value="<c:out value='${item.item_no}' />" />
     	<input type="hidden" name="item_name" value="<c:out value='${item.item_name}' />" />
+    	<input type="hidden" name="member_id" value='<c:out value="${sessionScope.member.mem_id}" />' />
     </form>
     <div class="container">
     	
@@ -298,14 +299,13 @@
 	const copyFormTab = $('#myTabContent3>form').html();
 
 	let pageNum = 1;
-	const userID = 'user004' //임시
-	
+	const userID = $('input[name=member_id]').val();
+	console.log(userID);
 	
 	//동적으로 리뷰 리스트를 생성하기 전에 함수를 선언한다.
 	//$(document).ready() 안에 들어가게 되면
 	//리스트 안의 버튼이 이 함수를 실행하지 못한다.
 	if(userID != null || userID != ''){
-		console.log('user004');
 		$('#reviewWriter').attr('readonly','true');
 		$('#reviewWriter').attr('value',userID);
 	}
