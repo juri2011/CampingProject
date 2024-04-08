@@ -7,6 +7,7 @@ import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -18,15 +19,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.campingga.domain.AttachImageVO;
 import com.campingga.domain.ItemVO;
+import com.campingga.domain.PagingVO;
 import com.campingga.service.AdminService;
+import com.campingga.service.ItemService;
+import com.campingga.service.MemberService;
 
 import lombok.extern.log4j.Log4j;
 import net.coobird.thumbnailator.Thumbnails;
@@ -35,17 +41,23 @@ import net.coobird.thumbnailator.Thumbnails;
 @Log4j
 @RequestMapping("/admin")
 public class AdminController {
-	
+
 	@Autowired
 	private AdminService adminService;
+
+	@Autowired
+	private MemberService memberService;
 	
-	 /* 관리자 메인 페이지 이동 */
-    @GetMapping("/adminPage")
-    public void adminMainGET() throws Exception{
-        
-        log.info("관리자 페이지 이동");
-        
-    }
+	@Autowired
+	private ItemService itemService;
+
+	/* 관리자 메인 페이지 이동 */
+	@GetMapping("/adminPage")
+	public void adminMainGET() throws Exception {
+
+		log.info("관리자 페이지 이동");
+
+	}
 
 	// 상품등록 페이지 이동
 	@GetMapping("/itemEnroll")
@@ -54,32 +66,97 @@ public class AdminController {
 		log.info("상품등록 페이지 진입");
 
 	}
-	
 
 	// 상품등록
 	@PostMapping("/itemEnroll")
-		public String itemsEnrollPOST(ItemVO item, RedirectAttributes rttr) {
-			
-			log.info("itemsEnrollPOST..." + item);
-			
-			adminService.itemEnroll(item);
-			
-			rttr.addFlashAttribute("enroll_result", item.getItem_name());
-			
-			return "redirect:/admin/itemManager";
-		}
-	
+	public String itemsEnrollPOST(ItemVO item, RedirectAttributes rttr) {
+
+		log.info("itemsEnrollPOST..." + item);
+
+		adminService.itemEnroll(item);
+
+		rttr.addFlashAttribute("enroll_result", item.getItem_name());
+
+		return "redirect:/admin/itemManager";
+	}
+
 	// 상품관리 페이지 이동
-		@GetMapping("/itemManager")
-		public void itemManagerGET() {
+	@GetMapping("/itemManager")
+	public String itemList(PagingVO vo, Model model, @RequestParam(value = "nowPage", required = false) String nowPage,
+			@RequestParam(value = "cntPerPage", required = false) String cntPerPage) {
 
-			log.info("상품관리 페이지 진입");
-
+		int total = itemService.countItem();
+		if (nowPage == null && cntPerPage == null) {
+			nowPage = "1";
+			cntPerPage = "5";
+		} else if (nowPage == null) {
+			nowPage = "1";
+		} else if (cntPerPage == null) {
+			cntPerPage = "5";
 		}
+		vo = new PagingVO(total, Integer.parseInt(nowPage), Integer.parseInt(cntPerPage));
+		model.addAttribute("paging", vo);
+		model.addAttribute("viewAll", itemService.selectItem(vo));
+		return "admin/itemManager";
+	}
+	
+	@GetMapping("/itemEdit")
+	public String itemEdit(@RequestParam("item_no") int item_no, Model model) {
+	    // 해당 상품번호에 해당하는 상품 정보를 가져와서 모델에 추가
+	    ItemVO item = itemService.get(item_no);
+	    
+	    model.addAttribute("item", item);
+	    
+	    // 상품의 카테고리 정보도 가져와서 모델에 추가
+	    List<String> categories = Arrays.asList("캠핑가구", "조리도구", "랜턴", "전자제품", "텐트", "침낭", "매트", "난로");
+	    model.addAttribute("categories", categories);
+	    
+	    // 상품의 판매 상태 정보도 가져와서 모델에 추가
+	    List<String> statuses = Arrays.asList("판매중", "판매중단(품절)");
+	    model.addAttribute("statuses", statuses);
+	    
+	    // 상품의 수정 시간을 가져와서 모델에 추가
+	    Date modDate = new Date(); // 현재 시간을 가져오거나, 데이터베이스에서 가져와서 사용할 수 있습니다.
+	    model.addAttribute("modDate", modDate);
+	    
+	    return "admin/itemEdit"; // 상품 수정 페이지로 이동
+	}
+
+
+	
+	@PostMapping("/itemEdit")
+	public String updateItem(@RequestParam("item_no") int item_no, ItemVO item, RedirectAttributes rttr) {
+	    log.info("updateItem POST..." + item);
+	    // 상품 번호와 상품 정보를 이용하여 상품 업데이트 서비스 메소드 호출
+	    item.setItem_no(item_no); // 상품 번호 설정
+	    int result = itemService.itemUpdate(item);
+	    if (result == 1) {
+	        rttr.addFlashAttribute("update_result", "success");
+	    } else {
+	        rttr.addFlashAttribute("update_result", "fail");
+	    }
+	    return "redirect:/admin/itemManager";
+	}
+	
+	@PostMapping("/deleteItem")
+	public String deleteItem(@RequestParam("item_no") int item_no, RedirectAttributes rttr) {
+	    log.info("deleteItem POST... item_no: " + item_no);
+	    
+	    // 아이템 서비스를 사용하여 해당 상품을 삭제합니다.
+	    int result = itemService.deleteItem(item_no);
+	    
+	    if (result == 1) {
+	        rttr.addFlashAttribute("delete_result", "success");
+	    } else {
+	        rttr.addFlashAttribute("delete_result", "fail");
+	    }
+	    
+	    return "redirect:/admin/itemManager";
+	}
 
 	/* 첨부 파일 업로드 */
 	// 이미지 파일 이름이 한글인 경우, 한글깨짐 방지위한 속성값을 부여(JSON데이터가 UTF8인코딩이 된 채로 전송)
-	@PostMapping(value = "/uploadAjaxAction", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@PostMapping(value = "/uploadAjaxAction", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<AttachImageVO>> uploadAjaxActionPOST(MultipartFile[] uploadFile) {
 
 		log.info("uploadAjaxActionPOST..........");
@@ -127,7 +204,7 @@ public class AdminController {
 		}
 
 		/* 이미저 정보 담는 객체 */
-		List<AttachImageVO> list = new ArrayList();
+		List<AttachImageVO> list = new ArrayList<AttachImageVO>();
 
 		// for문
 		for (MultipartFile multipartFile : uploadFile) {
@@ -172,48 +249,68 @@ public class AdminController {
 				e.printStackTrace();
 			}
 
-			// 이미지 정보가 저장된 AttachImageVO객체를 List의 요소로 추가
-			list.add(vo);
-		} // for
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																	// 이미지 정보가 저장된 AttachImageVO객체를 List의 요소로 추가
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																	list.add(vo);
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																} // for
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																														
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																ResponseEntity<List<AttachImageVO>> result = new ResponseEntity<List<AttachImageVO>>(list, HttpStatus.OK);
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																														
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																return result;
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																															}
 
-		ResponseEntity<List<AttachImageVO>> result = new ResponseEntity<List<AttachImageVO>>(list, HttpStatus.OK);
-
-		return result;
-	}
-	
 	/* 이미지 파일 삭제 */
 	@PostMapping("/deleteFile")
-	public ResponseEntity<String> deleteFile(String fileName){
-		
+	public ResponseEntity<String> deleteFile(String fileName) {
+
 		log.info("deleteFile........" + fileName);
-		
+
 		File file = null;
-		
+
 		try {
 			/* 썸네일 파일 삭제 */
 			file = new File("c:\\upload\\" + URLDecoder.decode(fileName, "UTF-8"));
-			
+
 			file.delete();
-			
+
 			/* 원본 파일 삭제 */
 			String originFileName = file.getAbsolutePath().replace("s_", "");
-			
+
 			log.info("originFileName : " + originFileName);
-			
+
 			file = new File(originFileName);
-			
+
 			file.delete();
-			
-			
-		} catch(Exception e) {
-			
+
+		} catch (Exception e) {
+
 			e.printStackTrace();
-			
+
 			return new ResponseEntity<String>("fail", HttpStatus.NOT_IMPLEMENTED);
-			
-		}//catch
-		
+
+		} // catch
+
 		return new ResponseEntity<String>("success", HttpStatus.OK);
 	}
+
+	@GetMapping("/memberManager")
+	public String memberList(PagingVO vo, Model model,
+			@RequestParam(value = "nowPage", required = false) String nowPage,
+			@RequestParam(value = "cntPerPage", required = false) String cntPerPage) {
+
+		int total = memberService.countMember();
+		if (nowPage == null && cntPerPage == null) {
+			nowPage = "1";
+			cntPerPage = "5";
+		} else if (nowPage == null) {
+			nowPage = "1";
+		} else if (cntPerPage == null) {
+			cntPerPage = "5";
+		}
+		vo = new PagingVO(total, Integer.parseInt(nowPage), Integer.parseInt(cntPerPage));
+		model.addAttribute("paging", vo);
+		model.addAttribute("viewAll", memberService.selectMember(vo));
+		return "admin/memberManager";
+	}
+	
 
 }
