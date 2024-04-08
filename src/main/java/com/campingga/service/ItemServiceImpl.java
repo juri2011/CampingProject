@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.campingga.domain.Criteria;
 import com.campingga.domain.ItemVO;
+import com.campingga.domain.PagingVO;
 import com.campingga.mapper.ItemMapper;
 
 @Service
@@ -34,5 +35,31 @@ public class ItemServiceImpl implements ItemService{
 	public ItemVO get(int item_no) {
 		return itemMapper.selectOneItem(item_no);
 	}
+
+	@Override
+	public int countItem() {
+		return itemMapper.countItem();
+	}
+
+	@Override
+	public List<ItemVO> selectItem(PagingVO vo) {
+		return itemMapper.selectItem(vo);
+	}
+
+	@Override
+	public int itemUpdate(ItemVO vo) {
+		return itemMapper.itemUpdate(vo);
+	}
+
+	@Override
+	public int deleteItem(int item_no) {
+		
+		return itemMapper.deleteItem(item_no);
+	}
+
+
+	
+	
+	
 
 }

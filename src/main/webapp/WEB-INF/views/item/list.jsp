@@ -13,7 +13,6 @@
 <!-- 임시 스타일 -->
 <style>
 	td{border: 1px solid black; width: 300px; height: 300px;}
-	.item-img{display: block; width:200px; height: 200px; background-color: yellow;}
 </style>
 </head>
 <body>
@@ -69,7 +68,9 @@
 	       </c:if>
 	       <!-- 데이터 들어가는 부분 -->
 	       <td>
-	           <a class="item-img" href="<c:out value='${item.item_no}'/>">item_img: (추가예정)</a>
+	           <a class="item-img" href="<c:out value='${item.item_no}'/>">
+	          	 <img src="/resources/img/${item.img_name}"/>
+	           </a>
 	           <p><c:out value="${item.item_name}" /></p>
 	           <p>
 		           <c:out value="${item.price}" />

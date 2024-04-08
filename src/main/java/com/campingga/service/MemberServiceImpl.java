@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.campingga.domain.MemberPagingVO;
+import com.campingga.domain.PagingVO;
 import com.campingga.domain.MemberVO;
 import com.campingga.mapper.MemberMapper;
 
@@ -41,7 +41,7 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
-    public List<MemberVO> selectMember(MemberPagingVO vo) {
+    public List<MemberVO> selectMember(PagingVO vo) {
     	return membermapper.selectMember(vo);
     }
 	

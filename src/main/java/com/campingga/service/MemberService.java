@@ -2,7 +2,7 @@ package com.campingga.service;
 
 import java.util.List;
 
-import com.campingga.domain.MemberPagingVO;
+import com.campingga.domain.PagingVO;
 import com.campingga.domain.MemberVO;
 
 public interface MemberService {
@@ -20,6 +20,6 @@ public interface MemberService {
     public int countMember();
 
     // 페이징 처리 게시글 조회
-    public List<MemberVO> selectMember(MemberPagingVO vo);
+    public List<MemberVO> selectMember(PagingVO vo);
 	
 }

@@ -31,6 +31,7 @@
 
 	</select>
 
+	<!-- 목록조회 -->
 	<select id="getList" resultType="com.campingga.domain.MemberVO">
 
 		select * from member
@@ -45,7 +46,7 @@
 
 	</select>
 
-	<!-- 검색기준으로 리스트 select -->
+	<!-- 목록 조회 - 페이징 처리 -->
 	<select id="selectMember" parameterType="criteria"
 		resultType="com.campingga.domain.MemberVO">
 
@@ -62,6 +63,8 @@
 
 
 	</select>
+	
+	
 
 
 </mapper>
