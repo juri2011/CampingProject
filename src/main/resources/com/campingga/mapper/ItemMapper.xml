@@ -7,7 +7,7 @@
 <mapper namespace="com.campingga.mapper.ItemMapper">
 	<!-- 리스트 컬럼 -->
 	<sql id="cols">
-		item_no, item_name, content, price, regdate, category,
+		item_no, item_name, img_name, amount, content, price, regdate, category,
 		status
 	</sql>
 
@@ -32,12 +32,13 @@
 	<select id="selectListWithPaging" parameterType="criteria"
 		resultType="itemVO">
 
-		select item_no, item_name, img_name, price, category
+		select item_no, item_name, img_name, amount, price, category
 		from (
 		select
 		item_no,
 		item_name,
 		img_name,
+		amount,
 		price,
 		category,
 		ROW_NUMBER() over(ORDER BY regdate desc) AS
