@@ -30,6 +30,6 @@ public interface MemberMapper {
 	public MemberVO read(String member_id);
 	
 	//권한 설정
-	public MemberVO insertAuth(Authority auth);
+	public int insertAuth(Authority auth);
 	
 }

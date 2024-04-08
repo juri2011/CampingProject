@@ -24,7 +24,6 @@ public class MemberServiceTests {
 	
 	@Autowired
 	private PasswordEncoder pwencoder;
-	
 	//회원가입 + 권한 테스트
 	@Test
 	public void memberJoinTest() throws Exception{
@@ -34,7 +33,7 @@ public class MemberServiceTests {
 		member.setEmail("juri@test.com");
 		member.setGender("여성");
 		member.setPhone("010-0000-0000");
-		member.setPwd("12345");
+		member.setPwd(pwencoder.encode("12345"));
 		member.setName("오주리");
 		member.setUserStnum("12345");
 		member.setUserAddr("경기도 용인시 기흥구");

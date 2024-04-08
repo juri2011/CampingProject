@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.campingga.domain.PagingVO;
@@ -17,13 +18,20 @@ public class MemberServiceImpl implements MemberService{
 	@Autowired
 	MemberMapper membermapper;
 
+	@Autowired
+	private PasswordEncoder pwencoder;
+	
 	@Override
 	public void memberJoin(MemberVO member) throws Exception {
+		
+		
 		
 		//사용자 권한
 		Authority auth = new Authority();
 		auth.setAuth("ROLE_MEMBER");
 		auth.setMem_id(member.getMem_id());
+		String pwd = member.getPwd();
+		member.setPwd(pwencoder.encode(pwd));
 		
 		membermapper.memberJoin(member);
 		membermapper.insertAuth(auth); //사용자 권한 추가

@@ -5,6 +5,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -69,14 +70,29 @@ public class MemberController {
 		}
 	} // memberIdChkPOST() 종료
 
+	// 로그인 페이지 이동(시큐리티)
+	@GetMapping("/customLogin")
+	public void joinGET(String error, String logout, Model model) {
+		
+		log.info("로그인 페이지 진입");
+		log.info("error: "+error);
+		log.info("logout: "+logout);
+		
+		if(error != null) {
+			model.addAttribute("error","사용자 ID 또는 비밀번호를 잘못 입력하셨습니다.");
+		}
+		if(logout != null) {
+			model.addAttribute("logout","로그아웃 되었습니다.");
+		}
+
+	}
 	// 로그인 페이지 이동
 	@GetMapping("/login")
 	public void joinGET() {
-
+		
 		log.info("로그인 페이지 진입");
-
+		
 	}
-
 	/* 로그인 */
 	@PostMapping("/login")
 	public String loginPOST(HttpServletRequest request, MemberVO member, RedirectAttributes rttr) throws Exception {
@@ -101,7 +117,6 @@ public class MemberController {
 
 		return "redirect:/main";
 	}
-
 	/*
 	 * 메인페이지 로그아웃
 	 * 
