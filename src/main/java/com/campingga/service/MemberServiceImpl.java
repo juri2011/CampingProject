@@ -60,6 +60,11 @@ public class MemberServiceImpl implements MemberService{
     public List<MemberVO> selectMember(PagingVO vo) {
     	return membermapper.selectMember(vo);
     }
+
+    @Override
+    public MemberVO getShippingInfo(String mem_id) {
+      return membermapper.selectShippingInfo(mem_id);
+    }
 	
 	
 	

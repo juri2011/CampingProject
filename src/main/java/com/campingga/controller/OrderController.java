@@ -15,6 +15,8 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,6 +32,7 @@ import com.campingga.domain.MemberVO;
 import com.campingga.domain.OrderListVO;
 import com.campingga.service.CartService;
 import com.campingga.service.ItemService;
+import com.campingga.service.MemberService;
 import com.campingga.service.OrderService;
 
 import lombok.extern.log4j.Log4j;
@@ -48,13 +51,18 @@ public class OrderController {
 	@Autowired
 	public ItemService itemService;
 	
+	@Autowired
+	public MemberService memberService;
+	
 	//구매 화면으로 이동
 	@GetMapping("/purchase")
-	public String orderListForm(HttpSession session, Model model) {
+	public String orderListForm(Model model) {
 		//session으로부터 user 정보 가져옴
 		
-		MemberVO user = (MemberVO) session.getAttribute("member");//임시
-		String userId = user.getMem_id();	
+	  Authentication auth = SecurityContextHolder.getContext().getAuthentication();   
+    String userId = auth.getName();
+    MemberVO user = memberService.getShippingInfo(userId);
+    log.info(user);
 		List<CartVO> cartList = cartService.getCartItemList(userId);
 		log.info(cartList);
 		int totalPrice = cartService.getTotalPrice(cartList);
@@ -67,7 +75,7 @@ public class OrderController {
 	}
 	
 	@PostMapping("/purchase/direct")
-	public String orderListFormDirect(HttpSession session, CartVO cartVO, Model model) {
+	public String orderListFormDirect(CartVO cartVO, Model model) {
 		//String userId = "user003"; 임시
 		
 		List<CartVO> cartList = new ArrayList<CartVO>();
@@ -76,11 +84,17 @@ public class OrderController {
 		
 		model.addAttribute("totalPrice",cartVO.getPrice() * cartVO.getQuantity());
 		model.addAttribute("cartList",cartList);
+		/*
 		if(session.getAttribute("member") != null) {
 			MemberVO member = (MemberVO) session.getAttribute("member");
 			model.addAttribute("member", member);
 		}
-		
+		*/
+		//비회원으로 테스트해보기 -> 에러 예상
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();   
+    String userId = auth.getName();
+    MemberVO member = memberService.getShippingInfo(userId);
+		model.addAttribute("member", member);
 		return "order/purchase";
 	}
 	/*
@@ -107,12 +121,10 @@ public class OrderController {
 	*/
 	
 	@GetMapping("/orderList")
-	public String orderList(HttpSession session, Model model) {
-		//세션에 멤버 값이 있을 경우만 처리
-		if(session.getAttribute("member") == null) {	
-			return "/main";
-		}
-		String mem_id = ((MemberVO)session.getAttribute("member")).getMem_id();
+	public String orderList(Model model) {
+	  Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String mem_id = auth.getName();
+		
 		List<OrderListVO> orderList = orderService.getOrderList(mem_id);
 		
 		//TreeMap은 기본적으로 오름차순이기 때문에 내림차순으로 정렬하도록 지정
@@ -156,10 +168,11 @@ public class OrderController {
 
 	
 	@PostMapping("/addOrder")
-	public @ResponseBody ResponseEntity<String> addOrder(HttpSession session, @RequestBody List<OrderListVO> orderList){
+	public @ResponseBody ResponseEntity<String> addOrder(@RequestBody List<OrderListVO> orderList){
 		
-		MemberVO member = (MemberVO) session.getAttribute("member");
-		String userId = member.getMem_id();
+	  Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    String userId = auth.getName();
+    
 		int insertCount = 0;
 		//name, phone, addr1, addr2, memo, item_no, amount
 		Date now = new Date();

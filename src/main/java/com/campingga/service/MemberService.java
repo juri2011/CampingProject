@@ -21,5 +21,8 @@ public interface MemberService {
 
     // 페이징 처리 게시글 조회
     public List<MemberVO> selectMember(PagingVO vo);
+    
+    //회원 정보 불러오기(배송용)
+    public MemberVO getShippingInfo(String mem_id);
 	
 }

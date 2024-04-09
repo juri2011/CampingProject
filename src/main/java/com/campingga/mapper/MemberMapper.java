@@ -32,4 +32,7 @@ public interface MemberMapper {
 	//권한 설정
 	public int insertAuth(Authority auth);
 	
+	//회원 배송 정보 가져오기
+	public MemberVO selectShippingInfo(String mem_id);
+	
 }

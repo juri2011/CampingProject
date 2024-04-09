@@ -92,6 +92,14 @@
 		values (#{mem_id}, #{auth})
 	</insert>
 
+	<select id="selectShippingInfo" resultType="MemberVO">
+		SELECT
+			mem_id, name, phone, email, userStnum, userAddr, userDaddr
+		FROM
+			member
+		WHERE
+			mem_id=#{mem_id}
+	</select>
 
 </mapper>
 
