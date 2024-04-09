@@ -7,9 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.*;
 
-@Getter
-@Setter
-@ToString
+@Data
 public class MemberVO {
 	private String mem_id;//아이디.
 	private String pwd;//비밀번호

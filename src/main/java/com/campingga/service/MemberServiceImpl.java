@@ -32,7 +32,7 @@ public class MemberServiceImpl implements MemberService{
 		auth.setMem_id(member.getMem_id());
 		String pwd = member.getPwd();
 		member.setPwd(pwencoder.encode(pwd));
-		
+		System.out.println(member.getPwd());
 		membermapper.memberJoin(member);
 		membermapper.insertAuth(auth); //사용자 권한 추가
 		

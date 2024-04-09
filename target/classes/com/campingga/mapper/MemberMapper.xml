@@ -64,7 +64,33 @@
 
 	</select>
 	
+	<resultMap type="MemberVO" id="memberMap">
+	    <id property="mem_id" column="mem_id"/>
+	    <result property="mem_id" column="mem_id"/>
+	    <result property="pwd" column="pwd"/>
+	    <result property="name" column="name"/>
+	    <result property="regdate" column="regdate"/>
+	    <collection property="authList" resultMap="authMap">
+	    </collection> 
+	</resultMap>
+  
+	<resultMap type="Authority" id="authMap">
+	    <result property="mem_id" column="mem_id"/>
+	    <result property="auth" column="auth"/>
+	</resultMap>
 	
+	<select id="read" resultMap="memberMap">
+	      SELECT
+	        m.mem_id, pwd, name, regdate, auth
+	      FROM
+	        member m LEFT OUTER JOIN authority a on m.mem_id = a.mem_id
+	      WHERE m.mem_id = #{member_id}
+	</select>
+	
+	<insert id="insertAuth" parameterType="Authority">
+		insert into authority (mem_id, auth)
+		values (#{mem_id}, #{auth})
+	</insert>
 
 
 </mapper>

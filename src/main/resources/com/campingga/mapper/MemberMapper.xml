@@ -81,7 +81,7 @@
 	
 	<select id="read" resultMap="memberMap">
 	      SELECT
-	        m.mem_id,  pwd, name, regdate, auth
+	        m.mem_id, pwd, name, regdate, auth
 	      FROM
 	        member m LEFT OUTER JOIN authority a on m.mem_id = a.mem_id
 	      WHERE m.mem_id = #{member_id}
