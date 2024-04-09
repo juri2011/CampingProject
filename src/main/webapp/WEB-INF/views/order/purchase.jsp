@@ -322,7 +322,8 @@
 				        //callPayment(response.data);
 				        //callPayment();
 				        alert('결제가 완료되었습니다.');
-		    		    self.location='/order/orderList';
+				        //뒤로가기로 현재 페이지 오는 것 방지
+				     	location.replace("/order/orderList");
 				    },
 				    error: function(xhr, status, error) {
 				        // 에러 처리
