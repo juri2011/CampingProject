@@ -113,7 +113,7 @@ public class MemberController {
 		}
 
 		// 일치하는 아이디, 비밀번호 경우 (로그인 성공)
-		session.setAttribute("member", lvo);
+		//session.setAttribute("member", lvo);
 
 		return "redirect:/main";
 	}

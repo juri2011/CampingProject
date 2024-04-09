@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
@@ -30,9 +32,28 @@ public class MainController {
 		@GetMapping("/main")
 		public void mainPageGET(Model model) {
 			
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+			
+			//사용자가 anonymousUser(로그인 하지 않은 사용자)인지 확인
+			if (auth != null && auth.isAuthenticated()
+					&& !"anonymousUser".equals(auth.getPrincipal())) {
+				
+				model.addAttribute("mem_id", auth.getName());
+				
+				//관리자 권한을 가지고 있으면
+				if(auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+					model.addAttribute("isAdmin", true);
+				}
+				else {
+					model.addAttribute("isAdmin", false);
+				}
+				
+			}
+			
 			List<ItemVO> newItem = itemService.getNewItems();
 			
 			log.info("메인 페이지 진입");
+			
 			
 			model.addAttribute("newItem", newItem);
 			
