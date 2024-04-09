@@ -4,6 +4,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -137,14 +139,17 @@ public class MemberController {
 	/* 비동기방식 로그아웃 메서드 */
 	@PostMapping("/logout.do")
 	@ResponseBody
-	public void logoutPOST(HttpServletRequest request) throws Exception {
+	//public void logoutPOST(HttpServletRequest request) throws Exception {
+	public void logoutPOST() throws Exception {
 
 		log.info("비동기 로그아웃 메서드 진입");
-
+		/*
 		HttpSession session = request.getSession();
 
 		session.invalidate();
-
+		*/
+		SecurityContextHolder.clearContext();
+		
 	}
 	
 	

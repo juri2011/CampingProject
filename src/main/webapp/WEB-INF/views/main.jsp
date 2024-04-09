@@ -131,8 +131,11 @@ a {
 	
 	</div>
 	<script>
+		var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
 		/* 상품 목록 클릭하면 상세페이지로 이동 */
 		$(document).ready(function(){
+			
 			$('.card').click(function(){
 				const item_no = $(this).data("no");
 				location.href="/item/detail?item_no="+item_no;
@@ -145,6 +148,14 @@ a {
 			$.ajax({
 				type : "POST",
 				url : "/member/logout.do",
+				
+				/* 
+					spring security에서 CSRF보호를 활성화하면
+					POST 요청을 보낼때 CSRF 토큰이 올바른지 검증한다
+				*/
+				beforeSend: function(xhr) {
+		            xhr.setRequestHeader(header, token);
+		        },
 				success : function(data) {
 					alert("로그아웃 성공");
 					document.location.reload();
