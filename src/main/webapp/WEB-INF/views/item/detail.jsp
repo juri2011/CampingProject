@@ -149,7 +149,7 @@
     	<input type="hidden" name="price" value="<c:out value='${item.price}' />" />
     	<input type="hidden" name="item_no" value="<c:out value='${item.item_no}' />" />
     	<input type="hidden" name="item_name" value="<c:out value='${item.item_name}' />" />
-    	<input type="hidden" name="member_id" value='<c:out value="${sessionScope.member.mem_id}" />' />
+    	<input type="hidden" name="member_id" value='<c:out value="${userId}" />' />
     </form>
     <div class="container">
     	
