@@ -129,6 +129,7 @@
 				<div class="join_button_wrap">
 					<input type="button" class="join_button" value="가입하기">
 				</div>
+				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 			</div>
 		</form>
 	</div>
