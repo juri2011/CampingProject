@@ -1,7 +1,8 @@
 //즉시실행함수 : reviewService 에 {name: "AAAA"} 할당
+
 const reviewService = (function(){
-
-
+	const token = $("meta[name='_csrf']").attr("content");
+	const header = $("meta[name='_csrf_header']").attr("content");
 	function add(review, callback, error){
 	
 		console.log("add review..........");
@@ -10,6 +11,9 @@ const reviewService = (function(){
 		$.ajax({
 			type: 'post',
 			url: '/review/write',
+			beforeSend: function(xhr) {
+		            xhr.setRequestHeader(header, token);
+		        },
 			data: JSON.stringify(review),
 			contentType: "application/json; charset=utf-8",
 			/*
@@ -53,6 +57,9 @@ const reviewService = (function(){
 		$.ajax({
 			type: 'delete',
 			url: '/review/'+rev_no,
+			beforeSend: function(xhr) {
+		            xhr.setRequestHeader(header, token);
+		        },
 			success:function(deleteResult, status, xhr){
 				if(callback){
 					callback(deleteResult);
@@ -71,6 +78,9 @@ const reviewService = (function(){
 		$.ajax({
 			type: 'put',
 			url:'/review/'+review.rev_no,
+			beforeSend: function(xhr) {
+		            xhr.setRequestHeader(header, token);
+		        },
 			data: JSON.stringify(review),
 			contentType: "application/json; charset=utf-8",
 			success: function(result, status, xhr){

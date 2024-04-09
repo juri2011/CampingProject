@@ -150,6 +150,8 @@
     	<input type="hidden" name="item_no" value="<c:out value='${item.item_no}' />" />
     	<input type="hidden" name="item_name" value="<c:out value='${item.item_name}' />" />
     	<input type="hidden" name="member_id" value='<c:out value="${userId}" />' />
+    	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+    	
     </form>
     <div class="container">
     	
@@ -245,14 +247,22 @@
 	  <div class="popup-content">
 	    <p>장바구니에 추가되었습니다.</p>
 	    <button id="move-cart">이동하기</button>
-	    <button class="close-btn" id="closePopup">닫기</button>
+	    <button class="close-btn">닫기</button>
+	  </div>
+	</div>
+	
+	<div class="popup-overlay" id="loginPopup">
+	  <div class="popup-content">
+	    <p>로그인이 필요한 서비스입니다.</p>
+	    <p>로그인하시겠습니까?</p>
+	    <button id="move-login">로그인</button>
+	    <button class="close-btn">닫기</button>
 	  </div>
 	</div>
 </body>
 <script src="/resources/js/cart.js"></script>
 <script src="/resources/js/review.js"></script>
 <script>
-
 	let item_no = '<c:out value="${item.item_no}"/>';
 	let uploadReslut = $("#uploadReslut");	
 
@@ -553,6 +563,10 @@
 		
 		$('#add-cart').on('click',function(){
 			//장바구니 추가
+			if(userID == null || userID == ''){
+				$('#loginPopup').css('display','flex');
+				return;
+			}
 			const amount = Number($('#amount').val());
 			const cart = {member_id: userID, item_no: item_no, quantity: amount};
 			cartService.add(cart, function(result){
@@ -561,14 +575,19 @@
 			});
 		});
 		
-		$('#closePopup').on('click',function(){
-			$('#popup').css('display','none');
+		$('.close-btn').on('click',function(){
+			$(this).closest('.popup-overlay').hide();
 		})
 		
 		$("#move-cart").on('click',function(){
 			$('#popup').css('display','none');
 			showTabMenu(1);
 			self.location="/cart/list";
+		});
+		$("#move-login").on('click',function(){
+			$('#loginPopup').hide();
+			showTabMenu(1);
+			self.location="/member/login";
 		});
 		
 		$('#toList').on('click',function(){
@@ -578,6 +597,10 @@
 		});
 		
 		$('#direct-purchase').on('click',function(){
+			if(userID == null || userID == ''){
+				$('#loginPopup').css('display','flex');
+				return;
+			}
 			$('#purchaseForm').submit();
 		});
 	});

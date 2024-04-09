@@ -64,10 +64,16 @@ public class ItemController {
 	public void get(@RequestParam("item_no") int item_no, @ModelAttribute("cri") Criteria cri, Model model) {
 	  
 	    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	    String userId = auth.getName();
+
+	    if (auth != null && auth.isAuthenticated()
+				&& !"anonymousUser".equals(auth.getPrincipal())) {
+			
+			model.addAttribute("userId", auth.getName());
+			
+		}
+	    
 	    log.info("/get or /modify");
 	    model.addAttribute("item",itemService.get(item_no));
 	    model.addAttribute("cri",cri);
-	    model.addAttribute("userId", userId);
 	  }
 }

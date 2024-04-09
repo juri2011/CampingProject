@@ -237,6 +237,8 @@
 	}
 </script>
 <script>
+	const token = $("meta[name='_csrf']").attr("content");
+	const header = $("meta[name='_csrf_header']").attr("content");
 	function validate() {
 		if ($("#name").val() == '') {
 			alert("이름을 입력하세요.");
@@ -308,6 +310,9 @@
 				
 				$.ajax({
 				    url: '/order/addOrder',
+				    beforeSend: function(xhr) {
+			            xhr.setRequestHeader(header, token);
+			        },
 				    type: 'POST',
 				    contentType: 'application/json',
 				    data: JSON.stringify(list),
