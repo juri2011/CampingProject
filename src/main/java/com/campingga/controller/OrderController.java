@@ -186,23 +186,22 @@ public class OrderController {
 		return "order/orderList";
 	}
 	
+	//주문 내역 준비
+	@PostMapping("/prepareOrder")
+	public @ResponseBody PurchaseDTO prepareOrder(HttpSession session, @RequestBody List<OrderListVO> orderList){
 
-	
-	@PostMapping("/addOrder")
-	public @ResponseBody ResponseEntity<PurchaseDTO> addOrder(@RequestBody List<OrderListVO> orderList){
-		
-	  Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    String userId = auth.getName();
-    
-		int insertCount = 0;
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	    String userId = auth.getName();
+	    
 		//name, phone, addr1, addr2, memo, item_no, amount
+	    
+	    //주문번호에 들어갈 날짜 정보
 		Date now = new Date();
-    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-    String orderNoDate = dateFormat.format(now);
-    int totalPrice = 0;
-		
-    for(OrderListVO order : orderList) {
-    	
+	    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+	    String orderNoDate = dateFormat.format(now);
+	    int totalPrice = 0;
+			
+	    for(OrderListVO order : orderList) {
 			order.setMem_id(userId);
 			
 			order.setOrd_no(userId + "_" + orderNoDate);
@@ -214,30 +213,63 @@ public class OrderController {
 			
 			log.info(order);
 			log.info("가격========================"+currentItem.getPrice());
-			if(orderService.addOrder(order) == 1) {
-				insertCount++;
-				totalPrice += order.getAmount() * order.getPrice();
-			} 
+			totalPrice += order.getAmount() * order.getPrice();
+		}
+	    
+	    log.info(totalPrice);
+				
+	    PurchaseDTO dto = new PurchaseDTO();
+	    dto.setName(orderList.get(0).getName());
+	    dto.setOrd_no(orderList.get(0).getOrd_no());
+	    dto.setTotalPrice(totalPrice);
+	    dto.setOrderList(orderList);
+	    
+	    //하나만 주문 시 그 상품명만 출력,
+	    //여러 상품 출력시 대표 상품 이름만 출력
+	    dto.setOrderName(orderList.size() > 1 ? (orderList.get(0).getItem_name() + "외 " + (orderList.size()-1) +"건"):
+	    	orderList.get(0).getItem_name()
+    	);
+	    session.removeAttribute("paymentData");
+	    //세션에 구매할 내역 일단 저장
+	    session.setAttribute("paymentData", dto);
+    	return dto;
+	}
+	
+	//실제로 주문 내역에 추가
+	@PostMapping("/addOrder")
+	public @ResponseBody ResponseEntity<String> addOrder(@RequestBody PurchaseDTO purchaseDTO){
+		
+	  Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    String userId = auth.getName();
+    
+		int insertCount = 0;
+		//int totalPrice = 0;
+		
+		List<OrderListVO> orderList = purchaseDTO.getOrderList();
+		log.info(orderList);
+		
+	    for(OrderListVO order : orderList) {
+	    	
+			//order.setMem_id(userId);
+			//order.setOrd_no(userId + "_" + orderNoDate);
+			
+			//ItemVO currentItem = itemService.get(order.getItem_no());
+			
+			//order.setItem_name(currentItem.getItem_name());
+			//order.setPrice(currentItem.getPrice());
+			
+			log.info(order);
+			if(orderService.addOrder(order) == 1)insertCount++;
 			//이 경로로 왔다는 것은 결제 처리가 정상적으로 되었다는 뜻이므로 removeCart로 삭제
 			cartService.removeCart(order.getCart_no());
 		}
-    
-    log.info(totalPrice);
-			
-    PurchaseDTO dto = new PurchaseDTO();
-    dto.setName(orderList.get(0).getName());
-    dto.setOrd_no(orderList.get(0).getOrd_no());
-    dto.setTotalPrice(totalPrice);
-    
-    //하나만 주문 시 그 상품명만 출력,
-    //여러 상품 출력시 대표 상품 이름만 출력
-    dto.setOrderName(orderList.size() > 1 ? (orderList.get(0).getItem_name() + "외 " + (insertCount-1) +"건"):
-    	orderList.get(0).getItem_name()
-    	);
-    
+	    
+	    //log.info(totalPrice);
+	    	
 		return insertCount == orderList.size()
-		        ? new ResponseEntity<>(dto, HttpStatus.OK)
+		        ? new ResponseEntity<>("success", HttpStatus.OK)
 		        : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			
 	}
 	/*
 	//장바구니, 바로구매페이지에서 Bill테이블에 데이터 추가(비동기로)

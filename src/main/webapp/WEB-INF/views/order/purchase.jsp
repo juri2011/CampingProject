@@ -125,33 +125,41 @@
 <script src="https://js.tosspayments.com/v1/payment"></script>
 <script>
 	const clientKey = 'test_ck_BX7zk2yd8yzOqlLk2JqX3x9POLqK'
-	const secretKey = 'test_sk_yL0qZ4G1VOajyKo47XKB8oWb2MQY'
+	var tossPayments = TossPayments(clientKey)
 	
 	// ------ 결제창 띄우기 ------
-    tossPayments
-      .requestPayment('카드', {
-        // 결제수단 파라미터 (카드, 계좌이체, 가상계좌, 휴대폰 등)
-        // 결제 정보 파라미터
-        // 더 많은 결제 정보 파라미터는 결제창 Javascript SDK에서 확인하세요.
-        // https://docs.tosspayments.com/reference/js-sdk
-        amount: 100, // 결제 금액
-        orderId: '9XVB9Z7PKjnXcIcV2mxoB', // 주문번호(주문번호는 상점에서 직접 만들어주세요.)
-        orderName: '테스트 결제', // 구매상품
-        customerName: '김토스', // 구매자 이름
-        successUrl: 'https://docs.tosspayments.com/guides/payment/test-success', // 결제 성공 시 이동할 페이지(이 주소는 예시입니다. 상점에서 직접 만들어주세요.)
-        failUrl: 'https://docs.tosspayments.com/guides/payment/test-fail', // 결제 실패 시 이동할 페이지(이 주소는 예시입니다. 상점에서 직접 만들어주세요.)
-      })
-      // ------결제창을 띄울 수 없는 에러 처리 ------
-      // 메서드 실행에 실패해서 reject 된 에러를 처리하는 블록입니다.
-      // 결제창에서 발생할 수 있는 에러를 확인하세요.
-      // https://docs.tosspayments.com/reference/error-codes#결제창공통-sdk-에러
-      .catch(function (error) {
-        if (error.code === 'USER_CANCEL') {
-          // 결제 고객이 결제창을 닫았을 때 에러 처리
-        } else if (error.code === 'INVALID_CARD_COMPANY') {
-          // 유효하지 않은 카드 코드에 대한 에러 처리
-        }
-      })
+	function callPayment(data){
+		console.log(data);
+		console.log(data.ord_no);
+		
+		tossPayments
+	      .requestPayment('카드', {
+	        // 결제수단 파라미터 (카드, 계좌이체, 가상계좌, 휴대폰 등)
+	        // 결제 정보 파라미터
+	        // 더 많은 결제 정보 파라미터는 결제창 Javascript SDK에서 확인하세요.
+	        // https://docs.tosspayments.com/reference/js-sdk
+	        amount: data.totalPrice, // 결제 금액
+	        orderId: data.ord_no, // 주문번호(주문번호는 상점에서 직접 만들어주세요.)
+	        orderName: data.orderName, // 구매상품
+	        customerName: data.name, // 구매자 이름
+	        successUrl: 'http://localhost:8092/purchase/success', // 결제 성공 시 이동할 페이지(이 주소는 예시입니다. 상점에서 직접 만들어주세요.)
+	        failUrl: 'http://localhost:8092/purchase/fail', // 결제 실패 시 이동할 페이지(이 주소는 예시입니다. 상점에서 직접 만들어주세요.)
+	      })
+	      // ------결제창을 띄울 수 없는 에러 처리 ------
+	      // 메서드 실행에 실패해서 reject 된 에러를 처리하는 블록입니다.
+	      // 결제창에서 발생할 수 있는 에러를 확인하세요.
+	      // https://docs.tosspayments.com/reference/error-codes#결제창공통-sdk-에러
+	      .catch(function (error) {
+	        if (error.code === 'USER_CANCEL') {
+	          // 결제 고객이 결제창을 닫았을 때 에러 처리
+	          location.href="/cart/list";
+	        } else if (error.code === 'INVALID_CARD_COMPANY') {
+	          // 유효하지 않은 카드 코드에 대한 에러 처리
+	        	location.href="/cart/list";
+	        }
+	      })
+	}
+    
 </script>
 
 <!-- 결제  -->
@@ -340,29 +348,48 @@
 					console.log(data.cart);
 					list.push(data);
 				});
-				
 				$.ajax({
-				    url: '/order/addOrder',
+				    url: '/order/prepareOrder',
 				    beforeSend: function(xhr) {
 			            xhr.setRequestHeader(header, token);
 			        },
 				    type: 'POST',
 				    contentType: 'application/json',
 				    data: JSON.stringify(list),
+				    dataType: "json",
 				    success: function(response) {
 				        // 성공적으로 데이터를 전송한 후 실행할 코드
 				        console.log(response);
-				        //callPayment(response.data);
-				        //callPayment();
-				        alert('결제가 완료되었습니다.');
-				        //뒤로가기로 현재 페이지 오는 것 방지
-				     	//location.replace("/order/orderList");
+				        console.log(response.orderList);
+				        callPayment(response);
+				        
+				        //const purchaseData = response;
+				        /*
+				        $.ajax({
+						    url: '/order/addOrder',
+						    beforeSend: function(xhr) {
+					            xhr.setRequestHeader(header, token);
+					        },
+						    type: 'POST',
+						    contentType: 'application/json',
+						    data: JSON.stringify(purchaseData),
+						    success: function(response) {
+						        // 성공적으로 데이터를 전송한 후 실행할 코드
+						        console.log(response);
+						    },
+						    error: function(xhr, status, error) {
+						        // 에러 처리
+						        console.error(error);
+						    }
+						});*/
 				    },
 				    error: function(xhr, status, error) {
 				        // 에러 처리
 				        console.error(error);
 				    }
 				});
+				
+				
 
 		        
 				/*
