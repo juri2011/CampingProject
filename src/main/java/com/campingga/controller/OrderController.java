@@ -30,6 +30,7 @@ import com.campingga.domain.CartVO;
 import com.campingga.domain.ItemVO;
 import com.campingga.domain.MemberVO;
 import com.campingga.domain.OrderListVO;
+import com.campingga.domain.PurchaseDTO;
 import com.campingga.service.CartService;
 import com.campingga.service.ItemService;
 import com.campingga.service.MemberService;
@@ -188,7 +189,7 @@ public class OrderController {
 
 	
 	@PostMapping("/addOrder")
-	public @ResponseBody ResponseEntity<String> addOrder(@RequestBody List<OrderListVO> orderList){
+	public @ResponseBody ResponseEntity<PurchaseDTO> addOrder(@RequestBody List<OrderListVO> orderList){
 		
 	  Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     String userId = auth.getName();
@@ -198,21 +199,44 @@ public class OrderController {
 		Date now = new Date();
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
     String orderNoDate = dateFormat.format(now);
+    int totalPrice = 0;
 		
     for(OrderListVO order : orderList) {
-			log.info(order);
+    	
 			order.setMem_id(userId);
 			
 			order.setOrd_no(userId + "_" + orderNoDate);
 			
-			if(orderService.addOrder(order) == 1) insertCount++;
+			ItemVO currentItem = itemService.get(order.getItem_no());
 			
+			order.setItem_name(currentItem.getItem_name());
+			order.setPrice(currentItem.getPrice());
+			
+			log.info(order);
+			log.info("가격========================"+currentItem.getPrice());
+			if(orderService.addOrder(order) == 1) {
+				insertCount++;
+				totalPrice += order.getAmount() * order.getPrice();
+			} 
 			//이 경로로 왔다는 것은 결제 처리가 정상적으로 되었다는 뜻이므로 removeCart로 삭제
 			cartService.removeCart(order.getCart_no());
 		}
+    
+    log.info(totalPrice);
 			
+    PurchaseDTO dto = new PurchaseDTO();
+    dto.setName(orderList.get(0).getName());
+    dto.setOrd_no(orderList.get(0).getOrd_no());
+    dto.setTotalPrice(totalPrice);
+    
+    //하나만 주문 시 그 상품명만 출력,
+    //여러 상품 출력시 대표 상품 이름만 출력
+    dto.setOrderName(orderList.size() > 1 ? (orderList.get(0).getItem_name() + "외 " + (insertCount-1) +"건"):
+    	orderList.get(0).getItem_name()
+    	);
+    
 		return insertCount == orderList.size()
-		        ? new ResponseEntity<>("success", HttpStatus.OK)
+		        ? new ResponseEntity<>(dto, HttpStatus.OK)
 		        : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	/*
