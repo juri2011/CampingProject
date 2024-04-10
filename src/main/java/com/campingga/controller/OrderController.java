@@ -56,22 +56,33 @@ public class OrderController {
 	
 	//구매 화면으로 이동
 	@GetMapping("/purchase")
-	public String orderListForm(Model model) {
-		//session으로부터 user 정보 가져옴
+	public String orderListForm(HttpSession session, Model model) {
 		
-	  Authentication auth = SecurityContextHolder.getContext().getAuthentication();   
-    String userId = auth.getName();
-    MemberVO user = memberService.getShippingInfo(userId);
-    log.info(user);
-		List<CartVO> cartList = cartService.getCartItemList(userId);
-		log.info(cartList);
-		int totalPrice = cartService.getTotalPrice(cartList);
-		log.info(totalPrice);
-		model.addAttribute("totalPrice",totalPrice);
-		model.addAttribute("cartList",cartList);
-		model.addAttribute("member", user);
+		Boolean accessGranted = (Boolean) session.getAttribute("accessGranted");
+		if(Boolean.TRUE.equals(accessGranted)) {
+			session.removeAttribute("accessGranted");
+			
+			//session으로부터 user 정보 가져옴
+				
+			  Authentication auth = SecurityContextHolder.getContext().getAuthentication();   
+		    String userId = auth.getName();
+		    MemberVO user = memberService.getShippingInfo(userId);
+		    log.info(user);
+			List<CartVO> cartList = cartService.getCartItemList(userId);
+			log.info(cartList);
+			int totalPrice = cartService.getTotalPrice(cartList);
+			log.info(totalPrice);
+			model.addAttribute("totalPrice",totalPrice);
+			model.addAttribute("cartList",cartList);
+			model.addAttribute("member", user);
 		
-		return "order/purchase";
+			return "order/purchase";
+			
+		}
+		else {
+			return "redirect:/";
+		}
+		
 	}
 	
 	@PostMapping("/purchase/direct")
@@ -97,6 +108,15 @@ public class OrderController {
 		model.addAttribute("member", member);
 		return "order/purchase";
 	}
+	
+	//장바구니 or 바로구매 버튼으로만 들어온 사용자에 한해서만 order/purchase 페이지 접근 가능하도록
+	//세션 발행
+	@PostMapping("/purchase")
+	public String permitAccessToPuchase(HttpSession session) {
+		session.setAttribute("accessGranted", true);
+		return "redirect:/order/purchase";
+	}
+	
 	/*
 	시큐리티를 사용하는 코드이므로 보류
 	@PostMapping("/purchase")
