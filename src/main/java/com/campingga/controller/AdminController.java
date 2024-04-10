@@ -47,9 +47,11 @@ public class AdminController {
 
 	@Autowired
 	private MemberService memberService;
-	
+
 	@Autowired
 	private ItemService itemService;
+	
+
 
 	/* 관리자 메인 페이지 이동 */
 	@GetMapping("/adminPage")
@@ -99,59 +101,59 @@ public class AdminController {
 		model.addAttribute("viewAll", itemService.selectItem(vo));
 		return "admin/itemManager";
 	}
-	
+
+	// 상품수정
 	@GetMapping("/itemEdit")
 	public String itemEdit(@RequestParam("item_no") int item_no, Model model) {
-	    // 해당 상품번호에 해당하는 상품 정보를 가져와서 모델에 추가
-	    ItemVO item = itemService.get(item_no);
-	    
-	    model.addAttribute("item", item);
-	    
-	    // 상품의 카테고리 정보도 가져와서 모델에 추가
-	    List<String> categories = Arrays.asList("캠핑가구", "조리도구", "랜턴", "전자제품", "텐트", "침낭", "매트", "난로");
-	    model.addAttribute("categories", categories);
-	    
-	    // 상품의 판매 상태 정보도 가져와서 모델에 추가
-	    List<String> statuses = Arrays.asList("판매중", "판매중단(품절)");
-	    model.addAttribute("statuses", statuses);
-	    
-	    // 상품의 수정 시간을 가져와서 모델에 추가
-	    Date modDate = new Date(); // 현재 시간을 가져오거나, 데이터베이스에서 가져와서 사용할 수 있습니다.
-	    model.addAttribute("modDate", modDate);
-	    
-	    return "admin/itemEdit"; // 상품 수정 페이지로 이동
+		// 해당 상품번호에 해당하는 상품 정보를 가져와서 모델에 추가
+		ItemVO item = itemService.get(item_no);
+
+		model.addAttribute("item", item);
+
+		// 상품의 카테고리 정보도 가져와서 모델에 추가
+		List<String> categories = Arrays.asList("캠핑가구", "조리도구", "랜턴", "전자제품", "텐트", "침낭", "매트", "난로");
+		model.addAttribute("categories", categories);
+
+		// 상품의 판매 상태 정보도 가져와서 모델에 추가
+		List<String> statuses = Arrays.asList("판매중", "판매중단(품절)");
+		model.addAttribute("statuses", statuses);
+
+		// 상품의 수정 시간을 가져와서 모델에 추가
+		Date modDate = new Date(); // 현재 시간을 가져오거나, 데이터베이스에서 가져와서 사용할 수 있습니다.
+		model.addAttribute("modDate", modDate);
+
+		return "admin/itemEdit"; // 상품 수정 페이지로 이동
 	}
 
-
-	
 	@PostMapping("/itemEdit")
 	public String updateItem(@RequestParam("item_no") int item_no, ItemVO item, RedirectAttributes rttr) {
-	    log.info("updateItem POST..." + item);
-	    // 상품 번호와 상품 정보를 이용하여 상품 업데이트 서비스 메소드 호출
-	    item.setItem_no(item_no); // 상품 번호 설정
-	    int result = itemService.itemUpdate(item);
-	    if (result == 1) {
-	        rttr.addFlashAttribute("update_result", "success");
-	    } else {
-	        rttr.addFlashAttribute("update_result", "fail");
-	    }
-	    return "redirect:/admin/itemManager";
+		log.info("updateItem POST..." + item);
+		// 상품 번호와 상품 정보를 이용하여 상품 업데이트 서비스 메소드 호출
+		item.setItem_no(item_no); // 상품 번호 설정
+		int result = itemService.itemUpdate(item);
+		if (result == 1) {
+			rttr.addFlashAttribute("update_result", "success");
+		} else {
+			rttr.addFlashAttribute("update_result", "fail");
+		}
+		return "redirect:/admin/itemManager";
 	}
-	
+
+	// 상품삭제
 	@PostMapping("/deleteItem")
 	public String deleteItem(@RequestParam("item_no") int item_no, RedirectAttributes rttr) {
-	    log.info("deleteItem POST... item_no: " + item_no);
-	    
-	    // 아이템 서비스를 사용하여 해당 상품을 삭제합니다.
-	    int result = itemService.deleteItem(item_no);
-	    
-	    if (result == 1) {
-	        rttr.addFlashAttribute("delete_result", "success");
-	    } else {
-	        rttr.addFlashAttribute("delete_result", "fail");
-	    }
-	    
-	    return "redirect:/admin/itemManager";
+		log.info("deleteItem POST... item_no: " + item_no);
+
+		// 아이템 서비스를 사용하여 해당 상품을 삭제합니다.
+		int result = itemService.deleteItem(item_no);
+
+		if (result == 1) {
+			rttr.addFlashAttribute("delete_result", "success");
+		} else {
+			rttr.addFlashAttribute("delete_result", "fail");
+		}
+
+		return "redirect:/admin/itemManager";
 	}
 
 	/* 첨부 파일 업로드 */
@@ -238,7 +240,7 @@ public class AdminController {
 				BufferedImage bo_image = ImageIO.read(saveFile);
 
 				// 비율
-				double ratio = 1.5;
+				double ratio = 1;
 				// 넓이 높이
 				int width = (int) (bo_image.getWidth() / ratio);
 				int height = (int) (bo_image.getHeight() / ratio);
@@ -248,15 +250,12 @@ public class AdminController {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			list.add(vo);
+		} // for
 
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																	// 이미지 정보가 저장된 AttachImageVO객체를 List의 요소로 추가
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																	list.add(vo);
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																} // for
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																														
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																ResponseEntity<List<AttachImageVO>> result = new ResponseEntity<List<AttachImageVO>>(list, HttpStatus.OK);
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																														
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																return result;
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																															}
+		ResponseEntity<List<AttachImageVO>> result = new ResponseEntity<List<AttachImageVO>>(list, HttpStatus.OK);
+		return result;
+	}
 
 	/* 이미지 파일 삭제 */
 	@PostMapping("/deleteFile")

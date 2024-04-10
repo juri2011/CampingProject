@@ -5,13 +5,16 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.campingga.domain.MemberVO;
+import com.campingga.domain.PasswordChangeDTO;
 import com.campingga.service.MemberService;
 
 import lombok.extern.log4j.Log4j;
@@ -22,7 +25,7 @@ import lombok.extern.log4j.Log4j;
 public class MemberController {
 
 	@Autowired // 하나 일 경우 생략가능.
-	private MemberService memberservice;
+	private MemberService memberService;
 
 	// 회원가입 페이지 이동
 	@GetMapping("/join")
@@ -39,7 +42,7 @@ public class MemberController {
 		log.info("join 진입");
 
 		// 회원가입 서비스 실행
-		memberservice.memberJoin(member);
+		memberService.memberJoin(member);
 
 		log.info("join Service 성공");
 
@@ -54,7 +57,7 @@ public class MemberController {
 
 		log.info("memberIdChk() 진입");
 
-		int result = memberservice.idCheck(mem_id);
+		int result = memberService.idCheck(mem_id);
 
 		log.info("결과값 = " + result);
 
@@ -85,7 +88,7 @@ public class MemberController {
 		// System.out.println("전달된 데이터 : " + member);
 
 		HttpSession session = request.getSession();
-		MemberVO lvo = memberservice.memberLogin(member);
+		MemberVO lvo = memberService.memberLogin(member);
 
 		// 일치하지 않는 아이디, 비밀번호 입력 경우
 		if (lvo == null) {
@@ -131,7 +134,98 @@ public class MemberController {
 		session.invalidate();
 
 	}
+
+	// 회원정보 관리 페이지 이동
+	@GetMapping("/memberUpdate")
+	public String memberUpdateGet() {
+		return "/member/memberUpdate";
+	}
+
+	// 회원 비밀번호 변경 페이지 이동
+	@GetMapping("/changePassword")
+	public String changePasswordGET() {
+		return "/member/changePassword";
+		
+	}
+
+	// changePassword
+		@PostMapping("/changePassword")
+		@ResponseBody
+		//public Map<String, String> changePassword(@ModelAttribute PasswordChangeDTO passwordData) {
+		public String changePassword(@ModelAttribute PasswordChangeDTO passwordData) {
+			
+			log.info("=================================="+passwordData);
+			
+			String mem_id = passwordData.getMem_id();
+			String oldPassword = passwordData.getOldPassword();
+			String newPassword = passwordData.getNewPassword();
+
+			//Map<String, String> response = new HashMap<>();
+
+			if (memberService.checkPassword(mem_id, oldPassword)) {
+				memberService.updatePassword(mem_id, newPassword);
+				//response.put("status", "success");
+				return "success";
+			} else {
+				//response.put("status", "fail");
+				return "fail";
+			}
+
+			//return response;
+		}
 	
+	/* 마이 페이지 이동 */
+	@GetMapping("/memberPage")
+	public void memberMainGET() throws Exception {
+
+		log.info("마이 페이지 이동");
+
+	}
+
+	/* 장바구니 페이지 이동 */
+	@GetMapping("/toCartList")
+	public String toCartList() {
+		// /cart/list로 리다이렉트
+		return "redirect:/cart/list";
+	}
+
+	/* 결제내역 페이지 이동 */
+	@GetMapping("/toOrderList")
+	public String toOrderList() {
+		// /order/orderList로 리다이렉트
+		return "redirect:/order/orderList";
+	}
+
+	// 회원상세 정보 페이지 이동
+	@GetMapping("/memberDetailPage")
+	public String memberDetailPage(Model model, HttpSession session) {
+		// 세션에서 현재 로그인된 회원 정보 가져오기
+		MemberVO member = (MemberVO) session.getAttribute("member");
+		if (member == null) {
+			// 회원 정보가 없으면 로그인 페이지로 리다이렉트
+			return "redirect:/member/login";
+		}
+
+		// 회원 정보를 모델에 추가하여 뷰로 전달
+		model.addAttribute("member", member);
+
+		// 회원 정보 수정 페이지로 이동
+		return "/member/memberDetailPage";
+	}
+
 	
+
+	@PostMapping("/updateMemberInfo")
+	@ResponseBody
+	public String updateMemberInfo(@ModelAttribute MemberVO member, HttpSession session) {
+		try {
+			memberService.updateMemberInfo(member); // 회원 정보 업데이트 서비스 호출
+			session.setAttribute("member", member); // 세션에 최신 정보 반영
+			return "success"; // 업데이트 성공 시 success 반환
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "fail"; // 업데이트 실패 시 fail 반환
+		}
+	}
 
 }

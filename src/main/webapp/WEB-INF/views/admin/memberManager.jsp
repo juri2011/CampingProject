@@ -62,14 +62,14 @@ a {
 				<th>가입일</th>
 				<th>회원상태</th>
 			</tr>
-			<c:forEach items="${viewAll }" var="member">
+			<c:forEach items="${viewAll}" var="member">
 				<tr>
 
 					<td>${member.mem_id}</td>
-					<td>${member.name}</td>
+					<td><a href="#">${member.name}</a></td>
 					<td>${member.email}</td>
 					<td>${member.phone}</td>
-					<td><fmt:formatDate value="${member.regdate }"
+					<td><fmt:formatDate value="${member.regdate}"
 							pattern="yyyy.MM.dd" /></td>
 					<c:choose>
 						<c:when test="${member.mem_status == 1}">

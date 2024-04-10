@@ -51,22 +51,48 @@
 		resultType="com.campingga.domain.MemberVO">
 
 		SELECT mem_id, name, email, phone, regdate, mem_status
-		FROM (
-		SELECT mem_id, name, email, phone, regdate, mem_status,
+		FROM
+		(
+		SELECT
+		mem_id, name, email, phone, regdate, mem_status,
 		(@row_number:=@row_number + 1) AS row_num
 		FROM member
-		CROSS JOIN (SELECT @row_number := 0) AS rn
+		CROSS JOIN (SELECT
+		@row_number := 0) AS rn
 		ORDER BY regdate DESC
 		) AS ranked
-		ORDER BY regdate DESC
+		ORDER BY
+		regdate DESC
 		LIMIT #{start}, #{cntPerPage}
 
-
+		<!-- 비밀번호 갱신 -->
 	</select>
-	
-	
 
+	<!-- 비밀번호 변경 확인을 위한 쿼리 -->
+	<select id="checkPassword" parameterType="map" resultType="int">
+		SELECT COUNT(*) FROM member WHERE mem_id = #{mem_id} AND pwd =
+		#{oldPassword} </select>
+	<!-- 비밀번호 변경 쿼리 -->
+	<update id="updatePassword" parameterType="map"> UPDATE member SET pwd
+		= #{newPassword} WHERE mem_id = #{mem_id} </update>
+	<!-- 회원 정보 수정 쿼리 -->
+	<update id="updateMemberInfo"
+		parameterType="com.campingga.domain.MemberVO">
+		UPDATE member
+		SET pwd = #{pwd},
+		name = #{name},
+		birth =
+		#{birth},
+		phone = #{phone},
+		gender = #{gender},
+		email = #{email},
+		userStnum = #{userStnum},
+		userAddr = #{userAddr},
+		userDaddr =
+		#{userDaddr}
+		WHERE mem_id = #{mem_id}
 
+	</update>
 </mapper>
 
 	
