@@ -21,5 +21,13 @@ public interface MemberService {
 
     // 페이징 처리 게시글 조회
     public List<MemberVO> selectMember(PagingVO vo);
+    
+    // 비밀번호 갱신
+    boolean checkPassword(String mem_id, String oldPassword);
+    
+    void updatePassword(String mem_id, String newPassword);
+    
+    // 회원 상세정보 보기/수정
+    public void updateMemberInfo(MemberVO memberVO);
 	
 }

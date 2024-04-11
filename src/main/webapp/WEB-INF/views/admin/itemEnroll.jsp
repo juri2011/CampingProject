@@ -215,10 +215,6 @@ h1 {
 				<div class="form_section_title">
 					<label>상품 이미지</label>
 					<div id="uploadResult">
-					<!-- 	<div id="result_card">
-							<div class="imgDeleteBtn">x</div>
-							<img src="/display?fileName=test.JPG">
-						</div> -->
 					</div>
 				</div>
 				<div class="form_section_content">

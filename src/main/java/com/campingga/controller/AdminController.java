@@ -8,8 +8,12 @@ import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.UUID;
 
 import javax.imageio.ImageIO;
@@ -29,10 +33,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.campingga.domain.AttachImageVO;
 import com.campingga.domain.ItemVO;
+import com.campingga.domain.OrderListVO;
 import com.campingga.domain.PagingVO;
 import com.campingga.service.AdminService;
 import com.campingga.service.ItemService;
 import com.campingga.service.MemberService;
+import com.campingga.service.OrderService;
 
 import lombok.extern.log4j.Log4j;
 import net.coobird.thumbnailator.Thumbnails;
@@ -47,9 +53,14 @@ public class AdminController {
 
 	@Autowired
 	private MemberService memberService;
-	
+
 	@Autowired
 	private ItemService itemService;
+	
+	@Autowired
+	public OrderService orderService;
+	
+
 
 	/* 관리자 메인 페이지 이동 */
 	@GetMapping("/adminPage")
@@ -99,59 +110,59 @@ public class AdminController {
 		model.addAttribute("viewAll", itemService.selectItem(vo));
 		return "admin/itemManager";
 	}
-	
+
+	// 상품수정
 	@GetMapping("/itemEdit")
 	public String itemEdit(@RequestParam("item_no") int item_no, Model model) {
-	    // 해당 상품번호에 해당하는 상품 정보를 가져와서 모델에 추가
-	    ItemVO item = itemService.get(item_no);
-	    
-	    model.addAttribute("item", item);
-	    
-	    // 상품의 카테고리 정보도 가져와서 모델에 추가
-	    List<String> categories = Arrays.asList("캠핑가구", "조리도구", "랜턴", "전자제품", "텐트", "침낭", "매트", "난로");
-	    model.addAttribute("categories", categories);
-	    
-	    // 상품의 판매 상태 정보도 가져와서 모델에 추가
-	    List<String> statuses = Arrays.asList("판매중", "판매중단(품절)");
-	    model.addAttribute("statuses", statuses);
-	    
-	    // 상품의 수정 시간을 가져와서 모델에 추가
-	    Date modDate = new Date(); // 현재 시간을 가져오거나, 데이터베이스에서 가져와서 사용할 수 있습니다.
-	    model.addAttribute("modDate", modDate);
-	    
-	    return "admin/itemEdit"; // 상품 수정 페이지로 이동
+		// 해당 상품번호에 해당하는 상품 정보를 가져와서 모델에 추가
+		ItemVO item = itemService.get(item_no);
+
+		model.addAttribute("item", item);
+
+		// 상품의 카테고리 정보도 가져와서 모델에 추가
+		List<String> categories = Arrays.asList("캠핑가구", "조리도구", "랜턴", "전자제품", "텐트", "침낭", "매트", "난로");
+		model.addAttribute("categories", categories);
+
+		// 상품의 판매 상태 정보도 가져와서 모델에 추가
+		List<String> statuses = Arrays.asList("판매중", "판매중단(품절)");
+		model.addAttribute("statuses", statuses);
+
+		// 상품의 수정 시간을 가져와서 모델에 추가
+		Date modDate = new Date(); // 현재 시간을 가져오거나, 데이터베이스에서 가져와서 사용할 수 있습니다.
+		model.addAttribute("modDate", modDate);
+
+		return "admin/itemEdit"; // 상품 수정 페이지로 이동
 	}
 
-
-	
 	@PostMapping("/itemEdit")
 	public String updateItem(@RequestParam("item_no") int item_no, ItemVO item, RedirectAttributes rttr) {
-	    log.info("updateItem POST..." + item);
-	    // 상품 번호와 상품 정보를 이용하여 상품 업데이트 서비스 메소드 호출
-	    item.setItem_no(item_no); // 상품 번호 설정
-	    int result = itemService.itemUpdate(item);
-	    if (result == 1) {
-	        rttr.addFlashAttribute("update_result", "success");
-	    } else {
-	        rttr.addFlashAttribute("update_result", "fail");
-	    }
-	    return "redirect:/admin/itemManager";
+		log.info("updateItem POST..." + item);
+		// 상품 번호와 상품 정보를 이용하여 상품 업데이트 서비스 메소드 호출
+		item.setItem_no(item_no); // 상품 번호 설정
+		int result = itemService.itemUpdate(item);
+		if (result == 1) {
+			rttr.addFlashAttribute("update_result", "success");
+		} else {
+			rttr.addFlashAttribute("update_result", "fail");
+		}
+		return "redirect:/admin/itemManager";
 	}
-	
+
+	// 상품삭제
 	@PostMapping("/deleteItem")
 	public String deleteItem(@RequestParam("item_no") int item_no, RedirectAttributes rttr) {
-	    log.info("deleteItem POST... item_no: " + item_no);
-	    
-	    // 아이템 서비스를 사용하여 해당 상품을 삭제합니다.
-	    int result = itemService.deleteItem(item_no);
-	    
-	    if (result == 1) {
-	        rttr.addFlashAttribute("delete_result", "success");
-	    } else {
-	        rttr.addFlashAttribute("delete_result", "fail");
-	    }
-	    
-	    return "redirect:/admin/itemManager";
+		log.info("deleteItem POST... item_no: " + item_no);
+
+		// 아이템 서비스를 사용하여 해당 상품을 삭제합니다.
+		int result = itemService.deleteItem(item_no);
+
+		if (result == 1) {
+			rttr.addFlashAttribute("delete_result", "success");
+		} else {
+			rttr.addFlashAttribute("delete_result", "fail");
+		}
+
+		return "redirect:/admin/itemManager";
 	}
 
 	/* 첨부 파일 업로드 */
@@ -238,7 +249,7 @@ public class AdminController {
 				BufferedImage bo_image = ImageIO.read(saveFile);
 
 				// 비율
-				double ratio = 1.5;
+				double ratio = 1;
 				// 넓이 높이
 				int width = (int) (bo_image.getWidth() / ratio);
 				int height = (int) (bo_image.getHeight() / ratio);
@@ -248,15 +259,12 @@ public class AdminController {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			list.add(vo);
+		} // for
 
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																	// 이미지 정보가 저장된 AttachImageVO객체를 List의 요소로 추가
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																	list.add(vo);
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																} // for
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																														
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																ResponseEntity<List<AttachImageVO>> result = new ResponseEntity<List<AttachImageVO>>(list, HttpStatus.OK);
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																														
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																return result;
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																															}
+		ResponseEntity<List<AttachImageVO>> result = new ResponseEntity<List<AttachImageVO>>(list, HttpStatus.OK);
+		return result;
+	}
 
 	/* 이미지 파일 삭제 */
 	@PostMapping("/deleteFile")
@@ -311,6 +319,61 @@ public class AdminController {
 		model.addAttribute("viewAll", memberService.selectMember(vo));
 		return "admin/memberManager";
 	}
+	
+	
+	@GetMapping("/orderManager")
+    public String getAllOrders(Model model) {
+        List<OrderListVO> orders = orderService.getAllOrders();
+        model.addAttribute("orders", orders);
+        
+        //TreeMap은 기본적으로 오름차순이기 때문에 내림차순으로 정렬하도록 지정
+  		Map<String, List<OrderListVO>> orderMap = new TreeMap<>(Collections.reverseOrder());
+  		Map<String, Integer> totalPriceMap = new HashMap<>(); 
+  		
+  		//주문번호별로 그룹화
+  			for(OrderListVO order : orders) {
+  				
+  				//order의 item_no를 이용해서 아이템정보(이름, 가격)등을 받아온다.
+  				ItemVO item = itemService.get(order.getItem_no());
+  				order.setItem_name(item.getItem_name());
+  				order.setPrice(item.getPrice());
+  				
+  				//주문번호로 key 생성
+  				String orderKey = order.getOrd_no();
+  				
+  				//아직 주문번호로 key값이 만들어지지 않았으면 생성 (초기화)
+  				if (!orderMap.containsKey(orderKey)) {
+  	                orderMap.put(orderKey, new ArrayList<>());
+  	                totalPriceMap.put(orderKey, 0);
+  	            }
+  				log.info("================================"+order.getAmount());
+  				//주문번호 key로 ArrayList value에 현재 order를 추가
+  				orderMap.get(orderKey).add(order);
+  				
+  				int totalPrice = totalPriceMap.get(orderKey) + (order.getPrice() * order.getAmount());
+  				totalPriceMap.put(orderKey, totalPrice);
+  				
+  			}
+  			
+  			
+  			//orderList.forEach(order -> log.info(order));
+  			model.addAttribute("orderMap",orderMap);
+  			model.addAttribute("totalPriceMap", totalPriceMap);
+  			//model.addAttribute("orderList",orderList);
+  			return "admin/orderManager";
+        
+    }
+	
+	
+	 @PostMapping("/updateOrderStatus")
+	    public String updateOrderStatus(@RequestParam("ord_no") String ord_no,
+	                                    @RequestParam("status") String status) {
+	        // 주문 상태 업데이트 로직 수행
+	        orderService.updateOrderStatus(ord_no, status);
+	        
+	        // 업데이트 후에는 주문 관리 페이지로 리다이렉트
+	        return "redirect:/admin/orderManager";
+	    }
 	
 
 }

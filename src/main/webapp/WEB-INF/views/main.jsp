@@ -102,8 +102,8 @@ a {
 					</div>
 					<li><a href="/admin/adminPage">관리자 페이지(수정 예정)</a></li>
 					<li><a id="gnb_logout_button">로그아웃</a></li>
-					<li>마이페이지</li>
-					<li>장바구니</li>
+					<li><a href="/member/memberPage">마이페이지</a></li>
+					<li><a href="/member/toCartList">장바구니</a></li>
 				</c:if>
 			</ul>
 		</div>
@@ -114,7 +114,9 @@ a {
 	<div class="container">
 		<c:forEach var="item" items="${newItem}">
 			<div class="card" data-no="<c:out value='${item.item_no}' />">
-		        <img src="product3.jpg" alt="<c:out value='${item.item_name}' />">
+		         <a class="item-img" href="<c:out value='${item.item_no}'/>">
+	          	 <img src="/resources/img/${item.img_name}"/>
+	          	 </a>
 		        <div class="card-details">
 		            <div class="card-title"><c:out value="${item.item_name}" /></div>
 		            <div class="card-price">가격: <fmt:formatNumber value="${item.price}" pattern="#,###원" /></div>
@@ -130,6 +132,12 @@ a {
 			$('.card').click(function(){
 				const item_no = $(this).data("no");
 				location.href="/item/detail?item_no="+item_no;
+			});
+			
+			
+			$(".item-img").on('click',function(e){
+				e.preventDefault();
+				self.location = "/item/detail?item_no=" + $(this).attr('href');
 			});
 		});
 		

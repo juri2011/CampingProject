@@ -73,11 +73,41 @@
 					</div>
 				</div>
 				<div class="birth_wrap">
-					<div class="birth_name">생년월일(예시 : 2005-08-20)</div>
-					<div class="birth_input_box">
-						<input class="birth_input" name="birth">
-					</div>
-				</div>
+    <div class="birth_name">생년월일</div>
+    <div class="birth_input_box">
+        <select class="birth_input" name="year">
+            <option value="">년(YYYY)</option>
+            <!-- 생년 옵션 -->
+            <script>
+                for (var year = 2005; year >= 1900; year--) {
+                    document.write('<option value="' + year + '">' + year + '</option>');
+                }
+            </script>
+        </select>
+        <select class="birth_input" name="month">
+            <option value="">월(MM)</option>
+            <!-- 생월 옵션 -->
+            <script>
+                for (var month = 1; month <= 12; month++) {
+                    var monthStr = month < 10 ? '0' + month : '' + month;
+                    document.write('<option value="' + monthStr + '">' + monthStr + '</option>');
+                }
+            </script>
+        </select>
+        <select class="birth_input" name="day">
+            <option value="">일(DD)</option>
+            <!-- 생일 옵션 -->
+            <script>
+                for (var day = 1; day <= 31; day++) {
+                    var dayStr = day < 10 ? '0' + day : '' + day;
+                    document.write('<option value="' + dayStr + '">' + dayStr + '</option>');
+                }
+            </script>
+        </select>
+        
+        <input type="hidden" name="birth" id="birthHidden">
+    </div>
+</div>
 				<div class="phone_wrap">
 					<div class="phone_name">전화번호(번호 사이에"-"필수)</div>
 					<div class="phone_input_box">
@@ -198,6 +228,28 @@
 		        }
 		    }
 		});
+				
+		 // 연도, 월, 일 선택값 가져와서 yyyy-mm-dd 형식으로 합치기
+	    function updateBirthHidden() {
+	        var year = document.getElementsByName("year")[0].value;
+	        var month = document.getElementsByName("month")[0].value;
+	        var day = document.getElementsByName("day")[0].value;
+	        if (year && month && day) {
+	            var birth = year + "-" + month + "-" + day;
+	            document.getElementById("birthHidden").value = birth;
+	        }
+	    }
+
+	    // 연도, 월, 일 선택이 변경될 때마다 호출하여 hidden input 업데이트
+	    document.querySelectorAll('.birth_input').forEach(item => {
+	        item.addEventListener('change', updateBirthHidden);
+	    });
+
+	    // 페이지 로드 시에도 호출하여 초기화
+	    window.onload = function() {
+	        updateBirthHidden();
+	    };		
+				
 		/* 다음 주소 연동 */
 		function execution_daum_address() {
 

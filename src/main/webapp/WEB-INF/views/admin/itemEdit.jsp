@@ -88,6 +88,10 @@ h1 {
 	margin: auto;
 }
 
+#result_card {
+	position: relative;
+}
+
 .imgDeleteBtn {
 	position: absolute;
 	top: 0;
@@ -204,11 +208,11 @@ h1 {
 			<div class="form_section">
 				<div class="form_section_title">
 					<label>상품 이미지</label>
-					<div id="uploadResult"></div>
 				</div>
 				<div class="form_section_content">
 					<input type="file" id="fileItem" name='uploadFile'
-						multiple="multiple" style="height: 30px;">
+						style="height: 30px;">
+					<div id="uploadResult"></div>
 				</div>
 			</div>
 
@@ -217,11 +221,11 @@ h1 {
 					<label>상품 이미지명</label>
 				</div>
 				<div class="form_section_content">
-					<input type="text" name="img_name" id="img_name" 
+					<input type="text" name="img_name" id="img_name"
 						value="<c:out value='${item.img_name}' />">
 				</div>
 			</div>
-			
+
 			<div class="form_section">
 				<div class="form_section_title">
 					<label>상품 소개</label>
@@ -363,25 +367,8 @@ h1 {
 
 		/* 파일 삭제 메서드 */
 		function deleteFile() {
-			let targetFile = $(".imgDeleteBtn").data("file");
-			let targetDiv = $("#result_card");
-			$.ajax({
-				url : '/admin/deleteFile',
-				data : {
-					fileName : targetFile
-				},
-				dataType : 'text',
-				type : 'POST',
-				success : function(result) {
-					console.log(result);
-					targetDiv.remove();
-					$("input[type='file']").val("");
-				},
-				error : function(result) {
-					console.log(result);
-					alert("파일을 삭제하지 못하였습니다.")
-				}
-			});
+		
+			$("#result_card").remove();
 		}
 	</script>
 </body>

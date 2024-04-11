@@ -86,7 +86,7 @@
         <tbody>
 	        <c:forEach items="${entry.value}" var="order">
 	            <tr>
-		        	<td><img src="" alt="이미지" /></td>
+		        	<td><img src="/resources/img/${item.img_name}" alt="이미지" /></td>
 		        	<td class="order-date"><fmt:formatDate value="${order.regdate}" pattern="yyyy-MM-dd hh:mm:ss" /></td>
 		        	<td class="product-name"><c:out value="${order.item_name}" /></td>
 		        	<td><c:out value="${order.amount}"/></td>

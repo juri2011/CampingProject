@@ -14,4 +14,7 @@ public interface OrderService {
 	 * 
 	 * //구매 테이블 전체 삭제 public int removeAllBill(String mem_id);
 	 */
+	public List<OrderListVO> getAllOrders();
+	
+	public void updateOrderStatus(String ord_no, String status);
 }
