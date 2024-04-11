@@ -21,7 +21,7 @@
  		
 		<security:access-denied-handler ref="customAccessDenied"/>
 		
-		<security:form-login login-page="/member/customLogin" authentication-success-handler-ref="customLoginSuccess"/>
+		<security:form-login login-page="/member/login" authentication-success-handler-ref="customLoginSuccess"/>
 		
 		<!-- post로 데이터를 전달할 때는 csrf 설정 해야함 -->
 		<!-- <security:csrf disabled="true" /> -->

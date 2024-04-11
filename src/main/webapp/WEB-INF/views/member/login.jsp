@@ -21,53 +21,38 @@
 	<div class="wrapper">
 
 		<div class="wrap">
-			<form id="login_form" method="post">
+			<!-- spring security를 사용하는 경우 action을 /login으로 -->
+			<form id="login_form" action="/login" method="post">
 				<div class="logo_wrap">
 					<span>캠핑가</span>
 				</div>
 				<div class="login_wrap">
 					<div class="id_wrap">
 						<div class="id_input_box">
-							<input class="id_input" name="mem_id" placeholder="아이디">
+							<!-- spring security를 사용하는 경우 아이디의 name을 username으로 -->
+							<input class="id_input" name="username" placeholder="아이디">
 						</div>
 					</div>
 					<div class="pw_wrap">
 						<div class="pw_input_box">
-							<input class="pw_iput" type="password" autocomplete="current-password" name="pwd" placeholder="비밀번호">
+							<!-- spring security를 사용하는 경우 비밀번호의 name을 password로 -->
+							<input class="pw_iput" type="password" autocomplete="current-password" name="password" placeholder="비밀번호">
 						</div>
 					</div>
 					
 					<div class="login_button_wrap">
-						<input type="button" class="login_button" value="로그인">
+						<input type="submit" class="login_button" value="로그인">
 					</div>
-					<c:if test="${result == 0 }">
-						<div class="login_warn">사용자 ID 또는 비밀번호를 잘못 입력하셨습니다.</div>
-					</c:if>
+					<div class="login_warn"><c:out value="${error}" /></div>
+					<div class="logout"><c:out value="${logout}" /></div>
 				</div>
+				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 			</form>
 
 		</div>
 
 	</div>
 
-	<script>
-		const loginButton = document.querySelector(".login_button");
-
-		loginButton.addEventListener("click", function() {
-
-			//alert("로그인 버튼 작동");
-
-			//로그인 폼 요소를 가져옵니다.
-			const loginForm = document.getElementById("login_form");
-
-			//로그인 폼의 action 속성을 설정합니다.
-			loginForm.setAttribute("action", "/member/login");
-
-			//로그인 폼을 서버에 제출합니다.
-			loginForm.submit();
-
-		});
-	</script>
 
 </body>
 </html>

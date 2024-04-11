@@ -81,7 +81,7 @@ public class MemberController {
 	} // memberIdChkPOST() 종료
 
 	// 로그인 페이지 이동(시큐리티)
-	@GetMapping("/customLogin")
+	/*@GetMapping("/customLogin")
 	public void joinGET(String error, String logout, Model model) {
 		
 		log.info("로그인 페이지 진입");
@@ -96,11 +96,21 @@ public class MemberController {
 		}
 
 	}
+	*/
 	// 로그인 페이지 이동
 	@GetMapping("/login")
-	public void joinGET() {
-		
-		log.info("로그인 페이지 진입");
+	public void joinGET(String error, String logout, Model model) {
+	  log.info("로그인 페이지 진입");
+    log.info("error: "+error);
+    log.info("logout: "+logout);
+    
+    if(error != null) {
+      model.addAttribute("error","사용자 ID 또는 비밀번호를 잘못 입력하셨습니다.");
+    }
+    if(logout != null) {
+      model.addAttribute("logout","로그아웃 되었습니다.");
+    }
+		//log.info("로그인 페이지 진입");
 		
 	}
 	/* 로그인 */
