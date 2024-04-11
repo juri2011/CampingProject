@@ -10,11 +10,12 @@ use campingDB;
 
 -- select user, host from mysql.user;
 
-drop database if exists campingDB;
-create database campingDB;
-use campingDB;
+drop database if exists campingdb;
+create database campingdb;
+use campingdb;
 
 drop table if exists member;
+
 CREATE TABLE member(
 	mem_id varchar(200) PRIMARY KEY,
 	pwd varchar(300) NOT NULL,
@@ -30,32 +31,21 @@ CREATE TABLE member(
 	-- updatedate datetime DEFAULT current_timestamp ON UPDATE CURRENT_TIMESTAMP,
 	mem_status enum('1', '2') DEFAULT '1' NOT NULL comment '1:정상 2:탈퇴'
 );
-
+desc member; -- member 테이블 구성 확인
 
 INSERT INTO member (mem_id, pwd, name, birth, phone, gender, email, userStnum, userAddr, userDaddr, mem_status) VALUES 
-('user008', 'pass123word', 'Sarah Johnson', '1991-12-05', '010-7464-4365', 'Female', 'sarah.j@example.com', '1617', 'San Francisco', 'Unit 606', '1'),
-('user009', 'securePass789', 'Daniel Wilson', '1987-08-25', '010-7464-4666', 'Male', 'daniel.w@example.com', '1819', 'Seattle', 'Apartment 707', '1'),
-('user010', 'myPasswordabc', 'Olivia Miller', '1993-04-12', '010-7464-4667', 'Female', 'olivia.m@example.com', '2021', 'Boston', 'Suite 808', '1'),
-('user011', 'helloWorldxyz', 'Ethan Taylor', '1986-11-18', '010-7464-4668', 'Male', 'ethan.t@example.com', '2223', 'Denver', 'Room 909', '1'),
-('user012', 'password456789', 'Sophia Anderson', '1995-02-28', '010-7464-4669', 'Female', 'sophia.a@example.com', '2425', 'Phoenix', 'Unit 1010', '1'),
-('user013', 'qwerty123456', 'Matthew Martinez', '1990-06-15', '010-7464-4670', 'Male', 'matthew.m@example.com', '2627', 'Portland', 'Apartment 1111', '1'),
-('user014', 'pass789word123', 'Isabella Lopez', '1989-09-22', '010-7464-4671', 'Female', 'isabella.l@example.com', '2829', 'Austin', 'Suite 1212', '1'),
-('user015', 'secure789pass', 'Noah Garcia', '1994-03-08', '010-7464-4672', 'Male', 'noah.g@example.com', '3031', 'San Diego', 'Room 1313', '1'),
-('user016', 'myPassxyzword', 'Emma Hernandez', '1988-07-01', '010-7464-4673', 'Female', 'emma.h@example.com', '3233', 'Las Vegas', 'Unit 1414', '1'),
-('user017', 'hello456world', 'James Young', '1992-10-10', '010-7464-4674', 'Male', 'james.y@example.com', '3435', 'Philadelphia', 'Apartment 1515', '1');
--- 필요에 따라 더 추가할 수 있습니다
+('user003', 'securePass123', '이민호', '1988-06-22', '010-3456-7890', '남성', 'minho88@example.com', '12345', '서울특별시 서대문구 충정로', '서울아파트 504호', '1'),
+('user004', 'myPassword456', '박서준', '1990-07-16', '010-4567-8901', '남성', 'seojun90@example.com', '67890', '경기도 수원시 팔달구 인계동', '수원빌라 201호', '1'),
+('user005', 'helloWorld789', '김지원', '1992-09-04', '010-5678-9012', '여성', 'jiwon92@example.com', '23456', '부산광역시 남구 대연동', '부산타워 331호', '1'),
+('user006', 'passwordHello123', '손예진', '1984-01-11', '010-6789-0123', '여성', 'yejin84@example.com', '78901', '인천광역시 남동구 구월동', '인천아파트 1202호', '1'),
+('user007', 'qwertyAsdfg123', '정해인', '1989-04-01', '010-7890-1234', '남성', 'haein89@example.com', '34567', '대전광역시 서구 둔산동', '대전하우스 401호', '1');
 
-
-desc member; -- member 테이블 구성 확인
 select * from member;
+
+delete from member;
 
 select count(*) from member;
 
-select mem_id, name, email, phone, regdate, mem_status from member m;
-
-	SELECT mem_id, name, email, phone, regdate, mem_status
-		FROM member
-		ORDER BY regdate DESC;
 
 /*--------------------------------
 등급 테이블 authority(
@@ -66,18 +56,20 @@ select mem_id, name, email, phone, regdate, mem_status from member m;
 
 )
 */
-
 drop table if exists authority;
+
 -- 권한테이블
 CREATE TABLE authority(
-	mem_id varchar(100) NOT NULL,
-	auth varchar(50) NOT NULL
+   auth_id int auto_increment primary key,
+   mem_id varchar(100) NOT NULL,
+   auth varchar(50) NOT NULL
 );
--- alter table authority add CONSTRAINT fk_authority FOREIGN KEY(mem_id) REFERENCES member(mem_id);
-desc authority ;
+-- alter table authority add CONSTRAINT fk_authority FOREIGN KEY(mem_id)REFERENCES member(mem_id);
+
 select * from authority;
 
-
+insert into authority (mem_id, auth)
+values ('dw', 'ROLE_ADMIN');
 
 /*--------------------------
 상품 테이블 item(
@@ -88,12 +80,13 @@ select * from authority;
  카테고리
 )
 */
+
 drop table if exists item;
+
 -- 상품테이블
 CREATE TABLE item(
   item_no INT AUTO_INCREMENT PRIMARY KEY,
   item_name VARCHAR(100) NOT null unique,
-  img_name VARCHAR(50),
   amount INT NOT NULL,
   content TEXT,
   price INT NOT NULL,
@@ -102,37 +95,13 @@ CREATE TABLE item(
   status ENUM ('1', '2') default '1' NOT NULL COMMENT '1:판매중 2:품절'
 );
 
-
-
-INSERT INTO item (item_name, amount, content, price, category, status)
-VALUES
-  ('아이폰 12 Pro', 10, '최신 아이폰 12 Pro 모델입니다.', 1500000, '스마트폰', '1'),
-  ('갤럭시 S21 Ultra', 8, '삼성의 최신 갤럭시 S21 Ultra입니다.', 1600000, '스마트폰', '1'),
-  ('맥북 프로', 5, '고성능의 맥북 프로 노트북입니다.', 2500000, '노트북', '1'),
-  ('아이맥 27인치', 3, '대형 화면의 아이맥 데스크탑입니다.', 3000000, '데스크탑', '1'),
-  ('아이패드 Air', 12, '가벼운 아이패드 Air 태블릿입니다.', 800000, '태블릿', '1'),
-  ('게이밍 노트북', 7, '고사양의 게이밍 노트북입니다.', 3500000, '노트북', '1'),
-  ('LG 그램 노트북', 9, '가볍고 성능 좋은 LG 그램 노트북입니다.', 2000000, '노트북', '1'),
-  ('갤럭시 워치 4', 15, '스마트 기능이 탑재된 갤럭시 워치 4입니다.', 500000, '웨어러블', '1'),
-  ('애플 워치 시리즈 6', 6, '애플의 최신 스마트 워치 시리즈 6입니다.', 600000, '웨어러블', '1'),
-  ('노트10', 4, '삼성의 이전 스마트폰 모델인 노트10입니다.', 800000, '스마트폰', '1'),
-  ('아이폰 11', 11, '이전 버전인 아이폰 11입니다.', 1000000, '스마트폰', '1'),
-  ('맥미니', 6, '소형 데스크탑 컴퓨터인 맥미니입니다.', 1500000, '데스크탑', '1');
-
-
-
-select * from item;
-		
-
-
-
 desc item;
 select * from item;
-
-
+delete from item;
 
 -- 리뷰테이블
 drop table if exists review;
+
 CREATE TABLE review(
 	rev_no int AUTO_INCREMENT PRIMARY KEY,
 	item_no int,
@@ -164,18 +133,29 @@ insert into review(item_no, writer, content, score) values
 )
 */
 DROP table if exists orderList;
+
 -- 주문테이블(구매페이지, 주문관리페이지에서 사용)
 CREATE TABLE orderList(
-  ord_no INT AUTO_INCREMENT PRIMARY KEY,
+  cart_no INT not null,
+  ord_no VARCHAR(255),
   item_no int NOT NULL,
-  price INT NOT NULL,
-  id varchar(100) NOT NULL,
+  -- price INT NOT NULL, (item 테이블 inner join으로 가져올 수 있음)
+  mem_id varchar(100) NOT NULL, -- 컬럼 명을 수정했습니다.
+  amount int not null, -- 수량
+  name varchar(100) not null,
+  phone varchar(100) not null,
+  stnum VARCHAR(50) not null, -- 지번 
+  userAddr VARCHAR(300) not null, -- 주소
+  userDaddr VARCHAR(200) not null, -- 상세주소
   regdate DATETIME DEFAULT CURRENT_TIMESTAMP,
-  d_memo VARCHAR(255),
-  status ENUM('1', '2', '3', '4') NOT NULL COMMENT '1:결제완료 2:배송준비 3:배송중 4:배송완료'
+  d_memo VARCHAR(255), -- 배송메모
+  -- 기본값 '결제완료'로 들어가게끔 수정
+  status ENUM('1', '2', '3', '4') default '1' NOT null COMMENT '1:결제완료 2:배송준비 3:배송중 4:배송완료'
 );
+
 -- ALTER TABLE orderList ADD CONSTRAINT FOREIGN KEY (item_no) REFERENCES item(item_no);
 desc orderList;
+
 select * from orderList;
 
 /*----------------------
@@ -187,14 +167,17 @@ select * from orderList;
  !상품명, 가격은 상품테이블을 참조하게 만들 예정(보류)
 )
 */
+
 drop table if exists cart;
+
 CREATE TABLE cart(
  cart_no int AUTO_INCREMENT primary key, -- 장바구니 정렬 용도로 사용
- item_img varchar(200) not NULL,
- item_no INT NOT NULL,
- price INT NOT NULL,
+ member_id varchar(100) not null,
+ item_img varchar(200),
+ item_no int NOT null,
  quantity INT NOT null
 );
+
 -- ALTER TABLE cart ADD CONTSTRAINT FOREIGN KEY (item_no) REFERENCES item(item_no)
 desc cart;
 select * from cart;
@@ -209,6 +192,8 @@ select * from cart;
  주문상태 결제완료/ 배송준비 / 배송중 / 배송완료
 )
 */
+
+/*
 drop table if exists bill;
 create table bill(
  item_img varchar(200) not NULL,
@@ -219,12 +204,16 @@ create table bill(
  valid tinyint NOT NULL DEFAULT '1' COMMENT 'status. 1: 확인 대기, 2: 검증 완료, 3: 위조 혹은 변조 발생하여 강제취소',
  status ENUM ('1', '2', '3', '4') NOT NULL COMMENT '1:결제완료 2:배송준비 3:배송중 4:배송완료'
 );
+
 -- ALTER TABLE bill ADD CONSTRAINT FOREIGN KEY (item_no) REFERENCES item(item_no);
 desc bill;
 select * from bill;
 
+*/
+
 -- 상품 이미지 저장 방식 정하기(장바구니 페이지, 결제페이지) / 참조 확립 ----> 해결!!
 drop table if exists item_image;
+
 create table item_image(
     item_no int NOT NULL,
     fileName varchar(100) not null,
@@ -235,3 +224,9 @@ create table item_image(
 -- ALTER TABLE item_image ADD CONSTRAINT FOREIGN KEY (item_no) REFERENCES item(item_no);
 desc item_image;
 select * from item_image;
+
+	SELECT i.*, m.fileName
+		FROM item i
+		INNER JOIN item_image m ON i.item_no = m.item_no;
+
+delete from item_image;
