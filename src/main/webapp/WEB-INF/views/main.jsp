@@ -103,7 +103,7 @@ a {
 					<li><a href="/admin/adminPage">관리자 페이지(수정 예정)</a></li>
 					<li><a id="gnb_logout_button">로그아웃</a></li>
 					<li><a href="/member/memberPage">마이페이지</a></li>
-					<li>장바구니</li>
+					<li><a href="/member/toCartList">장바구니</a></li>
 				</c:if>
 			</ul>
 		</div>

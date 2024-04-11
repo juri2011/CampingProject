@@ -48,4 +48,17 @@
 		where mem_id = #{mem_id}
 		order by regdate desc;
 	</select>
+	
+	
+	 <select id="getAllOrders" resultType="OrderListVO">
+        SELECT * FROM orderList
+    </select>
+    
+      <select id="findByOrdNo" resultType="OrderListVO">
+        SELECT * FROM orderList WHERE ord_no = #{ord_no}
+    </select>
+
+    <update id="updateOrder">
+        UPDATE orderList SET status = #{status} WHERE ord_no = #{ord_no}
+    </update>
 </mapper>

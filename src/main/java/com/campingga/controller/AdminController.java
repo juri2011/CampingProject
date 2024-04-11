@@ -8,8 +8,12 @@ import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.UUID;
 
 import javax.imageio.ImageIO;
@@ -29,10 +33,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.campingga.domain.AttachImageVO;
 import com.campingga.domain.ItemVO;
+import com.campingga.domain.OrderListVO;
 import com.campingga.domain.PagingVO;
 import com.campingga.service.AdminService;
 import com.campingga.service.ItemService;
 import com.campingga.service.MemberService;
+import com.campingga.service.OrderService;
 
 import lombok.extern.log4j.Log4j;
 import net.coobird.thumbnailator.Thumbnails;
@@ -50,6 +56,9 @@ public class AdminController {
 
 	@Autowired
 	private ItemService itemService;
+	
+	@Autowired
+	public OrderService orderService;
 	
 
 
@@ -310,6 +319,61 @@ public class AdminController {
 		model.addAttribute("viewAll", memberService.selectMember(vo));
 		return "admin/memberManager";
 	}
+	
+	
+	@GetMapping("/orderManager")
+    public String getAllOrders(Model model) {
+        List<OrderListVO> orders = orderService.getAllOrders();
+        model.addAttribute("orders", orders);
+        
+        //TreeMap은 기본적으로 오름차순이기 때문에 내림차순으로 정렬하도록 지정
+  		Map<String, List<OrderListVO>> orderMap = new TreeMap<>(Collections.reverseOrder());
+  		Map<String, Integer> totalPriceMap = new HashMap<>(); 
+  		
+  		//주문번호별로 그룹화
+  			for(OrderListVO order : orders) {
+  				
+  				//order의 item_no를 이용해서 아이템정보(이름, 가격)등을 받아온다.
+  				ItemVO item = itemService.get(order.getItem_no());
+  				order.setItem_name(item.getItem_name());
+  				order.setPrice(item.getPrice());
+  				
+  				//주문번호로 key 생성
+  				String orderKey = order.getOrd_no();
+  				
+  				//아직 주문번호로 key값이 만들어지지 않았으면 생성 (초기화)
+  				if (!orderMap.containsKey(orderKey)) {
+  	                orderMap.put(orderKey, new ArrayList<>());
+  	                totalPriceMap.put(orderKey, 0);
+  	            }
+  				log.info("================================"+order.getAmount());
+  				//주문번호 key로 ArrayList value에 현재 order를 추가
+  				orderMap.get(orderKey).add(order);
+  				
+  				int totalPrice = totalPriceMap.get(orderKey) + (order.getPrice() * order.getAmount());
+  				totalPriceMap.put(orderKey, totalPrice);
+  				
+  			}
+  			
+  			
+  			//orderList.forEach(order -> log.info(order));
+  			model.addAttribute("orderMap",orderMap);
+  			model.addAttribute("totalPriceMap", totalPriceMap);
+  			//model.addAttribute("orderList",orderList);
+  			return "admin/orderManager";
+        
+    }
+	
+	
+	 @PostMapping("/updateOrderStatus")
+	    public String updateOrderStatus(@RequestParam("ord_no") String ord_no,
+	                                    @RequestParam("status") String status) {
+	        // 주문 상태 업데이트 로직 수행
+	        orderService.updateOrderStatus(ord_no, status);
+	        
+	        // 업데이트 후에는 주문 관리 페이지로 리다이렉트
+	        return "redirect:/admin/orderManager";
+	    }
 	
 
 }
