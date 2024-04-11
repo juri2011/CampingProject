@@ -79,7 +79,7 @@
             </tr>
             <c:forEach var="cart" items="${cartList}">
             	<tr>
-            	<td><img src="product.jpg" alt="<c:out value='${cart.item_name}'/>"></td>
+            	<td><img src="/resources/img/${cart.fileName}" alt="<c:out value='${cart.item_name}'/>"></td>
                 <td>
                 	<c:out value='${cart.item_name}'/>
                 	<input type="hidden" name="cart_no" id="cart_no" value="${cart.cart_no}" />

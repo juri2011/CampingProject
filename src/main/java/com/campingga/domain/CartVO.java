@@ -13,4 +13,7 @@ public class CartVO {
 	private int price; //상품가격
 	private String status;//상품 상태- 1: 판매중 2: 품절
 	private int quantity; //상품 수
+	
+	// 이미지 정보 
+	private String fileName;
 }

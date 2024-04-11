@@ -31,4 +31,7 @@ public class OrderListVO {
 	//아이템 정보
 	private String item_name; //상품명
 	private int price; //가격
+	
+	//이미지 정보
+	private String fileName;
 }

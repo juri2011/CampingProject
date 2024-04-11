@@ -11,11 +11,15 @@
 	</select>
 	<!-- 한 사용자에 대해서만 장바구니 목록 가져오기 -->
 	<select id="selectCartItemList" resultType="cartVO">
-		select c.cart_no, c.item_no, i.item_name, i.price, i.status, c.quantity
-		from cart c
-		inner join item i on c.item_no = i.item_no
-		where c.member_id = #{userId}
-		order by c.cart_no desc
+		SELECT c.cart_no,
+		c.item_no, i.item_name, i.price, i.status, c.quantity,
+		m.fileName 
+		FROM cart c
+		INNER JOIN item i ON c.item_no = i.item_no
+		INNER JOIN item_image m ON i.item_no = m.item_no
+		WHERE c.member_id =
+		#{userId}
+		ORDER BY c.cart_no DESC
 	</select>
 	
 	<select id="selectCountByMemberId" resultType="int">

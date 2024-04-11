@@ -13,9 +13,9 @@
 
 		</selectKey>
 
-		INSERT INTO item(item_no, item_name, img_name, amount, content, price,
+		INSERT INTO item(item_no, item_name, amount, content, price,
 		category)
-		VALUES (#{item_no}, #{item_name}, #{img_name}, #{amount}, #{content},
+		VALUES (#{item_no}, #{item_name}, #{amount}, #{content},
 		#{price}, #{category})
 
 

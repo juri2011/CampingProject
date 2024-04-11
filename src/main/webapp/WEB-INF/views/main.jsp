@@ -124,7 +124,7 @@ a {
 		<c:forEach var="item" items="${newItem}">
 			<div class="card" data-no="<c:out value='${item.item_no}' />">
 		         <a class="item-img" href="<c:out value='${item.item_no}'/>">
-	          	 <img src="/resources/img/${item.img_name}"/>
+	          	 <img src="/resources/img/${item.fileName}"/>
 	          	 </a>
 		        <div class="card-details">
 		            <div class="card-title"><c:out value="${item.item_name}" /></div>

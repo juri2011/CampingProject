@@ -1,8 +1,5 @@
 package com.campingga.controller;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +18,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.campingga.domain.CartDTO;
 import com.campingga.domain.CartVO;
-import com.campingga.domain.MemberVO;
 import com.campingga.service.CartService;
 
 import lombok.extern.log4j.Log4j;

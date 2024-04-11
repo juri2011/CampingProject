@@ -39,6 +39,16 @@
     th {
       text-align: center;
     }
+    
+    img {
+    	width: 200px;
+    	height: 200px;
+    }
+    
+    .item-name {
+    	width: 350px;
+    	text-align: center;
+    }
 
     .order-date {
       text-align: right;
@@ -87,9 +97,9 @@
         <tbody>
           <c:forEach items="${entry.value}" var="order">
             <tr>
-              <td><img src="" alt="상품이미지" /></td>
+              <td><img src="/resources/img/${order.fileName}" alt="상품이미지" /></td>
               <td>${order.ord_no}</td>
-              <td>${order.item_name}</td>
+              <td class="item-name">${order.item_name}</td>
               <td class="order-date"><fmt:formatDate value="${order.regdate}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
               <td>${order.amount}</td>
               <td class="price"><fmt:formatNumber value="${order.price}" pattern="#,###원" /></td>
