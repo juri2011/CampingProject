@@ -202,14 +202,6 @@ h1 {
 						id="priceDisplay"><c:out value='${item.price}' /></span>
 				</div>
 			</div>
-				<div class="form_section">
-				<div class="form_section_title">
-					<label>상품 이미지명</label>
-				</div>
-				<div class="form_section_content">
-					<input name="img_name">
-				</div>
-			</div>
 
 			<div class="form_section">
 				<div class="form_section_title">

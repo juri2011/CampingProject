@@ -36,6 +36,11 @@
             justify-content: flex-end;
             padding-top: 5px;
         }
+        
+        img{
+        	width: 150px;
+        	height: 150px;
+        }
     </style>
 </head>
 <body>
@@ -55,10 +60,10 @@
             <thead>
                 <tr>
                     <th>상품번호</th>
+                    <th>상품 이미지</th>
                     <th>상품명</th>
                     <th>수량</th>
                     <th>판매가격</th>
-                    <th>상품 이미지명</th>
                     <th>등록일</th>
                     <th>카테고리</th>
                     <th>수정</th>
@@ -69,10 +74,10 @@
                 <c:forEach items="${viewAll}" var="item">
                     <tr>
                         <td>${item.item_no}</td>
+                        <td><img src="/resources/img/${item.fileName}" alt="상품이미지" /></td>
                         <td>${item.item_name}</td>
                         <td>${item.amount}</td>
                         <td><fmt:formatNumber value="${item.price}" type="number" /></td>
-                        <td>${item.img_name}</td>
                         <td><fmt:formatDate value="${item.regdate}" pattern="yyyy.MM.dd" /></td>
                         <td>${item.category}</td>
                         <td><button class="modify_btn" data-item_no="${item.item_no}">수정</button></td>

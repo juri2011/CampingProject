@@ -25,4 +25,6 @@ public class ItemVO {
 	/* 이미지 정보 */
 	private List<AttachImageVO> imageList;
 	
+	private String fileName;
+	
 }

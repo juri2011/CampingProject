@@ -74,7 +74,7 @@
 	       <!-- 데이터 들어가는 부분 -->
 	       <td>
 	           <a class="item-img" href="<c:out value='${item.item_no}'/>">
-	          	 <img src="/resources/img/${item.img_name}"/>
+	          	 <img src="/resources/img/${item.fileName}"/>
 	           </a>
 	           <p><c:out value="${item.item_name}" /></p>
 	           <p>

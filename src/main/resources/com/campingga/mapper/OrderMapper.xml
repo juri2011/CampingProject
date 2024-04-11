@@ -32,27 +32,30 @@
 		#{amount});
 	</insert>
 	<select id="getOrderList" parameterType="String" resultType="OrderListVO">
-		select
-			ord_no,
-			item_no,
-			amount,
-			name,
-			phone,
-			stnum,
-			userAddr,
-			userDaddr,
-			d_memo,
-			regdate,
-			status
-		from orderList 
-		where mem_id = #{mem_id}
-		order by regdate desc;
+		    SELECT ol.ord_no,
+	           ol.item_no,
+	           ol.amount,
+	           ol.name,
+	           ol.phone,
+	           ol.stnum,
+	           ol.userAddr,
+	           ol.userDaddr,
+	           ol.d_memo,
+	           ol.regdate,
+	           ol.status,
+	           ii.fileName
+		    FROM orderList ol
+		    INNER JOIN item_image ii ON ol.item_no = ii.item_no
+		    WHERE ol.mem_id = #{mem_id}
+		    ORDER BY ol.regdate DESC;
 	</select>
-	
-	
-	 <select id="getAllOrders" resultType="OrderListVO">
-        SELECT * FROM orderList
-    </select>
+
+
+	<select id="getAllOrders" resultType="OrderListVO">
+		SELECT ol.*, ii.fileName
+		FROM orderList ol
+		INNER JOIN item_image ii ON ol.item_no = ii.item_no
+	</select>
     
       <select id="findByOrdNo" resultType="OrderListVO">
         SELECT * FROM orderList WHERE ord_no = #{ord_no}

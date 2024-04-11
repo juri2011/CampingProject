@@ -9,6 +9,12 @@
 	<title>Cart Page</title>
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/mypage.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<style>
+		img {
+			width: 200px;
+			height: 200px;
+		}
+	</style>
 </head>
 <body>
 	<h1>cart</h1>
@@ -67,7 +73,7 @@
 				str += "<tr class='cartItem' id='cart-"+list[i].cart_no+"'>";
 				//str += "<td><input class='product-checkbox' type='checkbox' value='"+list[i].cart_no+"' checked/></td>"
 				//img src에 list[i].item_img를 넣으려니 405에러 발생(이미지가 아직 없기 때문에)
-				str += "	<td><img src='' alt='"+list[i].item_name+"'></td>";
+				str += "<td><img src='/resources/img/" + list[i].fileName + "' alt='" + list[i].item_name + "'></td>";
 				str += "	<td>"+list[i].item_name+"</td>";
 				str += "	<td>"+list[i].price.toLocaleString()+"원</td>";
 				str += "	<td> <input type='number' name='quantity' ";
