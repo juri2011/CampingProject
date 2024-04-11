@@ -114,8 +114,6 @@
     </div>
 
     <script>
-	    const token = $("meta[name='_csrf']").attr("content");
-		const header = $("meta[name='_csrf_header']").attr("content");
         function selChange() {
             var sel = document.getElementById('cntPerPage').value;
             location.href = "/admin/itemManager?nowPage=1&cntPerPage=" + sel; // 현재 페이지를 1페이지로 리셋

@@ -231,8 +231,6 @@ h1 {
 		</div>
 	</div>
 	<script>
-		const token = $("meta[name='_csrf']").attr("content");
-		const header = $("meta[name='_csrf_header']").attr("content");
 		let enrollForm = $("#enrollForm")
 
 		/* 취소 버튼 */

@@ -129,6 +129,7 @@
                     <option value="4" <c:if test="${order.status == 4}">selected</c:if>>배송완료</option>
                   </select>
                   <input type="submit" value="변경" />
+                  <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                 </form>
               </td>
             </tr>

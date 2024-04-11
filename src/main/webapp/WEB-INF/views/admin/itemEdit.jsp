@@ -216,15 +216,6 @@ h1 {
 				</div>
 			</div>
 
-			<div class="form_section">
-				<div class="form_section_title">
-					<label>상품 이미지명</label>
-				</div>
-				<div class="form_section_content">
-					<input type="text" name="img_name" id="img_name"
-						value="<c:out value='${item.img_name}' />">
-				</div>
-			</div>
 
 			<div class="form_section">
 				<div class="form_section_title">
@@ -235,7 +226,8 @@ h1 {
 				</div>
 			</div>
 			<input type="hidden" name="modDate" value="<%=new java.util.Date()%>">
-
+			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+			
 		</form>
 		<div class="btn_section">
 			<button id="cancelBtn" class="btn">취 소</button>
@@ -298,6 +290,9 @@ h1 {
 
 			$.ajax({
 				url : '/admin/uploadAjaxAction',
+				beforeSend: function(xhr) {
+		            xhr.setRequestHeader(header, token);
+		        },
 				processData : false,
 				contentType : false,
 				data : formData,

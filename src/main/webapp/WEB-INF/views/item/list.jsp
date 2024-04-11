@@ -24,10 +24,6 @@
 		<input type="hidden" name="category" value='<c:out value="${pageMaker.cri.category}"/>'/>
 		<input type="hidden" name="keyword" value='<c:out value="${pageMaker.cri.keyword}"/>'/>
 	</form>
-	<!-- 로고 -->
-	<a href="${pageContext.request.contextPath}/home">
-	    <img src="${pageContext.request.contextPath}/resources/images/캠핑가로고1.png" alt="Logo">
-	</a>
 	
 	<!-- 상품카테고리 선택 -->
 	<!-- 임의.location.href에 값을 설정하면 해당 값으로 페이지가 이동(리다이렉트).브라우저으이 현재 위치를 가져오거나 설정할 떄 사용. -->

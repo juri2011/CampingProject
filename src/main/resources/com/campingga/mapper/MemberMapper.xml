@@ -124,7 +124,7 @@
 	<!-- 회원 정보 수정 쿼리 -->
 	<update id="updateMemberInfo" parameterType="com.campingga.domain.MemberVO">
 		UPDATE member
-		SET pwd = #{pwd},
+		SET
 		name = #{name},
 		birth =
 		#{birth},

@@ -278,8 +278,10 @@
 	}
 </script>
 <script>
+/*
 	const token = $("meta[name='_csrf']").attr("content");
 	const header = $("meta[name='_csrf_header']").attr("content");
+	*/
 	function validate() {
 		if ($("#name").val() == '') {
 			alert("이름을 입력하세요.");
