@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Param;
 
 import com.campingga.domain.MemberVO;
 import com.campingga.domain.PagingVO;
+import com.campingga.domain.Authority;
+import com.campingga.domain.MemberVO;
 
 public interface MemberMapper {
 
@@ -35,4 +37,14 @@ public interface MemberMapper {
 	// 회원 상세정보 보기 / 수정
 	public void updateMemberInfo(MemberVO member);
 
+	
+	//회원 정보 가져오기
+	public MemberVO read(String member_id);
+	
+	//권한 설정
+	public int insertAuth(Authority auth);
+	
+	//회원 배송 정보 가져오기
+	public MemberVO selectShippingInfo(String mem_id);
+	
 }

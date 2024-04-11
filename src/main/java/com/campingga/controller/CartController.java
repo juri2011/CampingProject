@@ -6,6 +6,8 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,17 +36,19 @@ public class CartController {
 	
 	//단순히 이동만 하는 메소드
 	@GetMapping("/list")
-	public String cartList(HttpServletRequest request, Model model){
+	public String cartList(Model model){
 		//로그인 유저 체크
-		//Authentication auth = SecurityContextHolder.getContext().getAuthentication();		
-		HttpSession session = request.getSession();
-		//String userId = auth.getName();
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();		
+		String userId = auth.getName();
+		//HttpSession session = request.getSession();
+		/*
 		if(session.getAttribute("member") != null) {
 			MemberVO user = (MemberVO) session.getAttribute("member"); //임시(원래는 세션에서 id를 가져와야 함)
 			String userId = user.getMem_id();
 			model.addAttribute("userId", userId);
 		}
-		
+		*/
+		model.addAttribute("userId",userId);
 		return "cart/cart"; 
 	}
 	 //댓글 등록하기

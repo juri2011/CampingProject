@@ -4,51 +4,39 @@
 	xmlns:security="http://www.springframework.org/schema/security"
 	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-<!-- 
-	<bean id="loginSuccess" class="com.campingga.security.LoginSuccessHandler"></bean>
-	<bean id="customPasswordEncoder" class="com.campingga.security.CustomPasswordEncoder"></bean>
-	<bean id="customUserDetailService" class="com.campingga.security.CustomUserDetailsService"></bean>
-	
+
 	<bean id="customAccessDenied" class="com.campingga.security.CustomAccessDeniedHandler"></bean>
-	
- 	
+	<bean id="customLoginSuccess" class="com.campingga.security.LoginSuccessHandler"></bean>
+	<bean id="customUserDetailService" class="com.campingga.security.CustomUserDetailsService"></bean>
+	<!-- <bean id="customPasswordEncoder" class="com.campingga.security.CustomNoOpPasswordEncoder"></bean> -->
+	<bean id="bcryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"></bean>
 	<security:http>
- 		
+ 		<!--
+ 		테스트용 코드입니다. 주석 풀지 마세요! (풀면 밑에 있는 설정 실행 안됨) 
 		<security:intercept-url pattern="/*" access="permitAll"/>
 		<security:intercept-url pattern="/*/*.do" access="permitAll"/>
-		
-		 
-		<security:intercept-url pattern="/admin" access="hasRole('ROLE_ADMIN')"/>
-		<security:intercept-url pattern="/admin/*" access="hasRole('ROLE_ADMIN')"/>
-		<security:intercept-url pattern="/admin/*/*" access="hasRole('ROLE_ADMIN')"/>
-		<security:intercept-url pattern="/admin" access="hasRole('ROLE_MANAGER')"/>
-		<security:intercept-url pattern="/admin/*" access="hasRole('ROLE_MANAGER')"/>
-		<security:intercept-url pattern="/admin/*/*" access="hasRole('ROLE_MANAGER')"/>
-		<security:intercept-url pattern="/writeclaim/*/*" access="hasRole('ROLE_MEMBER')"/>
-		<security:intercept-url pattern="/cart" access="hasRole('ROLE_MEMBER')" />
-		<security:intercept-url pattern="/cart/*" access="hasRole('ROLE_MEMBER')" />
-		<security:intercept-url pattern="/order" access="hasRole('ROLE_MEMBER')" />
-		<security:intercept-url pattern="/order/*" access="hasRole('ROLE_MEMBER')" />
-		<security:intercept-url pattern="/review/*.do" access="hasRole('ROLE_MEMBER')" />
-		<security:intercept-url pattern="/wish" access="hasRole('ROLE_MEMBER')" />
-		<security:intercept-url pattern="/wish/*" access="hasRole('ROLE_MEMBER')" />
-		<security:intercept-url pattern="/wish/*/*" access="hasRole('ROLE_MEMBER')" />
-		
-		<security:form-login login-page="/member/login" authentication-success-handler-ref="loginSuccess" />
-		<security:logout logout-url="/logout.do" invalidate-session="true" />
-		
-		<security:access-denied-handler error-page="/accessError"/>
-		
+		 -->
+ 		<security:intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/>
+ 		<security:intercept-url pattern="/cart/**" access="hasRole('ROLE_MEMBER')"/>
+ 		
 		<security:access-denied-handler ref="customAccessDenied"/>
+		
+		<security:form-login login-page="/member/customLogin" authentication-success-handler-ref="customLoginSuccess"/>
+		
+		<!-- post로 데이터를 전달할 때는 csrf 설정 해야함 -->
+		<!-- <security:csrf disabled="true" /> -->
+		
 	</security:http>
 
-
 	<security:authentication-manager>
-		 
-		<security:authentication-provider  user-service-ref="customUserDetailService" >	
-			<security:password-encoder ref="customPasswordEncoder"/>
-		</security:authentication-provider>
+		<security:authentication-provider
+			user-service-ref="customUserDetailService">
+			<security:password-encoder ref="bcryptPasswordEncoder"/>
 		
+			<!-- <security:user-service>
+				<security:user name="dw" password="{noop}dw" authorities="ROLE_MEMBER, ROLE_ADMIN"/>
+				<security:user name="jr" password="{noop}jr" authorities="ROLE_MEMBER"/>
+			</security:user-service> -->
+		</security:authentication-provider>
 	</security:authentication-manager>
- -->
 </beans>

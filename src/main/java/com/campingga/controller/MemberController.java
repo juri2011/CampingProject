@@ -4,6 +4,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -72,14 +74,29 @@ public class MemberController {
 		}
 	} // memberIdChkPOST() 종료
 
+	// 로그인 페이지 이동(시큐리티)
+	@GetMapping("/customLogin")
+	public void joinGET(String error, String logout, Model model) {
+		
+		log.info("로그인 페이지 진입");
+		log.info("error: "+error);
+		log.info("logout: "+logout);
+		
+		if(error != null) {
+			model.addAttribute("error","사용자 ID 또는 비밀번호를 잘못 입력하셨습니다.");
+		}
+		if(logout != null) {
+			model.addAttribute("logout","로그아웃 되었습니다.");
+		}
+
+	}
 	// 로그인 페이지 이동
 	@GetMapping("/login")
 	public void joinGET() {
-
+		
 		log.info("로그인 페이지 진입");
-
+		
 	}
-
 	/* 로그인 */
 	@PostMapping("/login")
 	public String loginPOST(HttpServletRequest request, MemberVO member, RedirectAttributes rttr) throws Exception {
@@ -100,11 +117,10 @@ public class MemberController {
 		}
 
 		// 일치하는 아이디, 비밀번호 경우 (로그인 성공)
-		session.setAttribute("member", lvo);
+		//session.setAttribute("member", lvo);
 
 		return "redirect:/main";
 	}
-
 	/*
 	 * 메인페이지 로그아웃
 	 * 
@@ -125,14 +141,17 @@ public class MemberController {
 	/* 비동기방식 로그아웃 메서드 */
 	@PostMapping("/logout.do")
 	@ResponseBody
-	public void logoutPOST(HttpServletRequest request) throws Exception {
+	//public void logoutPOST(HttpServletRequest request) throws Exception {
+	public void logoutPOST() throws Exception {
 
 		log.info("비동기 로그아웃 메서드 진입");
-
+		/*
 		HttpSession session = request.getSession();
 
 		session.invalidate();
-
+		*/
+		SecurityContextHolder.clearContext();
+		
 	}
 
 	// 회원정보 관리 페이지 이동

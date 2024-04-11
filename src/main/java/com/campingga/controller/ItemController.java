@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -60,6 +62,15 @@ public class ItemController {
 	//int -> Integer/long형
 	@GetMapping("/detail")
 	public void get(@RequestParam("item_no") int item_no, @ModelAttribute("cri") Criteria cri, Model model) {
+	  
+	    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+	    if (auth != null && auth.isAuthenticated()
+				&& !"anonymousUser".equals(auth.getPrincipal())) {
+			
+			model.addAttribute("userId", auth.getName());
+			
+		}
 	    
 	    log.info("/get or /modify");
 	    model.addAttribute("item",itemService.get(item_no));

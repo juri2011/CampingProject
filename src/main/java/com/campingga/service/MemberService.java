@@ -29,5 +29,8 @@ public interface MemberService {
     
     // 회원 상세정보 보기/수정
     public void updateMemberInfo(MemberVO memberVO);
+    
+    //회원 정보 불러오기(배송용)
+    public MemberVO getShippingInfo(String mem_id);
 	
 }

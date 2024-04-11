@@ -29,6 +29,11 @@
 		</table>
 		<button id="purchase">구매</button>
 		<button id="deleteAll">전체 삭제</button>
+		
+	<!-- 결제 페이지로 이동 -->
+	<form id="goToPurchase" action="/order/purchase" method="post">
+		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+	</form>
 </body>
 <script src="/resources/js/cart.js"></script>
 <script>
@@ -134,7 +139,8 @@
 					cartService.update(cart, function(result){
 						//콘솔에 출력 
 						console.log('cart_no: ',list[i].cart_no , result);
-						self.location="/order/purchase";
+						//self.location="/order/purchase";
+						$("#goToPurchase").submit();
 					});
 				}//end for
 				

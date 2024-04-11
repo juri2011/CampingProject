@@ -89,18 +89,24 @@ a {
 		<div class="top_gnb_area">
 			<ul class="list">
 				<!-- 비로그인 상태 -->
-				<c:if test="${member == null}">
+				<%-- <c:if test="${member == null}"> --%>
+				<c:if test="${mem_id == null}">
 					<li><a href="/member/login">로그인</a></li>
 					<li><a href="/member/join">회원가입</a></li>
 					<li>고객센터</li>
 				</c:if>
 
 				<!-- 로그인한 상태 -->
-				<c:if test="${ member != null }">
+				<%-- <c:if test="${ member != null }"> --%>
+				<c:if test="${ mem_id != null }">
 					<div class="login_success_area">
-						<span>${member.mem_id}님, 환영합니다.</span>
+						<%-- <span>${member.mem_id}님, 환영합니다.</span> --%>
+						<span>${mem_id}님, 환영합니다.</span>
 					</div>
-					<li><a href="/admin/adminPage">관리자 페이지(수정 예정)</a></li>
+					<!-- <li><a href="/admin/adminPage">관리자 페이지(수정 예정)</a></li> -->
+					<c:if test="${isAdmin}">
+						<li><a href="/admin/adminPage">관리자 페이지(수정 예정)</a></li>
+					</c:if>
 					<li><a id="gnb_logout_button">로그아웃</a></li>
 					<li><a href="/member/memberPage">마이페이지</a></li>
 					<li><a href="/member/toCartList">장바구니</a></li>
@@ -127,8 +133,11 @@ a {
 	
 	</div>
 	<script>
+		var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
 		/* 상품 목록 클릭하면 상세페이지로 이동 */
 		$(document).ready(function(){
+			
 			$('.card').click(function(){
 				const item_no = $(this).data("no");
 				location.href="/item/detail?item_no="+item_no;
@@ -147,6 +156,14 @@ a {
 			$.ajax({
 				type : "POST",
 				url : "/member/logout.do",
+				
+				/* 
+					spring security에서 CSRF보호를 활성화하면
+					POST 요청을 보낼때 CSRF 토큰이 올바른지 검증한다
+				*/
+				beforeSend: function(xhr) {
+		            xhr.setRequestHeader(header, token);
+		        },
 				success : function(data) {
 					alert("로그아웃 성공");
 					document.location.reload();
