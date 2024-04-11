@@ -74,6 +74,14 @@
 	    <result property="pwd" column="pwd"/>
 	    <result property="name" column="name"/>
 	    <result property="regdate" column="regdate"/>
+	    <result property="name" column="name"/>
+	    <result property="birth" column="birth"/>
+	    <result property="userStnum" column="userStnum"/>
+	    <result property="userAddr" column="userAddr"/>
+	    <result property="userDaddr" column="userDaddr"/>
+	    <result property="email" column="email"/>
+	    <result property="gender" column="gender"/>
+	    <result property="phone" column="phone"/>
 	    <collection property="authList" resultMap="authMap">
 	    </collection> 
 	</resultMap>
@@ -85,7 +93,17 @@
 	
 	<select id="read" resultMap="memberMap">
 	      SELECT
-	        m.mem_id, pwd, name, regdate, auth
+	        m.mem_id,
+	        pwd, name,
+	        regdate,
+	        birth,
+	        userStnum,
+	        userAddr,
+	        userDaddr,
+	        email,
+	        gender,
+	        phone,
+	        auth
 	      FROM
 	        member m LEFT OUTER JOIN authority a on m.mem_id = a.mem_id
 	      WHERE m.mem_id = #{member_id}
@@ -104,8 +122,7 @@
 	<update id="updatePassword" parameterType="map"> UPDATE member SET pwd
 		= #{newPassword} WHERE mem_id = #{mem_id} </update>
 	<!-- 회원 정보 수정 쿼리 -->
-	<update id="updateMemberInfo"
-		parameterType="com.campingga.domain.MemberVO">
+	<update id="updateMemberInfo" parameterType="com.campingga.domain.MemberVO">
 		UPDATE member
 		SET pwd = #{pwd},
 		name = #{name},
@@ -119,6 +136,7 @@
 		userDaddr =
 		#{userDaddr}
 		WHERE mem_id = #{mem_id}
+	</update>
 	<select id="selectShippingInfo" resultType="MemberVO">
 		SELECT
 			mem_id, name, phone, email, userStnum, userAddr, userDaddr
@@ -127,8 +145,6 @@
 		WHERE
 			mem_id=#{mem_id}
 	</select>
-
-	</update>
 </mapper>
 
 	

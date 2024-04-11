@@ -32,5 +32,8 @@ public interface MemberService {
     
     //회원 정보 불러오기(배송용)
     public MemberVO getShippingInfo(String mem_id);
+    
+    //회원 정보 불러오기
+    public MemberVO read(String mem_id);
 	
 }

@@ -6,12 +6,14 @@
 <title>Change Password</title>
 </head>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<meta name="_csrf" content="${_csrf.token}"/>
+<meta name="_csrf_header" content="${_csrf.headerName}"/>
 <body>
 
 	<h2>비밀번호 변경</h2>
 
 	<form action="<c:url value='/member/changePassword'/>" method="post" id="pwUpdateForm" name="pwUpdateForm">
-    <input type="hidden" id="mem_id" name="mem_id" value="${member.mem_id}">
+    <input type="hidden" id="mem_id" name="mem_id" value="${mem_id}">
     <div class="col-sm-8 col-sm-offset-2">
         <div class="panel panel-default panel-margin-10">
             <div class="panel-body panel-body-content text-center">
@@ -30,9 +32,13 @@
             </div>
         </div>
     </div>
+    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+    
 </form>
 
 <script>
+const token = $("meta[name='_csrf']").attr("content");
+const header = $("meta[name='_csrf_header']").attr("content");
     // 비밀번호 변경 버튼 클릭 시 실행되는 함수
     document.getElementById("pwUpdate").addEventListener("click", function(event) {
         event.preventDefault(); // 기본 이벤트 동작 방지
@@ -64,6 +70,9 @@
         $.ajax({
             type: "POST",
             url: "/member/changePassword", // 회원 정보 수정 엔드포인트
+            beforeSend: function(xhr) {
+	            xhr.setRequestHeader(header, token);
+	        },
             data: formData,
             success: function(response) {
             	loadingIndicator.parentNode.removeChild(loadingIndicator);

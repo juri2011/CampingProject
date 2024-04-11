@@ -6,6 +6,8 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.campingga.domain.Authority;
 import com.campingga.domain.MemberVO;
 import com.campingga.domain.PasswordChangeDTO;
 import com.campingga.service.MemberService;
@@ -28,6 +31,9 @@ public class MemberController {
 
 	@Autowired // 하나 일 경우 생략가능.
 	private MemberService memberService;
+	
+	@Autowired
+	private PasswordEncoder encoder;
 
 	// 회원가입 페이지 이동
 	@GetMapping("/join")
@@ -162,7 +168,11 @@ public class MemberController {
 
 	// 회원 비밀번호 변경 페이지 이동
 	@GetMapping("/changePassword")
-	public String changePasswordGET() {
+	public String changePasswordGET(Model model) {
+	  Authentication auth = SecurityContextHolder.getContext().getAuthentication();   
+    String mem_id = auth.getName();
+	  
+	  model.addAttribute("mem_id", mem_id);
 		return "/member/changePassword";
 		
 	}
@@ -173,14 +183,22 @@ public class MemberController {
 		//public Map<String, String> changePassword(@ModelAttribute PasswordChangeDTO passwordData) {
 		public String changePassword(@ModelAttribute PasswordChangeDTO passwordData) {
 			
+		  
 			log.info("=================================="+passwordData);
 			
 			String mem_id = passwordData.getMem_id();
+			String storedPassword = memberService.read(mem_id).getPwd();
 			String oldPassword = passwordData.getOldPassword();
 			String newPassword = passwordData.getNewPassword();
 
 			//Map<String, String> response = new HashMap<>();
-
+			if(encoder.matches(oldPassword, storedPassword)) {
+			  memberService.updatePassword(mem_id, newPassword);
+			  return "success";
+			}else {
+			  return "fail";
+			}
+			/*
 			if (memberService.checkPassword(mem_id, oldPassword)) {
 				memberService.updatePassword(mem_id, newPassword);
 				//response.put("status", "success");
@@ -189,7 +207,7 @@ public class MemberController {
 				//response.put("status", "fail");
 				return "fail";
 			}
-
+			*/
 			//return response;
 		}
 	
@@ -219,12 +237,17 @@ public class MemberController {
 	@GetMapping("/memberDetailPage")
 	public String memberDetailPage(Model model, HttpSession session) {
 		// 세션에서 현재 로그인된 회원 정보 가져오기
-		MemberVO member = (MemberVO) session.getAttribute("member");
+		/*MemberVO member = (MemberVO) session.getAttribute("member");
 		if (member == null) {
 			// 회원 정보가 없으면 로그인 페이지로 리다이렉트
 			return "redirect:/member/login";
-		}
-
+		}*/
+	  
+	  Authentication auth = SecurityContextHolder.getContext().getAuthentication();   
+    String userId = auth.getName();
+    MemberVO member = memberService.read(userId);
+    log.info(member);
+	  
 		// 회원 정보를 모델에 추가하여 뷰로 전달
 		model.addAttribute("member", member);
 

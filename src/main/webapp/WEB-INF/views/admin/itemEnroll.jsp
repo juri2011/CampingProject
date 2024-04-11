@@ -231,7 +231,7 @@ h1 {
 					<input name="content">
 				</div>
 			</div>
-
+			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 		</form>
 		<div class="btn_section">
 			<button id="cancelBtn" class="btn">취 소</button>
@@ -239,6 +239,8 @@ h1 {
 		</div>
 	</div>
 	<script>
+		const token = $("meta[name='_csrf']").attr("content");
+		const header = $("meta[name='_csrf_header']").attr("content");
 		let enrollForm = $("#enrollForm")
 
 		/* 취소 버튼 */
@@ -298,6 +300,9 @@ h1 {
 
 			$.ajax({
 				url : '/admin/uploadAjaxAction',
+				beforeSend: function(xhr) {
+		            xhr.setRequestHeader(header, token);
+		        },
 				processData : false,
 				contentType : false,
 				data : formData,
@@ -378,6 +383,9 @@ h1 {
 			
 			$.ajax({
 				url: '/admin/deleteFile',
+				beforeSend: function(xhr) {
+		            xhr.setRequestHeader(header, token);
+		        },
 				data : {fileName : targetFile},
 				dataType : 'text',
 				type : 'POST',

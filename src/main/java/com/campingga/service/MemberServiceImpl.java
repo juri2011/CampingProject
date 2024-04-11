@@ -3,14 +3,12 @@ package com.campingga.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.campingga.domain.MemberVO;
-import com.campingga.domain.PagingVO;
 import com.campingga.domain.Authority;
 import com.campingga.domain.MemberVO;
+import com.campingga.domain.PagingVO;
 import com.campingga.mapper.MemberMapper;
 
 @Service
@@ -34,8 +32,8 @@ public class MemberServiceImpl implements MemberService {
 		String pwd = member.getPwd();
 		member.setPwd(pwencoder.encode(pwd));
 		System.out.println(member.getPwd());
-		membermapper.memberJoin(member);
-		membermapper.insertAuth(auth); //사용자 권한 추가
+		memberMapper.memberJoin(member);
+		memberMapper.insertAuth(auth); //사용자 권한 추가
 		
 	}
 
@@ -70,6 +68,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void updatePassword(String mem_id, String newPassword) {
+        newPassword = pwencoder.encode(newPassword);
         memberMapper.updatePassword(mem_id, newPassword);
     }
 
@@ -80,13 +79,13 @@ public class MemberServiceImpl implements MemberService {
 	}
 
     @Override
-    public List<MemberVO> selectMember(PagingVO vo) {
-    	return membermapper.selectMember(vo);
+    public MemberVO getShippingInfo(String mem_id) {
+      return memberMapper.selectShippingInfo(mem_id);
     }
 
     @Override
-    public MemberVO getShippingInfo(String mem_id) {
-      return membermapper.selectShippingInfo(mem_id);
+    public MemberVO read(String mem_id) {
+      return memberMapper.read(mem_id);
     }
 	
 

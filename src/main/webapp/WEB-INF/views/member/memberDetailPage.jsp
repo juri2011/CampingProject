@@ -4,6 +4,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="_csrf" content="${_csrf.token}"/>
+	<meta name="_csrf_header" content="${_csrf.headerName}"/>
 <title>회원 정보 수정</title>
 </head>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -46,12 +48,14 @@
 			</div>
 			<span class="id_input_re_1">사용 가능한 아이디입니다.</span> <span
 				class="id_input_re_2">이미 존재하는 아이디입니다.</span>
+			<%-- 
 			<div class="pw_wrap">
 				<div class="pw_name">비밀번호</div>
 				<div class="pw_input_box">
 					<input class="pw_input" name="pwd" type="password" value="${member.pwd}" autocomplete="current-password" readonly>
 				</div>
 			</div>
+			 --%>
 			<div class="user_wrap">
 				<div class="user_name">이름</div>
 				<div class="user_input_box">
@@ -148,6 +152,8 @@
 				<input type="button" class="modify_button" value="수정하기">
 			</div>
 		</div>
+		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+		
 	</form>
 </div>
 
@@ -155,6 +161,8 @@
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
 <script>
+const token = $("meta[name='_csrf']").attr("content");
+const header = $("meta[name='_csrf_header']").attr("content");
 $(document).ready(function() {
     // 수정하기 버튼 클릭 시 회원 정보 수정 요청
     $(".modify_button").click(function() {
@@ -173,6 +181,9 @@ $(document).ready(function() {
         $.ajax({
             type: "POST",
             url: "/member/updateMemberInfo", // 회원 정보 수정 엔드포인트
+            beforeSend: function(xhr) {
+	            xhr.setRequestHeader(header, token);
+	        },
             data: formData,
             success: function(response) {
                 alert("회원 정보가 성공적으로 수정되었습니다.");

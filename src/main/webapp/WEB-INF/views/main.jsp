@@ -89,7 +89,6 @@ a {
 		<div class="top_gnb_area">
 			<ul class="list">
 				<!-- 비로그인 상태 -->
-				<%-- <c:if test="${member == null}"> --%>
 				<c:if test="${mem_id == null}">
 					<li><a href="/member/login">로그인</a></li>
 					<li><a href="/member/join">회원가입</a></li>
@@ -97,18 +96,22 @@ a {
 				</c:if>
 
 				<!-- 로그인한 상태 -->
-				<%-- <c:if test="${ member != null }"> --%>
 				<c:if test="${ mem_id != null }">
 					<div class="login_success_area">
-						<%-- <span>${member.mem_id}님, 환영합니다.</span> --%>
 						<span>${mem_id}님, 환영합니다.</span>
 					</div>
-					<!-- <li><a href="/admin/adminPage">관리자 페이지(수정 예정)</a></li> -->
 					<c:if test="${isAdmin}">
-						<li><a href="/admin/adminPage">관리자 페이지(수정 예정)</a></li>
+						
 					</c:if>
+					<c:choose>
+						<c:when test="${isAdmin}">
+							<li><a href="/admin/adminPage">관리자 페이지</a></li>
+						</c:when>
+						<c:otherwise>
+							<li><a href="/member/memberPage">마이페이지</a></li>
+						</c:otherwise>
+					</c:choose>
 					<li><a id="gnb_logout_button">로그아웃</a></li>
-					<li><a href="/member/memberPage">마이페이지</a></li>
 					<li><a href="/member/toCartList">장바구니</a></li>
 				</c:if>
 			</ul>

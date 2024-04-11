@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="_csrf" content="${_csrf.token}"/>
 	<meta name="_csrf_header" content="${_csrf.headerName}"/>
-    <title>사이트 제목</title>
+    <title>CampingGa</title>
     <!-- 공통 CSS 파일을 여기에 포함 -->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/style.css">
     <!-- jQuery -->
