@@ -31,7 +31,7 @@ public class MainController {
 		//메인 페이지 이동
 		@GetMapping("/main")
 		public void mainPageGET(Model model) {
-			
+			/*
 			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 			
 			//사용자가 anonymousUser(로그인 하지 않은 사용자)인지 확인
@@ -49,7 +49,7 @@ public class MainController {
 				}
 				
 			}
-			
+			*/
 			List<ItemVO> newItem = itemService.getNewItems();
 			
 			log.info("메인 페이지 진입");

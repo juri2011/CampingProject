@@ -10,7 +10,7 @@
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <title>Welcome Campingga</title>
 </head>
-<style>
+<!-- <style>
 header {
 	text-align: center;
 }
@@ -46,7 +46,7 @@ a {
 	bottom: 60%;
 }
 </style>
-
+ -->
 <!-- 메인 3 개 출력 -->
 <style>
     .container {
@@ -83,7 +83,7 @@ a {
 <body>
 
 	<div class="wrapper">
-			<header>
+<%-- 			<header>
 			<h1>캠핑용품 쇼핑몰</h1>
 		</header>
 		<div class="top_gnb_area">
@@ -115,7 +115,7 @@ a {
 					<li><a href="/member/toCartList">장바구니</a></li>
 				</c:if>
 			</ul>
-		</div>
+		</div> --%>
 	
 	<!-- 최신 3개 -->
 	<hr />
@@ -151,27 +151,6 @@ a {
 				e.preventDefault();
 				self.location = "/item/detail?item_no=" + $(this).attr('href');
 			});
-		});
-		
-		/* gnb_area 로그아웃 버튼 작동 */
-		$("#gnb_logout_button").click(function() {
-			//alert("버튼 작동");
-			$.ajax({
-				type : "POST",
-				url : "/member/logout.do",
-				
-				/* 
-					spring security에서 CSRF보호를 활성화하면
-					POST 요청을 보낼때 CSRF 토큰이 올바른지 검증한다
-				*/
-				beforeSend: function(xhr) {
-		            xhr.setRequestHeader(header, token);
-		        },
-				success : function(data) {
-					alert("로그아웃 성공");
-					document.location.reload();
-				}
-			}); // ajax 
 		});
 	</script>
 </body>

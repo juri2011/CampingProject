@@ -1,5 +1,8 @@
 package com.campingga.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -114,15 +117,22 @@ public class MemberController {
 		
 	}
 	/* 로그인 */
+	/*
 	@PostMapping("/login")
 	public String loginPOST(HttpServletRequest request, MemberVO member, RedirectAttributes rttr) throws Exception {
 
 		// System.out.println("login 메서드 진입");
 		// System.out.println("전달된 데이터 : " + member);
-
+	  log.info("postMapping /login 진입");
+	  
 		HttpSession session = request.getSession();
 		MemberVO lvo = memberService.memberLogin(member);
-
+		Map<String, Object> memberInfo = new HashMap<>();
+		
+		log.info(lvo);
+		
+		boolean isAdmin = false;
+		
 		// 일치하지 않는 아이디, 비밀번호 입력 경우
 		if (lvo == null) {
 
@@ -133,10 +143,23 @@ public class MemberController {
 		}
 
 		// 일치하는 아이디, 비밀번호 경우 (로그인 성공)
-		//session.setAttribute("member", lvo);
-
+		for(Authority authority :lvo.getAuthList()) {
+		  log.info(authority);
+		  log.info(authority.getAuth());
+		  if(authority.getAuth().equals("ROLE_ADMIN")) {
+		    log.info("관리자");
+		    isAdmin = true;
+		    break;
+		  }
+		}
+		memberInfo.put("mem_id", lvo.getMem_id());
+		memberInfo.put("isAdmin", isAdmin);
+		
+		session.setAttribute("memberInfo", memberInfo);
+		
 		return "redirect:/main";
 	}
+	*/
 	/*
 	 * 메인페이지 로그아웃
 	 * 
@@ -158,16 +181,14 @@ public class MemberController {
 	@PostMapping("/logout.do")
 	@ResponseBody
 	//public void logoutPOST(HttpServletRequest request) throws Exception {
-	public void logoutPOST() throws Exception {
+	public void logoutPOST(HttpSession session) throws Exception {
 
 		log.info("비동기 로그아웃 메서드 진입");
 		/*
 		HttpSession session = request.getSession();
-
-		session.invalidate();
 		*/
+		session.invalidate();
 		SecurityContextHolder.clearContext();
-		
 	}
 
 	// 회원정보 관리 페이지 이동
