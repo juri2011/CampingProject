@@ -1,7 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
-<html>
+<html>	
 <head>
 <meta charset="UTF-8">
 <meta name="_csrf" content="${_csrf.token}"/>
@@ -88,8 +89,8 @@
             </script>
         </select>
            <select class="birth_input" name="day" id="birthDay">
-            <option value="">일(DD)</option>
-            <!-- 생일 옵션 -->
+            <option value=""><fmt:formatDate value="${member.birth}" pattern="dd"/></option>
+							<!-- 생일 옵션 -->
          <script>
                 for (var day = 1; day <= 31; day++) {
                     var dayStr = day < 10 ? '0' + day : '' + day;
@@ -98,9 +99,6 @@
             </script>
         </select>
         <input type="hidden" name="birth" id="birthHidden">
-        ${member.birth.year}
-        ${member.birth.month}
-        ${member.birth.day}
     </div>
 </div>
 

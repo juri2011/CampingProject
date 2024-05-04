@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -62,9 +63,9 @@
 						<input class="pwck_input" type="password"
 							autocomplete="current-password">
 					</div>
-					<span class="pwck_input_re_1">비밀번호가 일치합니다.</span>
-				    <span class="pwck_input_re_2">비밀번호가 일치하지 않습니다.</span>
-						
+					<span class="pwck_input_re_1">비밀번호가 일치합니다.</span> <span
+						class="pwck_input_re_2">비밀번호가 일치하지 않습니다.</span>
+
 				</div>
 				<div class="user_wrap">
 					<div class="user_name">이름</div>
@@ -73,41 +74,37 @@
 					</div>
 				</div>
 				<div class="birth_wrap">
-    <div class="birth_name">생년월일</div>
-    <div class="birth_input_box">
-        <select class="birth_input" name="year">
-            <option value="">년(YYYY)</option>
-            <!-- 생년 옵션 -->
-            <script>
+					<div class="birth_name">생년월일</div>
+					<div class="birth_input_box">
+						<select class="birth_input" name="year">
+							<option value="">년(YYYY)</option>
+							<!-- 생년 옵션 -->
+							<script>
                 for (var year = 2005; year >= 1900; year--) {
                     document.write('<option value="' + year + '">' + year + '</option>');
                 }
             </script>
-        </select>
-        <select class="birth_input" name="month">
-            <option value="">월(MM)</option>
-            <!-- 생월 옵션 -->
-            <script>
+						</select> <select class="birth_input" name="month">
+							<option value="">월(MM)</option>
+							<!-- 생월 옵션 -->
+							<script>
                 for (var month = 1; month <= 12; month++) {
                     var monthStr = month < 10 ? '0' + month : '' + month;
                     document.write('<option value="' + monthStr + '">' + monthStr + '</option>');
                 }
             </script>
-        </select>
-        <select class="birth_input" name="day">
-            <option value="">일(DD)</option>
-            <!-- 생일 옵션 -->
-            <script>
+						</select> <select class="birth_input" name="day">
+							<option value=""><fmt:formatDate value="${member.birth}" pattern="dd"/>일(DD)</option>
+							<!-- 생일 옵션 -->
+							<script>
                 for (var day = 1; day <= 31; day++) {
                     var dayStr = day < 10 ? '0' + day : '' + day;
                     document.write('<option value="' + dayStr + '">' + dayStr + '</option>');
                 }
             </script>
-        </select>
-        
-        <input type="hidden" name="birth" id="birthHidden">
-    </div>
-</div>
+						</select> <input type="hidden" name="birth" id="birthHidden">
+					</div>
+				</div>
 				<div class="phone_wrap">
 					<div class="phone_name">전화번호(번호 사이에"-"필수)</div>
 					<div class="phone_input_box">
@@ -159,7 +156,8 @@
 				<div class="join_button_wrap">
 					<input type="button" class="join_button" value="가입하기">
 				</div>
-				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+				<input type="hidden" name="${_csrf.parameterName}"
+					value="${_csrf.token}" />
 			</div>
 		</form>
 	</div>
