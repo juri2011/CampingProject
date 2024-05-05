@@ -5,34 +5,104 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>회원가입</title>
+<link href="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" rel="stylesheet">
+
 <style>
-/* 중복아이디 존재하지 않는경우 */
-.id_input_re_1 {
-	color: green;
-	display: none;
-}
-/* 중복아이디 존재하는 경우 */
-.id_input_re_2 {
-	color: red;
-	display: none;
+
+/* 기본 스타일 설정 */
+body {
+    font-family: Arial, sans-serif;
 }
 
-/* 비밀번호 확인 일치 유효성검사 */
-.pwck_input_re_1 {
-	color: green;
-	display: none;
+/* 레이아웃 설정 */
+.wrapper {
+    width: 80%;
+    margin: 20px auto;
+    padding: 20px;
+    background: #f4f4f4;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 10px #ccc;
 }
 
-.pwck_input_re_2 {
-	color: red;
-	display: none;
+.form-container {
+    display: flex;
+    flex-direction: column;
 }
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* 입력 필드 스타일 */
+.form-control {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+input[readonly] {
+    background-color: #eee; /* Light grey background for readonly inputs */
+}
+
+/* 버튼 스타일 */
+.join_button, .address_button {
+    padding: 10px 20px;
+    color: white;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.join_button:hover, .address_button:hover {
+    background-color: #45a049;
+}
+
+.address_button {
+    padding: 8px;
+    margin-top: 5px;
+}
+
+/* 주소 입력 필드 스타일 */
+.address_wrap {
+    margin: 20px 0;
+    padding: 10px;
+    background-color: #f8f8f8;
+    border: 1px solid #ccc;
+}
+
+.address_input_1_wrap, .address_input_2_wrap, .address_input_3_wrap {
+    margin-bottom: 10px;
+}
+
+.address_input_1_box, .address_input_2_box, .address_input_3_box {
+    margin-right: 5px;
+    display: inline-block;
+}
+
+/* 유효성 검사 메시지 스타일 */
+.help-block, .id_input_re_1, .id_input_re_2, .pwck_input_re_1, .pwck_input_re_2 {
+    display: none; /* Initially hide all help blocks */
+    color: red;
+}
+
+.id_input_re_1, .pwck_input_re_1 {
+    color: green;
+}
+
+
+
 </style>
-
+</head>
 
 <body>
 
@@ -40,8 +110,9 @@
 		<form id="join_form" method="post">
 			<div class="wrap">
 				<div class="subjecet">
-					<span>회원가입</span>
+					<h1>회원가입</h1>
 				</div>
+				<hr />
 				<div class="id_wrap">
 					<div class="id_name">아이디</div>
 					<div class="id_input_box">
@@ -94,7 +165,9 @@
                 }
             </script>
 						</select> <select class="birth_input" name="day">
-							<option value=""><fmt:formatDate value="${member.birth}" pattern="dd"/>일(DD)</option>
+							<option value=""><fmt:formatDate value="${member.birth}"
+									pattern="dd" />일(DD)
+							</option>
 							<!-- 생일 옵션 -->
 							<script>
                 for (var day = 1; day <= 31; day++) {
@@ -132,27 +205,26 @@
 					<div class="address_input_1_wrap">
 						<div class="address_input_1_box">
 							<input class="address_input_1" name="userStnum"
-								readonly="readonly">
+								readonly="readonly" placeholder="우편번호">
 						</div>
-						<div class="address_button" onclick="execution_daum_address()">
-							<span>주소찾기</span>
-						</div>
+						<button type="button" class="address_button"
+							onclick="execution_daum_address()">주소찾기</button>
 						<div class="clearfix"></div>
 					</div>
 					<div class="address_input_2_wrap">
 						<div class="address_input_2_box">
 							<input class="address_input_2" name="userAddr"
-								readonly="readonly">
+								readonly="readonly" placeholder="기본 주소">
 						</div>
 					</div>
 					<div class="address_input_3_wrap">
 						<div class="address_input_3_box">
 							<input class="address_input_3" name="userDaddr"
-								readonly="readonly" placeholder="상세주소">
+								placeholder="상세주소">
 						</div>
 					</div>
-
 				</div>
+
 				<div class="join_button_wrap">
 					<input type="button" class="join_button" value="가입하기">
 				</div>
@@ -167,13 +239,6 @@
 		src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
 	<script>
-		$(document).ready(function() {
-			//회원가입 버튼(회원가입 기능 작동)
-			$(".join_button").click(function() {
-				$("#join_form").attr("action", "/member/join");
-				$("#join_form").submit();
-			});
-		});
 
 		//아이디 중복검사
 		$('.id_input').on(
@@ -307,6 +372,84 @@
 					}).open();
 
 		}
+		
+		// 유효성 검사
+	       $(document).ready(function() {
+        $(".join_button").click(function(event) {
+            event.preventDefault(); // 폼 자동 제출 방지
+
+            // 아이디 입력 검증
+            if ($(".id_input").val().trim() === "") {
+                alert("아이디를 입력해주세요.");
+                $(".id_input").focus();
+                return; // 검증 종료
+            }
+
+            // 비밀번호 입력 검증
+            if ($(".pw_input").val().trim() === "") {
+                alert("비밀번호를 입력해주세요.");
+                $(".pw_input").focus();
+                return; // 검증 종료
+            }
+
+            // 비밀번호 확인 입력 검증
+            if ($(".pwck_input").val().trim() === "") {
+                alert("비밀번호 확인을 입력해주세요.");
+                $(".pwck_input").focus();
+                return; // 검증 종료
+            }
+
+            // 비밀번호 일치 검사
+            if ($(".pw_input").val() !== $(".pwck_input").val()) {
+                alert("입력한 비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+                $(".pwck_input").focus();
+                return; // 검증 종료
+            }
+
+            // 이름 입력 검증
+            if ($(".user_input").val().trim() === "") {
+                alert("이름을 입력해주세요.");
+                $(".user_input").focus();
+                return; // 검증 종료
+            }
+
+            // 생년월일 입력 검증
+            if ($(".birth_input[name='year']").val() === "" || 
+                $(".birth_input[name='month']").val() === "" || 
+                $(".birth_input[name='day']").val() === "") {
+                alert("생년월일을 모두 선택해주세요.");
+                $(".birth_input[name='year']").focus();  // 가장 먼저 선택되어야 하는 연도에 포커스
+                return; // 검증 종료
+            }
+
+            // 전화번호 입력 검증
+            if ($(".phone_input").val().trim() === "") {
+                alert("전화번호를 입력해주세요.");
+                $(".phone_input").focus();
+                return; // 검증 종료
+            }
+
+            // 이메일 입력 검증
+            if ($(".mail_input1").val().trim() === "") {
+                alert("이메일을 입력해주세요.");
+                $(".mail_input1").focus();
+                return; // 검증 종료
+            }
+
+            // 주소 입력 검증
+            if ($(".address_input_1").val().trim() === "" ||
+                $(".address_input_2").val().trim() === "") {
+                alert("주소를 입력해주세요.");
+                $(".address_input_1").focus();
+                return; // 검증 종료
+            }
+
+            // 모든 필드가 적절히 입력되었을 때
+            $("#join_form").attr("action", "/member/join");
+            $("#join_form").submit(); // 폼 제출
+        });
+    });
+
 
 	
 	</script>

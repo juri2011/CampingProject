@@ -18,7 +18,6 @@
                     <c:if test="${sessionScope.memberInfo.mem_id == null}">
                         <li><a href="/member/login">로그인</a></li>
                         <li><a href="/member/join">회원가입</a></li>
-                        <li>고객센터</li>
                     </c:if>
 
                     <!-- 로그인한 상태 -->
@@ -34,7 +33,7 @@
                                 <li><a href="/member/memberPage">마이페이지</a></li>
                             </c:otherwise>
                         </c:choose>
-                        <li><a id="gnb_logout_button">로그아웃</a></li>
+                        <li><a href="/main" id="gnb_logout_button">로그아웃</a></li>
                         <li><a href="/member/toCartList">장바구니</a></li>
                     </c:if>
                 </ul>
