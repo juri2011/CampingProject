@@ -15,4 +15,10 @@ public class CommonController {
 		return "home";
 		
 	}
+	
+	@RequestMapping("/test")
+	public String testPage() {
+		return "test";
+		
+	}
 }
