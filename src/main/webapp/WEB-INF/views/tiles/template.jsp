@@ -8,7 +8,7 @@
 	<meta name="_csrf_header" content="${_csrf.headerName}"/>
     <title>CampingGa</title>
     <!-- 공통 CSS 파일을 여기에 포함 -->
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/style1.css">
     <!-- jQuery -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
