@@ -66,6 +66,7 @@ public class CartController {
 	//비동기로 장바구니 리스트를 가져오는 메소드
 	@GetMapping("/cartList/{member_id}")
 	public @ResponseBody ResponseEntity<CartDTO> cartList(@PathVariable("member_id") String member_id){
+		log.info("get cart list............. ");
 		CartDTO dto = cartService.getCartItemListWithCnt(member_id);
 		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}

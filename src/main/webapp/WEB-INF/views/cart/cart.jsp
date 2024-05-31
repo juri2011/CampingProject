@@ -11,35 +11,61 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 	<style>
 		img {
-			width: 200px;
-			height: 200px;
+			width: 100px;
+			height: 100px;
 		}
+		#listTbody .btn{
+		  	margin: 0 5px;
+		  	padding: 5px 10px;
+	  	}
+	  	.cart-container{
+	  		max-width: 800px;
+	  		margin: 20px auto;
+	  		
+	  	}
+	  	
+	  	.cart-table{
+	  		min-width: 800px;
+	  		border-spacing: 10px;
+	  		border-collapse: separate;
+	  	}
+	  	.td-image{
+	  		max-width: 110px;
+	  	}
+	  	.td-delete{
+	  		min-width: 65px;
+	  	}
 	</style>
 </head>
 <body>
-	<h1>cart</h1>
-	
-		<table>
-			<thead>
-				<tr>
-					<!-- <th>전체선택<input id="selectAll" type="checkbox" checked/></th> -->
-					<th>상품 이미지</th>
-					<th>상품명</th>
-					<th>가격</th>
-					<th>수량</th>
-				</tr>
-			</thead>
-			<tbody id="listTbody">
+	<div id="wrapper">
+		<div class="cart-container">
+			<h1>cart</h1>
+			<table class="cart-table">
+				<thead>
+					<tr>
+						<!-- <th>전체선택<input id="selectAll" type="checkbox" checked/></th> -->
+						<th>상품 이미지</th>
+						<th>상품명</th>
+						<th>가격</th>
+						<th>수량</th>
+					</tr>
+				</thead>
+				<tbody id="listTbody">
+					
+				</tbody>
+			</table>
+			<button class="btn btn-primary" id="purchase">구매</button>
+			<button class="btn btn-danger" id="deleteAll">전체 삭제</button>
 				
-			</tbody>
-		</table>
-		<button id="purchase">구매</button>
-		<button id="deleteAll">전체 삭제</button>
+			<!-- 결제 페이지로 이동 -->
+			<form id="goToPurchase" action="/order/purchase" method="post">
+				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+			</form>
+		</div>
 		
-	<!-- 결제 페이지로 이동 -->
-	<form id="goToPurchase" action="/order/purchase" method="post">
-		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-	</form>
+	</div>
+	
 </body>
 <script src="/resources/js/cart.js"></script>
 <script>
@@ -73,12 +99,12 @@
 				str += "<tr class='cartItem' id='cart-"+list[i].cart_no+"'>";
 				//str += "<td><input class='product-checkbox' type='checkbox' value='"+list[i].cart_no+"' checked/></td>"
 				//img src에 list[i].item_img를 넣으려니 405에러 발생(이미지가 아직 없기 때문에)
-				str += "<td><img src='/resources/img/" + list[i].fileName + "' alt='" + list[i].item_name + "'></td>";
+				str += "<td class='td-image'><img src='/resources/img/" + list[i].fileName + "' alt='" + list[i].item_name + "'></td>";
 				str += "	<td>"+list[i].item_name+"</td>";
 				str += "	<td>"+list[i].price.toLocaleString()+"원</td>";
 				str += "	<td> <input type='number' name='quantity' ";
 				str += "value='"+list[i].quantity+"' min='1' max='100'/></td>";
-				str += "	<td><button onclick='cartDelete("+list[i].cart_no+")'>삭제</button></td></tr>";
+				str += "	<td class='td-delete'><button class='btn btn-danger' onclick='cartDelete("+list[i].cart_no+")'>삭제</button></td></tr>";
 			}
 			console.log('결과 : ',str);
 			listTbody.html(str);
@@ -93,10 +119,14 @@
 				$.ajax({
 					type: 'delete',
 					url: '/cart/deleteAll/'+member_id,
+					beforeSend: function(xhr) {
+			            xhr.setRequestHeader(header, token);
+			        },
 					success:function(deleteResult, status, xhr){
 						showList();
 					},
 					error:function(xhr, status, er){
+						console.log("장바구니 목록을 비우는 중 에러 발생");
 						if(error){
 							error(er);
 						}

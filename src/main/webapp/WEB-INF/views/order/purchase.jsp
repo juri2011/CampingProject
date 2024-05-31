@@ -16,7 +16,7 @@
         margin: 0;
         padding: 0;
     }
-    .container {
+    .purchase-container {
         max-width: 600px;
         margin: 20px auto;
         padding: 20px;
@@ -66,61 +66,64 @@
 </style>
 </head>
 <body>
-<div class="container">
-    <h2>주문 확인</h2>
-    <div class="order-details">
-        <table>
-            <tr>
-            	<th>상품</th>
-                <th>상품명</th>
-                <th>수량</th>
-                <th>가격</th>
-                <th>상태</th>
-            </tr>
-            <c:forEach var="cart" items="${cartList}">
-            	<tr>
-            	<td><img src="/resources/img/${cart.fileName}" alt="<c:out value='${cart.item_name}'/>"></td>
-                <td>
-                	<c:out value='${cart.item_name}'/>
-                	<input type="hidden" name="cart_no" id="cart_no" value="${cart.cart_no}" />
-                	<input type="hidden" name="item_no" id="item_no" value="${cart.item_no}" />
-                </td>
-                <td class="item-quantity"><c:out value='${cart.quantity}'/></td>
-                <td><fmt:formatNumber value="${cart.price}" pattern="#,###원" /></td>
-                <td><c:out value='${cart.status eq 1 ? "판매중" : "판매중단"}'/></td>
-                
-            </tr>
-            </c:forEach>
-            <tr>
-                <td colspan="3"><b>총 상품 금액:</b></td>
-                <td colspan="2"><fmt:formatNumber value="${totalPrice}" pattern="#,###원" /></td>
-            </tr>
-            
-        </table>
-    </div>
-    <h2>배송 정보</h2>
-    <%-- <div class="shipping-details">
-        <input id="name" type="text" placeholder="받으실 분" value='<c:out value="${sessionScope.member.name}"/>'>
-        <input id="phone" type="tel" placeholder="전화번호" value='<c:out value="${sessionScope.member.phone}"/>'>
-        <input id="stnum" type="text" placeholder="주소" value='<c:out value="${sessionScope.member.userStnum}"/>'>
-        <input id="addr1" type="text" placeholder="주소" value='<c:out value="${sessionScope.member.userAddr}"/>'>
-        <input id="addr2" type="text" placeholder="상세주소" value='<c:out value="${sessionScope.member.userDaddr}"/>'>
-        <textarea id="memo" placeholder="배송 메시지">파손되지 않게 조심히 배송해주세요</textarea>
-    </div> --%>
-    <div class="shipping-details">
-        <input id="name" type="text" placeholder="받으실 분" value='<c:out value="${member.name}"/>'>
-        <input id="phone" type="tel" placeholder="전화번호" value='<c:out value="${member.phone}"/>'>
-        <input class="popup-address address_input_1" readonly id="stnum" type="text" placeholder="지번" value='<c:out value="${member.userStnum}"/>'>
-        <input class="popup-address address_input_2" readonly id="addr1" type="text" placeholder="주소" value='<c:out value="${member.userAddr}"/>'>
-        <input class="address_input_3" readonly id="addr2" type="text" placeholder="상세주소" value='<c:out value="${member.userDaddr}"/>'>
-        <textarea id="memo" placeholder="배송 메시지">파손되지 않게 조심히 배송해주세요</textarea>
-    </div>
-    <div class="btn-container">
-        <button class="btn" id="purchase">결제</button>
-        <button class="btn">다시 입력</button>
-        <button class="btn" id="cancel">결제취소</button>
-    </div>
+<div id="wrapper">
+	<div class="purchase-container">
+	    <h2>주문 확인</h2>
+	    <div class="order-details">
+	        <table>
+	            <tr>
+	            	<th>상품</th>
+	                <th>상품명</th>
+	                <th>수량</th>
+	                <th>가격</th>
+	                <th>상태</th>
+	            </tr>
+	            <c:forEach var="cart" items="${cartList}">
+	            	<tr>
+	            	<td><img src="/resources/img/${cart.fileName}" alt="<c:out value='${cart.item_name}'/>"></td>
+	                <td>
+	                	<c:out value='${cart.item_name}'/>
+	                	<input type="hidden" name="cart_no" id="cart_no" value="${cart.cart_no}" />
+	                	<input type="hidden" name="item_no" id="item_no" value="${cart.item_no}" />
+	                </td>
+	                <td class="item-quantity"><c:out value='${cart.quantity}'/></td>
+	                <td><fmt:formatNumber value="${cart.price}" pattern="#,###원" /></td>
+	                <td><c:out value='${cart.status eq 1 ? "판매중" : "판매중단"}'/></td>
+	                
+	            </tr>
+	            </c:forEach>
+	            <tr>
+	                <td colspan="3"><b>총 상품 금액:</b></td>
+	                <td colspan="2"><fmt:formatNumber value="${totalPrice}" pattern="#,###원" /></td>
+	            </tr>
+	            
+	        </table>
+	    </div>
+	    <h2>배송 정보</h2>
+	    <%-- <div class="shipping-details">
+	        <input id="name" type="text" placeholder="받으실 분" value='<c:out value="${sessionScope.member.name}"/>'>
+	        <input id="phone" type="tel" placeholder="전화번호" value='<c:out value="${sessionScope.member.phone}"/>'>
+	        <input id="stnum" type="text" placeholder="주소" value='<c:out value="${sessionScope.member.userStnum}"/>'>
+	        <input id="addr1" type="text" placeholder="주소" value='<c:out value="${sessionScope.member.userAddr}"/>'>
+	        <input id="addr2" type="text" placeholder="상세주소" value='<c:out value="${sessionScope.member.userDaddr}"/>'>
+	        <textarea id="memo" placeholder="배송 메시지">파손되지 않게 조심히 배송해주세요</textarea>
+	    </div> --%>
+	    <div class="shipping-details">
+	        <input id="name" type="text" placeholder="받으실 분" value='<c:out value="${member.name}"/>'>
+	        <input id="phone" type="tel" placeholder="전화번호" value='<c:out value="${member.phone}"/>'>
+	        <input class="popup-address address_input_1" readonly id="stnum" type="text" placeholder="지번" value='<c:out value="${member.userStnum}"/>'>
+	        <input class="popup-address address_input_2" readonly id="addr1" type="text" placeholder="주소" value='<c:out value="${member.userAddr}"/>'>
+	        <input class="address_input_3" readonly id="addr2" type="text" placeholder="상세주소" value='<c:out value="${member.userDaddr}"/>'>
+	        <textarea id="memo" placeholder="배송 메시지">파손되지 않게 조심히 배송해주세요</textarea>
+	    </div>
+	    <div class="btn-container">
+	        <button class="btn" id="purchase">결제</button>
+	        <button class="btn">다시 입력</button>
+	        <button class="btn" id="cancel">결제취소</button>
+	    </div>
+	</div>
 </div>
+
 </body>
 <script src="https://js.tosspayments.com/v1/payment"></script>
 <script>

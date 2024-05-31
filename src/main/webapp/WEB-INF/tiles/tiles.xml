@@ -6,12 +6,17 @@
 <tiles-definitions>
 
 <!-- <definition name="layout" template="/WEB-INF/views/tiles/template.jsp" preparer="menuPreparer" > -->
+<definition name="mainLayout" template="/WEB-INF/views/tiles/template_main.jsp" >
+	<put-attribute name="header" value="/WEB-INF/views/tiles/header_main.jsp" />
+	<put-attribute name="body" value="" />
+	<put-attribute name="footer" value="/WEB-INF/views/tiles/footer.jsp" />
+</definition>
 <definition name="layout" template="/WEB-INF/views/tiles/template.jsp" >
 	<put-attribute name="header" value="/WEB-INF/views/tiles/header.jsp" />
 	<put-attribute name="body" value="" />
 	<put-attribute name="footer" value="/WEB-INF/views/tiles/footer.jsp" />
 </definition>
-<definition name="main" extends="layout">
+<definition name="main" extends="mainLayout">
 	<put-attribute name="title" value="home" />
 	<put-attribute name="body" value="/WEB-INF/views/main.jsp" />
 </definition>

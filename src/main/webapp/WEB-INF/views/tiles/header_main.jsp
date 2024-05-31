@@ -20,16 +20,7 @@
 
 <style>
 	#wrapper{
-		margin-top: 20px;
-	}
-	
-	.hero, .hero>.container>.row, .hero-slide>.img{
-		max-height: 400px;
-		min-height: 400px;
-	}
-	
-	.container-search{
-		margin-top: 50px;
+		margin-top: 150px;
 	}
 	.span-welcome{
 		color: white;
@@ -55,7 +46,7 @@
 
       <div class="container">
         <div class="row justify-content-center align-items-center">
-          <div class="container-search col-lg-9 text-center">
+          <div class="col-lg-9 text-center">
             <h1 class="heading" data-aos="fade-up">
               Easiest way to find your dream home
             </h1>
@@ -143,7 +134,6 @@
               </li> 
               
             </ul>
-
 
             <a
               href="#"

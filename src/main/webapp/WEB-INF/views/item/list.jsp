@@ -12,12 +12,17 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <!-- 임시 스타일 -->
 <style>
+	.list-container{
+		max-width: 800px;
+		margin: 20px auto;
+	}
 	td{border: 1px solid black; width: 300px; height: 300px;}
 </style>
 </head>
 <body>
-<div id="wrap">
-	<!-- 검색기준 form 태그 -->
+<div id="wrapper">
+	<div class="list-container">
+		<!-- 검색기준 form 태그 -->
 	<form id="actionForm" action="/item/list" method="get">
 		<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum}" />
 		<input type="hidden" name="amount" value="${pageMaker.cri.amount}" />
@@ -52,7 +57,7 @@
 		>텐트</option>
 		<option value="침낭"
 			<c:out value="${pageMaker.cri.category == '침낭'?'selected':''}" />
-		>칭남</option>
+		>침낭</option>
 		<option value="매트"
 			<c:out value="${pageMaker.cri.category == '매트'?'selected':''}" />
 		>매트</option>
@@ -107,6 +112,8 @@
 			</c:if>
 		</ul>
 	</div>
+	</div>
+	
 </div>
 </body>
 <script>

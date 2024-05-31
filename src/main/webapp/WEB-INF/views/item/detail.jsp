@@ -11,13 +11,7 @@
 	<!-- jQuery -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f0f0f0;
-        }
-        .container {
+        .item-container {
         	display: flex;
             max-width: 800px;
             margin: 20px auto;
@@ -25,6 +19,12 @@
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .breadcrumb{
+        	max-width: 800px;
+        	margin: 0 auto;
+        	padding: 0 20px;
         }
         #result_card img{
 			max-width: 100%;
@@ -36,7 +36,7 @@
 		}
         .product-info {
         	width: 100%;
-        	height: 300px;
+        	min-height: 300px;
             margin-left: 20px;
             padding: 10px;
             border: 1px solid black;
@@ -62,6 +62,8 @@
             margin-top: 20px;
         }
         
+        
+        
 		
 		/* 탭 메뉴 */
 		.tab-menu {
@@ -80,7 +82,7 @@
 		  margin: 0;
 		}
 		
-		.tab-menu ul li {
+		.tab-title li {
 		  display: inline-block;
 		  padding: 10px;
 		  border-right: 1px solid #ddd;
@@ -132,10 +134,37 @@
 	    cursor: pointer;
 	    float: right;
 	  }
+	  
+	  .btn{
+	  	margin: 0 10px;
+	  }
+	  
+	  #myTabContent2 .btn{
+	  	margin: 0 5px;
+	  	padding: 5px 10px;
+	  }
+	  
+	  .review-table{
+	  	min-width: 700px;
+	  	margin: 0 auto;
+	  	table-layout: fixed;
+	  	border-spacing: 10px;
+	  }
+	  
+	  th{
+	  	text-align: center;
+	  }
+	  .th-content{
+	  	width: 40%;
+	  }
+	  .td-number{
+	  	text-align: center;
+	  }
     </style>
 </head>
 <body>
-<p><a href="/main">홈</a> &gt; <a href="/item/list">전체상품</a> &gt; <a href="/item/list?pageNum=1&amount=12&category=<c:out value="${item.category}"/>"><c:out value="${item.category}"/></a></p>
+<div id="wrapper">
+	<p class="breadcrumb"><a href="/main">홈</a> &gt; <a href="/item/list">전체상품</a> &gt; <a href="/item/list?pageNum=1&amount=12&category=<c:out value="${item.category}"/>"><c:out value="${item.category}"/></a></p>
     <form name="actionForm" action="item/list" method="get">
     	<input type="hidden" name="pageNum" value="<c:out value='${cri.pageNum}' />" />
     	<input type="hidden" name="amount" value="<c:out value='${cri.amount}' />" />
@@ -153,7 +182,7 @@
     	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
     	
     </form>
-    <div class="container">
+    <div class="item-container">
     	
         <div class="form_section">
             <div class="form_section_content">
@@ -181,8 +210,8 @@
             
             </div>
             <hr />
-            <button id="add-cart">장바구니</button>
-            <button id="direct-purchase">바로결제</button>
+            <button class="btn btn-primary" id="add-cart">장바구니</button>
+            <button class="btn btn-primary" id="direct-purchase">바로결제</button>
         </div>
     </div>
     
@@ -200,12 +229,12 @@
       </div>
       <div id="myTabContent2">
         <h2>리뷰 리스트</h2>
-        <table>
+        <table class="review-table">
         	<thead>
         	<tr>
         		<th>글번호</th>
         		<th>작성자</th>
-        		<th>내용</th>
+        		<th class="th-content">내용</th>
         		<th>평점</th>
         		<th>작성일</th>        	
         	</tr>
@@ -226,14 +255,14 @@
 	        	
 	        	그 전까진 아이디를 직접 쓰는걸로
 	         --%>
-	        <p><label for="writer">작성자</label><input type="text" name="writer" id="reviewWriter" placeholder="작성자를 입력해주세요"/></p>
-	        <p><textarea name="content" id="reviewContent" cols="30" rows="10" placeholder="내용을 입력해주세요"></textarea><p/>
+	        <p><label for="writer">작성자</label><input class="form-control" type="text" name="writer" id="reviewWriter" placeholder="작성자를 입력해주세요"/></p>
+	        <p><textarea class="form-control" name="content" id="reviewContent" cols="30" rows="10" placeholder="내용을 입력해주세요"></textarea><p/>
 	        <!-- 비회원 상태에서 작성 가능 -->
 	        <p id="inputBox">
 		        <input id="rev_no" type="hidden" name="rev_no" value=""/>
-		        <input class="addBtn" type="submit" value="작성"/>
-		        <button class="modifyBtn" id="modify">수정</button>
-		        <input class="addBtn" type="reset" value="초기화" />
+		        <input class="addBtn btn btn-primary" type="submit" value="작성"/>
+		        <button class="modifyBtn btn btn-primary" id="modify">수정</button>
+		        <input class="addBtn btn btn-danger" type="reset" value="초기화" />
 		        <!-- submit하면 안되기 때문에 type을 button으로 지정했다 -->
 		        <button class="modifyBtn" id="toList" type="button">목록으로</button>
 	        </p>
@@ -246,8 +275,8 @@
 	<div class="popup-overlay" id="popup">
 	  <div class="popup-content">
 	    <p>장바구니에 추가되었습니다.</p>
-	    <button id="move-cart">이동하기</button>
-	    <button class="close-btn">닫기</button>
+	    <button class="btn btn-primary" id="move-cart">이동하기</button>
+	    <button class="btn btn-primary close-btn">닫기</button>
 	  </div>
 	</div>
 	
@@ -255,10 +284,12 @@
 	  <div class="popup-content">
 	    <p>로그인이 필요한 서비스입니다.</p>
 	    <p>로그인하시겠습니까?</p>
-	    <button id="move-login">로그인</button>
-	    <button class="close-btn">닫기</button>
+	    <button class="btn btn-primary" id="move-login">로그인</button>
+	    <button class="btn btn-primary close-btn">닫기</button>
 	  </div>
 	</div>
+</div>
+
 </body>
 <script src="/resources/js/cart.js"></script>
 <script src="/resources/js/review.js"></script>
@@ -403,14 +434,19 @@
 				return;
 			}
 			for(let i=0, len=list.length || 0; i<len; i++){
-				str += "<tr><td>"+list[i].rownum+"</td>";
+				str += "<tr><td class='td-number'>"+list[i].rownum+"</td>";
 				str += 		"<td>"+list[i].writer+"</td>";
 				str += 		"<td>"+list[i].content+"</td>";
-				str += 		"<td>"+list[i].score+"</td>";
+				//str += 		"<td>"+list[i].score+"</td>";
+				str += "<td>";
+				for(let j=0; j<list[i].score; j++){
+					str += "<span class='icon-star text-warning'></span>"
+				}
+				str += "</td>";
 				str += 		"<td>"+reviewService.displayTime(list[i].regdate)+"</td>";
 				if(list[i].writerID === userID){
-					str += "<td><button class='review-update' onclick='reviewUpdate("+list[i].rev_no+")'>수정</button>";
-					str += "<button class='review-delete' onclick='reviewDelete("+list[i].rev_no+")'>삭제</button></td>";
+					str += "<td><button class='btn btn-primary review-update' onclick='reviewUpdate("+list[i].rev_no+")'>수정</button>";
+					str += "<button class='btn btn-danger review-delete' onclick='reviewDelete("+list[i].rev_no+")'>삭제</button></td>";
 				}
 				
 				str += "</tr>";
@@ -456,7 +492,7 @@
 		
 		let str = "<ul class='pagination pull-right'>";
 		if(prev){//이전 블록이 있다면
-			str += "<li class='page-item'><a class='page-link' href='"+(startNum -1)+"'>Previous</a></li>"
+			str += "<li class='page-item'><a class='page-link' `='"+(startNum -1)+"'>Previous</a></li>"
 		}
 		
 		for(let i=startNum; i<=endNum; i++){

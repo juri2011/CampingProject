@@ -15,9 +15,9 @@
       padding: 0;
     }
 
-    .container {
+    .orderlist-container {
       width: 100%;
-      max-width: 1200px;
+      max-width: 800px;
       margin: 0 auto;
     }
 
@@ -69,7 +69,8 @@
   </style>
 </head>
 <body>
-  <div class="container">
+<div id="wrapper">
+	<div class="orderlist-container">
     <h2>결제 내역</h2>
     <c:forEach items="${orderMap}" var="entry">
     <div class="table-wrapper">
@@ -122,5 +123,7 @@
     </div>
    </c:forEach>
   </div>
+</div>
+  
 </body>
 </html>
