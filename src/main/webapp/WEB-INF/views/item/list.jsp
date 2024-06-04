@@ -12,16 +12,12 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <!-- 임시 스타일 -->
 <style>
-	.list-container{
-		max-width: 800px;
-		margin: 20px auto;
-	}
 	td{border: 1px solid black; width: 300px; height: 300px;}
 </style>
 </head>
 <body>
 <div id="wrapper">
-	<div class="list-container">
+	<div class="common-container">
 		<!-- 검색기준 form 태그 -->
 	<form id="actionForm" action="/item/list" method="get">
 		<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum}" />

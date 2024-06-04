@@ -32,11 +32,19 @@
 	color: red;
 	display: none;
 }
+.birth_input{
+	display: inline;
+	width: auto;
+}
+.wrap div{
+	margin-bottom: 10px;
+}
 </style>
 <body>
 
 <div class="wrapper">
-	<form id="modify_form" method="post">
+	<div class="common-container">
+		<form id="modify_form" method="post">
 		<div class="wrap">
 			<div class="subject">
 				<span>회원정보 수정</span>
@@ -44,7 +52,7 @@
 			<div class="id_wrap">
 				<div class="id_name">아이디</div>
 				<div class="id_input_box">
-					<input class="id_input" name="mem_id" value="${member.mem_id}" readonly>
+					<input class="id_input form-control" name="mem_id" value="${member.mem_id}" readonly>
 				</div>
 			</div>
 			<span class="id_input_re_1">사용 가능한 아이디입니다.</span> <span
@@ -60,13 +68,13 @@
 			<div class="user_wrap">
 				<div class="user_name">이름</div>
 				<div class="user_input_box">
-					<input class="user_input" name="name" value="${member.name}">
+					<input class="user_input form-control" name="name" value="${member.name}">
 				</div>
 			</div>
    <div class="birth_wrap">
     <div class="birth_name">생년월일</div>
-    <div class="birth_input_box">
-        <select class="birth_input" name="year" id="birthYear">
+    <div class="birth_input_box col-auto">
+        <select class="birth_input form-select" name="year" id="birthYear" aria-describedby="passwordHelpInline">
             <option value="">년(YYYY)</option>
             <!-- 생년 옵션 -->
             <script>
@@ -77,7 +85,7 @@
                 }
             </script>
         </select>
-        <select class="birth_input" name="month" id="birthMonth">
+        <select class="birth_input form-select col-auto" name="month" id="birthMonth" aria-describedby="passwordHelpInline">
             <option value="">월(MM)</option>
             <!-- 생월 옵션 -->
             <script>
@@ -88,7 +96,7 @@
                 }
             </script>
         </select>
-           <select class="birth_input" name="day" id="birthDay">
+           <select class="birth_input form-select col-auto" name="day" id="birthDay" aria-describedby="passwordHelpInline">
             <option value=""><fmt:formatDate value="${member.birth}" pattern="dd"/></option>
 							<!-- 생일 옵션 -->
          <script>
@@ -106,20 +114,20 @@
 			<div class="phone_wrap">
 				<div class="phone_name">전화번호(번호 사이에"-"필수)</div>
 				<div class="phone_input_box">
-					<input class="phone_input" name="phone" value="${member.phone}">
+					<input class="phone_input form-control" name="phone" value="${member.phone}">
 				</div>
 			</div>
 			<div class="gender_wrap">
 				 <div class="gender_name">성별</div>
 				    <div class="gender_input_box">
-				        <label><input type="radio" class="gender_input" name="gender" value="남성" ${member.gender == '남성' ? 'checked' : ''}> 남성</label>
-				        <label><input type="radio" class="gender_input" name="gender" value="여성" ${member.gender == '여성' ? 'checked' : ''}> 여성</label>
+				        <label><input type="radio" class="gender_input form-check-input" name="gender" value="남성" ${member.gender == '남성' ? 'checked' : ''}> 남성</label>
+				        <label><input type="radio" class="gender_input form-check-input" name="gender" value="여성" ${member.gender == '여성' ? 'checked' : ''}> 여성</label>
 				    </div>
 			</div>
 			<div class="mail_wrap">
 				<div class="mail_name">이메일</div>
 				<div class="mail_input_box">
-					<input class="mail_input1" name="email" value="${member.email}">
+					<input class="mail_input1 form-control" name="email" value="${member.email}">
 				</div>
 
 			</div>
@@ -127,7 +135,7 @@
 				<div class="address_name">주소</div>
 				<div class="address_input_1_wrap">
 					<div class="address_input_1_box">
-						<input class="address_input_1" name="userStnum" readonly="readonly" value="${member.userStnum}">
+						<input class="address_input_1 form-control" name="userStnum" readonly="readonly" value="${member.userStnum}">
 					</div>
 					<div class="address_button" onclick="execution_daum_address()">
 						<span>주소찾기</span>
@@ -136,23 +144,26 @@
 				</div>
 				<div class="address_input_2_wrap">
 					<div class="address_input_2_box">
-						<input class="address_input_2" name="userAddr" readonly="readonly" value="${member.userAddr}">
+						<input class="address_input_2 form-control" name="userAddr" readonly="readonly" value="${member.userAddr}">
 					</div>
 				</div>
 				<div class="address_input_3_wrap">
 					<div class="address_input_3_box">
-						<input class="address_input_3" name="userDaddr" readonly="readonly" value="${member.userDaddr}" placeholder="상세주소">
+						<input class="address_input_3 form-control" name="userDaddr" readonly="readonly" value="${member.userDaddr}" placeholder="상세주소">
 					</div>
 				</div>
 
 			</div>
 			<div class="join_button_wrap">
-				<input type="button" class="modify_button" value="수정하기">
+				<button class="modify-button btn btn-primary">수정하기</button>
+				<!-- <input type="button" class="modify_button" value="수정하기"> -->
 			</div>
 		</div>
 		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 		
-	</form>
+	</form>	
+	</div>
+	
 </div>
 
 <!-- API 외부 스크립트 파일 연결 코드 -->

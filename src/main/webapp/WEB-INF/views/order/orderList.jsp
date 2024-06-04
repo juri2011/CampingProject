@@ -15,12 +15,6 @@
       padding: 0;
     }
 
-    .orderlist-container {
-      width: 100%;
-      max-width: 800px;
-      margin: 0 auto;
-    }
-
     .table-wrapper {
       margin-top: 20px;
       border: 1px solid #ddd;
@@ -70,7 +64,7 @@
 </head>
 <body>
 <div id="wrapper">
-	<div class="orderlist-container">
+	<div class="common-container">
     <h2>결제 내역</h2>
     <c:forEach items="${orderMap}" var="entry">
     <div class="table-wrapper">

@@ -13,7 +13,7 @@
     <style>
         .item-container {
         	display: flex;
-            max-width: 800px;
+            max-width: 1200px;
             margin: 20px auto;
             background-color: #fff;
             padding: 20px;
@@ -22,7 +22,7 @@
         }
         
         .breadcrumb{
-        	max-width: 800px;
+        	max-width: 1200px;
         	margin: 0 auto;
         	padding: 0 20px;
         }
@@ -68,7 +68,7 @@
 		/* 탭 메뉴 */
 		.tab-menu {
 		  border: 1px solid #ddd;
-		  max-width: 800px;
+		  max-width: 1200px;
             margin: 20px auto;
             background-color: #fff;
             padding: 20px;
@@ -145,7 +145,7 @@
 	  }
 	  
 	  .review-table{
-	  	min-width: 700px;
+	  	min-width: 1100px;
 	  	margin: 0 auto;
 	  	table-layout: fixed;
 	  	border-spacing: 10px;
@@ -264,7 +264,7 @@
 		        <button class="modifyBtn btn btn-primary" id="modify">수정</button>
 		        <input class="addBtn btn btn-danger" type="reset" value="초기화" />
 		        <!-- submit하면 안되기 때문에 type을 button으로 지정했다 -->
-		        <button class="modifyBtn" id="toList" type="button">목록으로</button>
+		        <button class="modifyBtn btn btn-primary" id="toList" type="button">목록으로</button>
 	        </p>
         </form>
         

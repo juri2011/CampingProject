@@ -19,13 +19,13 @@
 		  	padding: 5px 10px;
 	  	}
 	  	.cart-container{
-	  		max-width: 800px;
+	  		max-width: 1200px;
 	  		margin: 20px auto;
 	  		
 	  	}
 	  	
 	  	.cart-table{
-	  		min-width: 800px;
+	  		min-width: 1200px;
 	  		border-spacing: 10px;
 	  		border-collapse: separate;
 	  	}

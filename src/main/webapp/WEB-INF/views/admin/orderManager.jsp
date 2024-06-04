@@ -77,7 +77,7 @@
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="common-container">
     <h2>주문관리 페이지</h2>
     <c:forEach items="${orderMap}" var="entry">
     <div class="table-wrapper">

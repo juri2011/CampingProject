@@ -10,7 +10,14 @@
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <title>Welcome Campingga</title>
+<style>
+	.main-wrapper{
+		max-width: 1200px;
+		margin: 20px auto;
+	}
+</style>
 </head>
+
 <body>
 
 	<div class="main-wrapper">

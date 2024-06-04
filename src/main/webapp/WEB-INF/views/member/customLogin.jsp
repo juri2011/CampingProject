@@ -20,7 +20,7 @@
 
 	<div class="wrapper">
 
-		<div class="wrap">
+		<div class="common-container">
 			<!-- spring security를 사용하는 경우 action을 /login으로 -->
 			<form id="login_form" action="/login" method="post">
 				<div class="logo_wrap">

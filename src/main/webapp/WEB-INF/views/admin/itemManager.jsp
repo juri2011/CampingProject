@@ -41,12 +41,17 @@
         	width: 150px;
         	height: 150px;
         }
+        
+        .btn{
+        	padding: 5px 10px;
+        }
     </style>
 </head>
 <body>
-    <h2>상품관리</h2>
+    
 
-    <div id="outter">
+    <div class="common-container">
+    	<h2>상품관리</h2>
         <div style="float: right;">
             <select id="cntPerPage" name="sel" onchange="selChange()">
                 <option value="5" <c:if test="${paging.cntPerPage == 5}">selected</c:if>>5줄 보기</option>
@@ -80,8 +85,8 @@
                         <td><fmt:formatNumber value="${item.price}" type="number" /></td>
                         <td><fmt:formatDate value="${item.regdate}" pattern="yyyy.MM.dd" /></td>
                         <td>${item.category}</td>
-                        <td><button class="modify_btn" data-item_no="${item.item_no}">수정</button></td>
-                        <td><button class="delete_btn" data-item-no="${item.item_no}">삭제</button></td>
+                        <td><button class="modify_btn btn btn-primary" data-item_no="${item.item_no}">수정</button></td>
+                        <td><button class="delete_btn btn btn-danger" data-item-no="${item.item_no}">삭제</button></td>
                     </tr>
                 </c:forEach>
             </tbody>
@@ -89,7 +94,7 @@
 
         <div class="admin_content_wrap">
             <div class="admin_content_subject">
-                <button id="itemEnroll" class="enroll_btn">상품등록</button>
+                <button id="itemEnroll" class="enroll_btn btn btn-primary">상품등록</button>
             </div>
         </div>
 		<!-- 페이징 처리 -->

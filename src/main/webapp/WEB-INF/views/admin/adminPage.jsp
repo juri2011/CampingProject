@@ -10,11 +10,15 @@
 
 <body>
 
+	<div id="wrapper">
+		<div class="common-container">
+			<h1>관리자 페이지</h1>
+			<p><a href="/admin/itemManager">상품관리</a></p>
+			<p><a href="/admin/orderManager">주문관리</a></p>
+			<p><a href="/admin/memberManager">회원관리</a></p>
+		</div>
+	</div>
 	
-	<h1>관리자 페이지</h1>
-	<p><a href="/admin/itemManager">상품관리</a></p>
-	<p><a href="/admin/orderManager">주문관리</a></p>
-	<p><a href="/admin/memberManager">회원관리</a></p>
 
 </body>
 </html>

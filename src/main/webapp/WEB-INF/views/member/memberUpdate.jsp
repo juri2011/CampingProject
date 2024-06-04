@@ -8,12 +8,17 @@
 </head>
 <body>
 
-<h2>회원 정보 수정</h2>
+<div id="wrapper">
+	<div class="common-container">
+		<h2>회원 정보 수정</h2>
 
-<ul>
-    <li><a href="/member/memberDetailPage">회원 정보 수정</a></li>
-    <li><a href="/member/changePassword">비밀번호 변경</a></li>
-</ul>
+		<ul>
+		    <li><a href="/member/memberDetailPage">회원 정보 수정</a></li>
+		    <li><a href="/member/changePassword">비밀번호 변경</a></li>
+		</ul>
+		
+	</div>
+</div>
 
 
 </body>

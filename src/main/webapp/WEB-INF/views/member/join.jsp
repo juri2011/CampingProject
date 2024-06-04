@@ -107,131 +107,134 @@ input[readonly] {
 <body>
 
 	<div class="wrapper">
-		<form id="join_form" method="post">
-			<div class="wrap">
-				<div class="subjecet">
-					<h1>회원가입</h1>
-				</div>
-				<hr />
-				<div class="id_wrap">
-					<div class="id_name">아이디</div>
-					<div class="id_input_box">
-						<input class="id_input" name="mem_id">
+		<div class="common-container">
+			<form id="join_form" method="post">
+				<div class="wrap">
+					<div class="subjecet">
+						<h1>회원가입</h1>
 					</div>
-				</div>
-				<span class="id_input_re_1">사용 가능한 아이디입니다.</span> <span
-					class="id_input_re_2">이미 존재하는 아이디입니다.</span>
-				<div class="pw_wrap">
-					<div class="pw_name">비밀번호</div>
-					<div class="pw_input_box">
-						<input class="pw_input" name="pwd" type="password"
-							autocomplete="current-password">
-					</div>
-				</div>
-				<div class="pwck_wrap">
-					<div class="pwck_name">비밀번호 확인</div>
-					<div class="pwck_input_box">
-						<input class="pwck_input" type="password"
-							autocomplete="current-password">
-					</div>
-					<span class="pwck_input_re_1">비밀번호가 일치합니다.</span> <span
-						class="pwck_input_re_2">비밀번호가 일치하지 않습니다.</span>
-
-				</div>
-				<div class="user_wrap">
-					<div class="user_name">이름</div>
-					<div class="user_input_box">
-						<input class="user_input" name="name">
-					</div>
-				</div>
-				<div class="birth_wrap">
-					<div class="birth_name">생년월일</div>
-					<div class="birth_input_box">
-						<select class="birth_input" name="year">
-							<option value="">년(YYYY)</option>
-							<!-- 생년 옵션 -->
-							<script>
-                for (var year = 2005; year >= 1900; year--) {
-                    document.write('<option value="' + year + '">' + year + '</option>');
-                }
-            </script>
-						</select> <select class="birth_input" name="month">
-							<option value="">월(MM)</option>
-							<!-- 생월 옵션 -->
-							<script>
-                for (var month = 1; month <= 12; month++) {
-                    var monthStr = month < 10 ? '0' + month : '' + month;
-                    document.write('<option value="' + monthStr + '">' + monthStr + '</option>');
-                }
-            </script>
-						</select> <select class="birth_input" name="day">
-							<option value=""><fmt:formatDate value="${member.birth}"
-									pattern="dd" />일(DD)
-							</option>
-							<!-- 생일 옵션 -->
-							<script>
-                for (var day = 1; day <= 31; day++) {
-                    var dayStr = day < 10 ? '0' + day : '' + day;
-                    document.write('<option value="' + dayStr + '">' + dayStr + '</option>');
-                }
-            </script>
-						</select> <input type="hidden" name="birth" id="birthHidden">
-					</div>
-				</div>
-				<div class="phone_wrap">
-					<div class="phone_name">전화번호(번호 사이에"-"필수)</div>
-					<div class="phone_input_box">
-						<input class="phone_input" name="phone">
-					</div>
-				</div>
-				<div class="gender_wrap">
-					<div class="gender_name">성별</div>
-					<div class="gender_input_box">
-						<label><input type="radio" class="gender_input"
-							name="gender" value="남성"> 남성</label> <label><input
-							type="radio" class="gender_input" name="gender" value="여성">
-							여성</label>
-					</div>
-				</div>
-				<div class="mail_wrap">
-					<div class="mail_name">이메일</div>
-					<div class="mail_input_box">
-						<input class="mail_input1" name="email">
-					</div>
-
-				</div>
-				<div class="address_wrap">
-					<div class="address_name">주소</div>
-					<div class="address_input_1_wrap">
-						<div class="address_input_1_box">
-							<input class="address_input_1" name="userStnum"
-								readonly="readonly" placeholder="우편번호">
-						</div>
-						<button type="button" class="address_button"
-							onclick="execution_daum_address()">주소찾기</button>
-						<div class="clearfix"></div>
-					</div>
-					<div class="address_input_2_wrap">
-						<div class="address_input_2_box">
-							<input class="address_input_2" name="userAddr"
-								readonly="readonly" placeholder="기본 주소">
+					<hr />
+					<div class="id_wrap">
+						<div class="id_name">아이디</div>
+						<div class="id_input_box">
+							<input class="id_input" name="mem_id">
 						</div>
 					</div>
-					<div class="address_input_3_wrap">
-						<div class="address_input_3_box">
-							<input class="address_input_3" name="userDaddr"
-								placeholder="상세주소">
+					<span class="id_input_re_1">사용 가능한 아이디입니다.</span> <span
+						class="id_input_re_2">이미 존재하는 아이디입니다.</span>
+					<div class="pw_wrap">
+						<div class="pw_name">비밀번호</div>
+						<div class="pw_input_box">
+							<input class="pw_input" name="pwd" type="password"
+								autocomplete="current-password">
 						</div>
 					</div>
+					<div class="pwck_wrap">
+						<div class="pwck_name">비밀번호 확인</div>
+						<div class="pwck_input_box">
+							<input class="pwck_input" type="password"
+								autocomplete="current-password">
+						</div>
+						<span class="pwck_input_re_1">비밀번호가 일치합니다.</span> <span
+							class="pwck_input_re_2">비밀번호가 일치하지 않습니다.</span>
+	
+					</div>
+					<div class="user_wrap">
+						<div class="user_name">이름</div>
+						<div class="user_input_box">
+							<input class="user_input" name="name">
+						</div>
+					</div>
+					<div class="birth_wrap">
+						<div class="birth_name">생년월일</div>
+						<div class="birth_input_box">
+							<select class="birth_input" name="year">
+								<option value="">년(YYYY)</option>
+								<!-- 생년 옵션 -->
+								<script>
+	                for (var year = 2005; year >= 1900; year--) {
+	                    document.write('<option value="' + year + '">' + year + '</option>');
+	                }
+	            </script>
+							</select> <select class="birth_input" name="month">
+								<option value="">월(MM)</option>
+								<!-- 생월 옵션 -->
+								<script>
+	                for (var month = 1; month <= 12; month++) {
+	                    var monthStr = month < 10 ? '0' + month : '' + month;
+	                    document.write('<option value="' + monthStr + '">' + monthStr + '</option>');
+	                }
+	            </script>
+							</select> <select class="birth_input" name="day">
+								<option value=""><fmt:formatDate value="${member.birth}"
+										pattern="dd" />일(DD)
+								</option>
+								<!-- 생일 옵션 -->
+								<script>
+	                for (var day = 1; day <= 31; day++) {
+	                    var dayStr = day < 10 ? '0' + day : '' + day;
+	                    document.write('<option value="' + dayStr + '">' + dayStr + '</option>');
+	                }
+	            </script>
+							</select> <input type="hidden" name="birth" id="birthHidden">
+						</div>
+					</div>
+					<div class="phone_wrap">
+						<div class="phone_name">전화번호(번호 사이에"-"필수)</div>
+						<div class="phone_input_box">
+							<input class="phone_input" name="phone">
+						</div>
+					</div>
+					<div class="gender_wrap">
+						<div class="gender_name">성별</div>
+						<div class="gender_input_box">
+							<label><input type="radio" class="gender_input"
+								name="gender" value="남성"> 남성</label> <label><input
+								type="radio" class="gender_input" name="gender" value="여성">
+								여성</label>
+						</div>
+					</div>
+					<div class="mail_wrap">
+						<div class="mail_name">이메일</div>
+						<div class="mail_input_box">
+							<input class="mail_input1" name="email">
+						</div>
+	
+					</div>
+					<div class="address_wrap">
+						<div class="address_name">주소</div>
+						<div class="address_input_1_wrap">
+							<div class="address_input_1_box">
+								<input class="address_input_1" name="userStnum"
+									readonly="readonly" placeholder="우편번호">
+							</div>
+							<button type="button" class="address_button"
+								onclick="execution_daum_address()">주소찾기</button>
+							<div class="clearfix"></div>
+						</div>
+						<div class="address_input_2_wrap">
+							<div class="address_input_2_box">
+								<input class="address_input_2" name="userAddr"
+									readonly="readonly" placeholder="기본 주소">
+							</div>
+						</div>
+						<div class="address_input_3_wrap">
+							<div class="address_input_3_box">
+								<input class="address_input_3" name="userDaddr"
+									placeholder="상세주소">
+							</div>
+						</div>
+					</div>
+	
+					<div class="join_button_wrap">
+						<input type="button" class="join_button" value="가입하기">
+					</div>
+					<input type="hidden" name="${_csrf.parameterName}"
+						value="${_csrf.token}" />
 				</div>
-
-				<div class="join_button_wrap">
-					<input type="button" class="join_button" value="가입하기">
-				</div>
-				<input type="hidden" name="${_csrf.parameterName}"
-					value="${_csrf.token}" />
-			</div>
-		</form>
+			</form>
+		</div>
+		
 	</div>
 
 	<!-- API 외부 스크립트 파일 연결 코드 -->

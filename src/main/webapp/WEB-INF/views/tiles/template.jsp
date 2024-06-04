@@ -11,6 +11,13 @@
     <%-- <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/style1.css"> --%>
     <!-- jQuery -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<style>
+		.common-container{
+			max-width: 1200px;
+			min-height: 200px;
+			margin: 20px auto;
+		}
+	</style>
 </head>
 <body>
     <div id="container">
