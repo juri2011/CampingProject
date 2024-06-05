@@ -419,10 +419,10 @@ input[readonly] {
 		            return; // 검증 종료
 		        }
 
-		        // 이름 입력 검증 (2~50자)
+		        // 이름 입력 검증 (2~20자)
 		        let userInput = $(".user_input").val().trim();
-		        if (userInput === "" || userInput.length < 2 || userInput.length > 50) {
-		            alert("이름은 2자 이상 50자 이하로 입력해주세요.");
+		        if (userInput === "" || userInput.length < 2 || userInput.length > 20) {
+		            alert("이름은 2자 이상 20자 이하로 입력해주세요.");
 		            $(".user_input").focus();
 		            return; // 검증 종료
 		        }

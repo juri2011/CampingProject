@@ -1,9 +1,5 @@
 package com.campingga.controller;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.campingga.domain.MemberVO;
 import com.campingga.domain.PasswordChangeDTO;
@@ -280,19 +275,20 @@ public class MemberController {
 		return "/member/memberDetailPage";
 	}
 
-	
-
 	@PostMapping("/updateMemberInfo")
 	@ResponseBody
 	public String updateMemberInfo(@ModelAttribute MemberVO member, HttpSession session) {
-		try {
-			memberService.updateMemberInfo(member); // 회원 정보 업데이트 서비스 호출
-			session.setAttribute("member", member); // 세션에 최신 정보 반영
-			return "success"; // 업데이트 성공 시 success 반환
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "fail"; // 업데이트 실패 시 fail 반환
-		}
+	    try {
+	        System.out.println("Received member: " + member); // 로그 추가
+	        memberService.updateMemberInfo(member); // 회원 정보 업데이트 서비스 호출
+	        session.setAttribute("member", member); // 세션에 최신 정보 반영
+	        return "success"; // 업데이트 성공 시 success 반환
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return "fail"; // 업데이트 실패 시 fail 반환
+	    }
 	}
+
+
 
 }
