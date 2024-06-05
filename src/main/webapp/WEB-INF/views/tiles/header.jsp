@@ -196,7 +196,7 @@
 	            xhr.setRequestHeader(header, token);
 	        },
 			success : function(data) {
-				alert("로그아웃 성공");
+				alert("로그아웃 되었습니다.");
 				//document.location.reload();
 				location.href="/";
 			}

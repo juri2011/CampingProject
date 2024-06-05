@@ -242,36 +242,44 @@ input[readonly] {
 		src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
 	<script>
+	
+	//아이디 중복 검사
+	 $(document).ready(function() {
+            // CSRF 토큰 설정
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
 
-		//아이디 중복검사
-		$('.id_input').on(
-				"propertychange change keyup paste input",
-				function() {
+            $('.id_input').on("propertychange change keyup paste input", function() {
+                let mem_id = $('.id_input').val(); // .id_input에 입력되는 값
+                let data = { mem_id: mem_id }; // '컨트롤에 넘길 데이터 이름' : '데이터(.id_input에 입력되는 값)'
 
-					let mem_id = $('.id_input').val(); // .id_input에 입력되는 값
-					let data = {
-						mem_id : mem_id
-					} // '컨트롤에 넘길 데이터 이름' : '데이터(.id_input에 입력되는 값)'
+                $.ajax({
+                    type: "post",
+                    url: "/member/memberIdChk",
+                    data: data,
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader(header, token); // CSRF 토큰을 헤더에 설정
+                    },
+                    success: function(result) {
+                        console.log("AJAX 요청 성공, 응답: " + result);
+                        if (result != 'fail') {
+                            $('.id_input_re_1').css("display", "inline-block");
+                            $('.id_input_re_2').css("display", "none");
+                        } else {
+                            $('.id_input_re_2').css("display", "inline-block");
+                            $('.id_input_re_1').css("display", "none");
+                        }
+                    },
+                    error: function(request, status, error) {
+                        console.log("AJAX 요청 실패");
+                        console.log("code:" + request.status);
+                        console.log("message:" + request.responseText);
+                        console.log("error:" + error);
+                    }
+                }); // ajax 종료
+            }); // function 종료
+        });
 
-					$.ajax({
-						type : "post",
-						url : "/member/memberIdChk",
-						data : data,
-						success : function(result) {
-							//console.log("성공 여부" + result);
-							if (result != 'fail') {
-								$('.id_input_re_1').css("display",
-										"inline-block");
-								$('.id_input_re_2').css("display", "none");
-							} else {
-								$('.id_input_re_2').css("display",
-										"inline-block");
-								$('.id_input_re_1').css("display", "none");
-							}
-						}// success 종료
-					}); // ajax 종료	
-
-				});// function 종료
 
 
 		/* 비밀번호 확인 일치 유효성 검사 */
@@ -376,82 +384,106 @@ input[readonly] {
 
 		}
 		
-		// 유효성 검사
-	       $(document).ready(function() {
-        $(".join_button").click(function(event) {
-            event.preventDefault(); // 폼 자동 제출 방지
+		$(document).ready(function() {
+		    $(".join_button").click(function(event) {
+		        event.preventDefault(); // 폼 자동 제출 방지
 
-            // 아이디 입력 검증
-            if ($(".id_input").val().trim() === "") {
-                alert("아이디를 입력해주세요.");
-                $(".id_input").focus();
-                return; // 검증 종료
-            }
+		        // 아이디 입력 검증 (6~12자)
+		        let idInput = $(".id_input").val().trim();
+		        if (idInput === "" || idInput.length < 6 || idInput.length > 12) {
+		            alert("아이디는 6자 이상 12자 이하로 입력해주세요.");
+		            $(".id_input").focus();
+		            return; // 검증 종료
+		        }
 
-            // 비밀번호 입력 검증
-            if ($(".pw_input").val().trim() === "") {
-                alert("비밀번호를 입력해주세요.");
-                $(".pw_input").focus();
-                return; // 검증 종료
-            }
+		        // 비밀번호 입력 검증 (8~20자)
+		        let pwInput = $(".pw_input").val().trim();
+		        if (pwInput === "" || pwInput.length < 8 || pwInput.length > 20) {
+		            alert("비밀번호는 8자 이상 20자 이하로 입력해주세요.");
+		            $(".pw_input").focus();
+		            return; // 검증 종료
+		        }
 
-            // 비밀번호 확인 입력 검증
-            if ($(".pwck_input").val().trim() === "") {
-                alert("비밀번호 확인을 입력해주세요.");
-                $(".pwck_input").focus();
-                return; // 검증 종료
-            }
+		        // 비밀번호 확인 입력 검증
+		        let pwckInput = $(".pwck_input").val().trim();
+		        if (pwckInput === "") {
+		            alert("비밀번호 확인을 입력해주세요.");
+		            $(".pwck_input").focus();
+		            return; // 검증 종료
+		        }
 
-            // 비밀번호 일치 검사
-            if ($(".pw_input").val() !== $(".pwck_input").val()) {
-                alert("입력한 비밀번호와 비밀번호 확인이 일치하지 않습니다.");
-                $(".pwck_input").focus();
-                return; // 검증 종료
-            }
+		        // 비밀번호 일치 검사
+		        if (pwInput !== pwckInput) {
+		            alert("입력한 비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+		            $(".pwck_input").focus();
+		            return; // 검증 종료
+		        }
 
-            // 이름 입력 검증
-            if ($(".user_input").val().trim() === "") {
-                alert("이름을 입력해주세요.");
-                $(".user_input").focus();
-                return; // 검증 종료
-            }
+		        // 이름 입력 검증 (2~50자)
+		        let userInput = $(".user_input").val().trim();
+		        if (userInput === "" || userInput.length < 2 || userInput.length > 50) {
+		            alert("이름은 2자 이상 50자 이하로 입력해주세요.");
+		            $(".user_input").focus();
+		            return; // 검증 종료
+		        }
 
-            // 생년월일 입력 검증
-            if ($(".birth_input[name='year']").val() === "" || 
-                $(".birth_input[name='month']").val() === "" || 
-                $(".birth_input[name='day']").val() === "") {
-                alert("생년월일을 모두 선택해주세요.");
-                $(".birth_input[name='year']").focus();  // 가장 먼저 선택되어야 하는 연도에 포커스
-                return; // 검증 종료
-            }
+		        // 생년월일 입력 검증
+		        if ($(".birth_input[name='year']").val() === "" || 
+		            $(".birth_input[name='month']").val() === "" || 
+		            $(".birth_input[name='day']").val() === "") {
+		            alert("생년월일을 모두 선택해주세요.");
+		            $(".birth_input[name='year']").focus();  // 가장 먼저 선택되어야 하는 연도에 포커스
+		            return; // 검증 종료
+		        }
+		        
+		        // 전화번호 입력 검증 (xxx-xxxx-xxxx 형식)
+		        let phoneInput = $(".phone_input").val().trim();
+		        let phonePattern = /^\d{3}-\d{4}-\d{4}$/;
+		        if (!phoneInput.match(phonePattern)) {
+		            alert("전화번호는 xxx-xxxx-xxxx 형식으로 입력해주세요.");
+		            $(".phone_input").focus();
+		            return; // 검증 종료
+		        }
 
-            // 전화번호 입력 검증
-            if ($(".phone_input").val().trim() === "") {
-                alert("전화번호를 입력해주세요.");
-                $(".phone_input").focus();
-                return; // 검증 종료
-            }
+		        // 성별 입력 검증
+		        if ($("input[name='gender']:checked").length === 0) {
+		            alert("성별을 선택해주세요.");
+		            $("input[name='gender']").focus();
+		            return; // 검증 종료
+		        }
 
-            // 이메일 입력 검증
-            if ($(".mail_input1").val().trim() === "") {
-                alert("이메일을 입력해주세요.");
-                $(".mail_input1").focus();
-                return; // 검증 종료
-            }
+		        // 이메일 입력 검증
+		        let emailInput = $(".mail_input1").val().trim();
+		        let emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+		        if (emailInput === "" || !emailInput.match(emailPattern)) {
+		            alert("올바른 이메일 형식을 입력해주세요.");
+		            $(".mail_input1").focus();
+		            return; // 검증 종료
+		        }
 
-            // 주소 입력 검증
-            if ($(".address_input_1").val().trim() === "" ||
-                $(".address_input_2").val().trim() === "") {
-                alert("주소를 입력해주세요.");
-                $(".address_input_1").focus();
-                return; // 검증 종료
-            }
+		   
+		        // 주소 입력 검증
+		        if ($(".address_input_1").val().trim() === "" ||
+		            $(".address_input_2").val().trim() === "") {
+		            alert("주소를 입력해주세요.");
+		            $(".address_input_1").focus();
+		            return; // 검증 종료
+		        }
+		        
+		        // 상세주소 입력 검증
+		        if ($(".address_input_3").val().trim() === "") {
+				    alert("상세주소를 입력해주세요.");
+		            $(".address_input_3").focus();
+		            return; // 검증 종료
+		        }
 
-            // 모든 필드가 적절히 입력되었을 때
-            $("#join_form").attr("action", "/member/join");
-            $("#join_form").submit(); // 폼 제출
-        });
-    });
+		        // 모든 필드가 적절히 입력되었을 때
+		        $("#join_form").attr("action", "/member/join");
+		        $("#join_form").submit(); // 폼 제출
+		    });
+		});
+
+
 
 
 	
