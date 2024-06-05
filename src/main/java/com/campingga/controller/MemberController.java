@@ -72,23 +72,6 @@ public class MemberController {
         }
     }
 
-	// 로그인 페이지 이동(시큐리티)
-	/*@GetMapping("/customLogin")
-	public void joinGET(String error, String logout, Model model) {
-		
-		log.info("로그인 페이지 진입");
-		log.info("error: "+error);
-		log.info("logout: "+logout);
-		
-		if(error != null) {
-			model.addAttribute("error","사용자 ID 또는 비밀번호를 잘못 입력하셨습니다.");
-		}
-		if(logout != null) {
-			model.addAttribute("logout","로그아웃 되었습니다.");
-		}
-
-	}
-	*/
 	// 로그인 페이지 이동
 	@GetMapping("/login")
 	public void joinGET(String error, String logout, Model model) {
@@ -105,66 +88,6 @@ public class MemberController {
 		//log.info("로그인 페이지 진입");
 		
 	}
-	/* 로그인 */
-	/*
-	@PostMapping("/login")
-	public String loginPOST(HttpServletRequest request, MemberVO member, RedirectAttributes rttr) throws Exception {
-
-		// System.out.println("login 메서드 진입");
-		// System.out.println("전달된 데이터 : " + member);
-	  log.info("postMapping /login 진입");
-	  
-		HttpSession session = request.getSession();
-		MemberVO lvo = memberService.memberLogin(member);
-		Map<String, Object> memberInfo = new HashMap<>();
-		
-		log.info(lvo);
-		
-		boolean isAdmin = false;
-		
-		// 일치하지 않는 아이디, 비밀번호 입력 경우
-		if (lvo == null) {
-
-			int result = 0;
-			rttr.addFlashAttribute("result", result);
-			return "redirect:/member/login";
-
-		}
-
-		// 일치하는 아이디, 비밀번호 경우 (로그인 성공)
-		for(Authority authority :lvo.getAuthList()) {
-		  log.info(authority);
-		  log.info(authority.getAuth());
-		  if(authority.getAuth().equals("ROLE_ADMIN")) {
-		    log.info("관리자");
-		    isAdmin = true;
-		    break;
-		  }
-		}
-		memberInfo.put("mem_id", lvo.getMem_id());
-		memberInfo.put("isAdmin", isAdmin);
-		
-		session.setAttribute("memberInfo", memberInfo);
-		
-		return "redirect:/main";
-	}
-	*/
-	/*
-	 * 메인페이지 로그아웃
-	 * 
-	 * @GetMapping("/logout.do") public String logoutMainGET(HttpServletRequest
-	 * request) throws Exception{
-	 * 
-	 * log.info("logoutMainGET메서드 진입");
-	 * 
-	 * HttpSession session = request.getSession();
-	 * 
-	 * session.invalidate();
-	 * 
-	 * return "redirect:/main";
-	 * 
-	 * }
-	 */
 
 	/* 비동기방식 로그아웃 메서드 */
 	@PostMapping("/logout.do")
@@ -197,39 +120,24 @@ public class MemberController {
 		
 	}
 
-	// changePassword
-		@PostMapping("/changePassword")
-		@ResponseBody
-		//public Map<String, String> changePassword(@ModelAttribute PasswordChangeDTO passwordData) {
-		public String changePassword(@ModelAttribute PasswordChangeDTO passwordData) {
-			
-		  
-			log.info("=================================="+passwordData);
-			
-			String mem_id = passwordData.getMem_id();
-			String storedPassword = memberService.read(mem_id).getPwd();
-			String oldPassword = passwordData.getOldPassword();
-			String newPassword = passwordData.getNewPassword();
+	@PostMapping("/changePassword")
+	@ResponseBody
+	public String changePassword(@ModelAttribute PasswordChangeDTO passwordData) {
+	    log.info("=================================="+passwordData);
+	    
+	    String mem_id = passwordData.getMem_id();
+	    String storedPassword = memberService.read(mem_id).getPwd();
+	    String oldPassword = passwordData.getOldPassword();
+	    String newPassword = passwordData.getNewPassword();
 
-			//Map<String, String> response = new HashMap<>();
-			if(encoder.matches(oldPassword, storedPassword)) {
-			  memberService.updatePassword(mem_id, newPassword);
-			  return "success";
-			}else {
-			  return "fail";
-			}
-			/*
-			if (memberService.checkPassword(mem_id, oldPassword)) {
-				memberService.updatePassword(mem_id, newPassword);
-				//response.put("status", "success");
-				return "success";
-			} else {
-				//response.put("status", "fail");
-				return "fail";
-			}
-			*/
-			//return response;
-		}
+	    if (encoder.matches(oldPassword, storedPassword)) {
+	        memberService.updatePassword(mem_id, newPassword);
+	        return "success";
+	    } else {
+	        return "fail";
+	    }
+	}
+
 	
 	/* 마이 페이지 이동 */
 	@GetMapping("/memberPage")
