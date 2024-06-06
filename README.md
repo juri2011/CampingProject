@@ -23,6 +23,7 @@ Spring Framework 기반 팀프로젝트 과제로 진행한 캠핑 쇼핑몰 프
   <img src="https://github.com/juri2011/CampingProject/assets/154123667/9a0a37aa-df5f-414c-ad5e-9a196e39bd4e">
  </p>
 </details>
+<details>
  <summary>시퀀스 다이어그램</summary>
  <p>
   <img src="https://github.com/juri2011/CampingProject/assets/154123667/38dd5a9b-b316-4fb7-afea-7ebc7d40f5e5">
