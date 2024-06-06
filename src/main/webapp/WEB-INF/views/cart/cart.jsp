@@ -40,7 +40,8 @@
 <body>
 	<div id="wrapper">
 		<div class="cart-container">
-			<h1>cart</h1>
+			<h1>장바구니</h1>
+			<hr>
 			<table class="cart-table">
 				<thead>
 					<tr>

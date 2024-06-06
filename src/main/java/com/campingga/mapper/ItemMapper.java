@@ -8,17 +8,23 @@ import com.campingga.domain.PagingVO;
 
 public interface ItemMapper {
 
-	public List<ItemVO> selectList();
+    public List<ItemVO> selectList();
 
-	public List<ItemVO> selectListWithPaging(Criteria cri);
+    public List<ItemVO> selectListWithPaging(Criteria cri);
 
-	public int selectTotalCount(Criteria cri);
+    public int selectTotalCount(Criteria cri);
 
-	public ItemVO selectOneItem(int item_no);
+    public ItemVO selectOneItem(int item_no);
 
-	public List<ItemVO> selectNewItems();
-	public List<ItemVO> selectItem(PagingVO vo);
-	public int countItem();
-	public int itemUpdate(ItemVO vo);
-	public int deleteItem(int item_no);
+    public List<ItemVO> selectNewItems();
+
+    public List<ItemVO> selectItem(PagingVO vo);
+
+    public int countItem();
+
+    public int itemUpdate(ItemVO vo);
+
+    public int deleteItem(int item_no);
+
+
 }

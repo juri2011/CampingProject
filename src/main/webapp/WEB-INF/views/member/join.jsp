@@ -18,10 +18,9 @@ body {
 
 /* 레이아웃 설정 */
 .wrapper {
-    width: 80%;
+    width: 1280px;
     margin: 20px auto;
     padding: 20px;
-    background: #f4f4f4;
     border: 1px solid #ccc;
     box-shadow: 0 0 10px #ccc;
 }
@@ -31,13 +30,16 @@ body {
     flex-direction: column;
 }
 
+h1{
+	font-size:800;
+}
+
 .form-group {
     margin-bottom: 15px;
 }
 
 .form-group label {
     display: block;
-    margin-bottom: 5px;
 }
 
 /* 입력 필드 스타일 */
@@ -56,7 +58,7 @@ input[readonly] {
 .join_button, .address_button {
     padding: 10px 20px;
     color: white;
-    background-color: #4CAF50;
+    background-color: #005555;
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -64,7 +66,7 @@ input[readonly] {
 }
 
 .join_button:hover, .address_button:hover {
-    background-color: #45a049;
+    background-color: #004040;
 }
 
 .address_button {
@@ -84,10 +86,31 @@ input[readonly] {
     margin-bottom: 10px;
 }
 
+.mail_input1{
+	width: 210px;
+}
+
+
+/* 우편번호 입력란 너비 */
+.address_input_1 {
+    width: 200px; /* 원하는 너비로 조정 */
+}
+
+/* 기본주소 입력란 너비 */
+.address_input_2 {
+    width: 500px; /* 원하는 너비로 조정 */
+}
+
+/* 상세주소 입력란 너비 */
+.address_input_3 {
+    width: 500px; /* 원하는 너비로 조정 */
+}
+
 .address_input_1_box, .address_input_2_box, .address_input_3_box {
     margin-right: 5px;
     display: inline-block;
 }
+
 
 /* 유효성 검사 메시지 스타일 */
 .help-block, .id_input_re_1, .id_input_re_2, .pwck_input_re_1, .pwck_input_re_2 {
@@ -99,8 +122,37 @@ input[readonly] {
     color: green;
 }
 
+.gender_input_box label {
+    font-size: 18px;
+}
 
+/* 입력값 넣는 태그들 간격 설정 */
+.id_input_box,
+.pw_input_box,
+.pwck_input_box,
+.user_input_box,
+.birth_input_box,
+.phone_input_box,
+.gender_input_box,
+.mail_input_box,
+.address_input_1_wrap,
+.address_input_2_wrap,
+.address_input_3_wrap {
+    margin-bottom: 20px;
+}
 
+/* 입력값 제목들 크기 조절 */
+.id_name,
+.pw_name,
+.pwck_name,
+.user_name,
+.birth_name,
+.phone_name,
+.gender_name,
+.mail_name,
+.address_name {
+    font-size: 18px;
+}
 </style>
 </head>
 
@@ -111,7 +163,7 @@ input[readonly] {
 			<form id="join_form" method="post">
 				<div class="wrap">
 					<div class="subjecet">
-						<h1>회원가입</h1>
+						<h2>회원가입</h2>
 					</div>
 					<hr />
 					<div class="id_wrap">
@@ -152,30 +204,30 @@ input[readonly] {
 								<option value="">년(YYYY)</option>
 								<!-- 생년 옵션 -->
 								<script>
-	                for (var year = 2005; year >= 1900; year--) {
-	                    document.write('<option value="' + year + '">' + year + '</option>');
-	                }
-	            </script>
+					                for (var year = 2005; year >= 1900; year--) {
+					                    document.write('<option value="' + year + '">' + year + '</option>');
+					                }
+					            </script>
 							</select> <select class="birth_input" name="month">
 								<option value="">월(MM)</option>
 								<!-- 생월 옵션 -->
 								<script>
-	                for (var month = 1; month <= 12; month++) {
-	                    var monthStr = month < 10 ? '0' + month : '' + month;
-	                    document.write('<option value="' + monthStr + '">' + monthStr + '</option>');
-	                }
-	            </script>
+					                for (var month = 1; month <= 12; month++) {
+					                    var monthStr = month < 10 ? '0' + month : '' + month;
+					                    document.write('<option value="' + monthStr + '">' + monthStr + '</option>');
+					                }
+					            </script>
 							</select> <select class="birth_input" name="day">
 								<option value=""><fmt:formatDate value="${member.birth}"
 										pattern="dd" />일(DD)
 								</option>
 								<!-- 생일 옵션 -->
 								<script>
-	                for (var day = 1; day <= 31; day++) {
-	                    var dayStr = day < 10 ? '0' + day : '' + day;
-	                    document.write('<option value="' + dayStr + '">' + dayStr + '</option>');
-	                }
-	            </script>
+					                for (var day = 1; day <= 31; day++) {
+					                    var dayStr = day < 10 ? '0' + day : '' + day;
+					                    document.write('<option value="' + dayStr + '">' + dayStr + '</option>');
+					                }
+					            </script>
 							</select> <input type="hidden" name="birth" id="birthHidden">
 						</div>
 					</div>

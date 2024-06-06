@@ -310,7 +310,7 @@ h1 {
 		});
 
 		/* 파일 체크 */
-		let regex = new RegExp("(.*?)\.(jpg|png|JPG)$");
+		let regex = new RegExp("(.*?)\.(jpg|png|JPG|PNG)$");
 		let maxSize = 1048576; //1MB	
 
 		function fileCheck(fileName, fileSize) {

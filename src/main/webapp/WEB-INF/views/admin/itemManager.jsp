@@ -15,11 +15,9 @@
 
         table {
             width: 100%;
-        }
-
-        td {
             text-align: center;
         }
+        
 
         #outter {
             display: block;

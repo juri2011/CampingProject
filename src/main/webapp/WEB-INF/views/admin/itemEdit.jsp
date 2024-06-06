@@ -140,7 +140,6 @@ h1 {
 }
 </style>
 </head>
-
 <body>
 	<div class="admin_content_main">
 		<h1>상품정보 수정페이지</h1>
@@ -175,7 +174,6 @@ h1 {
 					<input type="number" id="amount" name="amount"
 						value="<c:out value='${item.amount}'/>" min="1" max="100" />
 				</div>
-
 			</div>
 			<div class="form_section">
 				<div class="form_section_title">
@@ -200,11 +198,8 @@ h1 {
 						value="<c:out value='${item.price}' />">
 				</div>
 			</div>
-
-
 			<input type="hidden" name="item_no"
 				value="<c:out value='${item.item_no}' />">
-
 			<div class="form_section">
 				<div class="form_section_title">
 					<label>상품 이미지</label>
@@ -213,10 +208,18 @@ h1 {
 					<input type="file" id="fileItem" name='uploadFile'
 						style="height: 30px;">
 					<div id="uploadResult"></div>
+
+				</div>
+				<div class="form_section">
+					<div class="form_section_title">
+						<label>저장된 이미지명</label>
+					</div>
+					<div class="form_section_content">
+						<input type="text" id="currentImageName"
+							value="<c:out value='${item.imageList[0].fileName}' />" readonly>
+					</div>
 				</div>
 			</div>
-
-
 			<div class="form_section">
 				<div class="form_section_title">
 					<label>상품 소개</label>
@@ -226,8 +229,9 @@ h1 {
 				</div>
 			</div>
 			<input type="hidden" name="modDate" value="<%=new java.util.Date()%>">
-			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-			
+			<input type="hidden" name="${_csrf.parameterName}"
+				value="${_csrf.token}" />
+
 		</form>
 		<div class="btn_section">
 			<button id="cancelBtn" class="btn">취 소</button>
@@ -235,136 +239,137 @@ h1 {
 		</div>
 	</div>
 	<script>
-		let editForm = $("#editForm")
+        let editForm = $("#editForm")
 
-		/* 취소 버튼 */
-		$("#cancelBtn").click(function() {
-			location.href = "/admin/itemManager"
-		});
+        /* 취소 버튼 */
+        $("#cancelBtn").click(function() {
+            location.href = "/admin/itemManager"
+        });
 
-		/* 상품 수정 버튼 */
-		$("#updateBtn").on("click", function(e) {
-			e.preventDefault();
+        /* 상품 수정 버튼 */
+        $("#updateBtn").on("click", function(e) {
+            e.preventDefault();
 
-			// 상품 가격 값을 가져와서 숫자로 변환
-			let priceInput = document.getElementById('price');
-			let priceValue = parseInt(priceInput.value.replace(/,/g, ''), 10); // 쉼표(,) 제거 후 숫자로 변환
+            // 상품 가격 값을 가져와서 숫자로 변환
+            let priceInput = document.getElementById('price');
+            let priceValue = parseInt(priceInput.value.replace(/,/g, ''), 10); // 쉼표(,) 제거 후 숫자로 변환
 
-			// 변환된 값을 다시 입력란에 설정
-			priceInput.value = priceValue;
-			
+            // 변환된 값을 다시 입력란에 설정
+            priceInput.value = priceValue;
+            
 
-			// 폼 제출
-			editForm.submit();
-		});
+            // 폼 제출
+            editForm.submit();
+        });
 
-		/* 판매 상태 미선택시 */
-		$(document).ready(function() {
-			$("form").submit(function(event) {
-				const selectedStatus = $("select[name='status']").val();
-				if (selectedStatus === "") {
-					alert("판매상태를 선택해주세요.");
-					event.preventDefault(); // 폼 제출을 취소합니다.
-				}
-			});
-		});
+        /* 판매 상태 미선택시 */
+        $(document).ready(function() {
+            $("form").submit(function(event) {
+                const selectedStatus = $("select[name='status']").val();
+                if (selectedStatus === "") {
+                    alert("판매상태를 선택해주세요.");
+                    event.preventDefault(); // 폼 제출을 취소합니다.
+                }
+            });
+        });
 
-		/* 이미지 업로드 */
-		$("input[type='file']").on("change", function(e) {
-			/* 이미지 존재시 삭제 */
-			if ($(".imgDeleteBtn").length > 0) {
-				deleteFile();
-			}
+        /* 이미지 업로드 */
+        $("input[type='file']").on("change", function(e) {
+            /* 이미지 존재시 삭제 */
+            if ($(".imgDeleteBtn").length > 0) {
+                deleteFile();
+            }
 
-			//FormData객체를 생성하여 첨부파일을 FormData에 저장을 하고 FormData 자체를 서버로 전송
-			let formData = new FormData();
-			let fileInput = $('input[name="uploadFile"]');
-			let fileList = fileInput[0].files;
-			let fileObj = fileList[0];
+            //FormData객체를 생성하여 첨부파일을 FormData에 저장을 하고 FormData 자체를 서버로 전송
+            let formData = new FormData();
+            let fileInput = $('input[name="uploadFile"]');
+            let fileList = fileInput[0].files;
+            let fileObj = fileList[0];
 
-			if (!fileCheck(fileObj.name, fileObj.size)) {
-				return false;
-			}
-			//FormData 객체에 데이터를 추가
-			formData.append("uploadFile", fileObj);
+            if (!fileCheck(fileObj.name, fileObj.size)) {
+                return false;
+            }
+            //FormData 객체에 데이터를 추가
+            formData.append("uploadFile", fileObj);
 
-			$.ajax({
-				url : '/admin/uploadAjaxAction',
-				beforeSend: function(xhr) {
-		            xhr.setRequestHeader(header, token);
-		        },
-				processData : false,
-				contentType : false,
-				data : formData,
-				type : 'POST',
-				dataType : 'json',
-				success : function(result) {
-					console.log(result);
-					showUploadImage(result);
-				},
-				error : function(result) {
-					alert("이미지 파일이 아닙니다.");
-				}
-			});
+            $.ajax({
+                url : '/admin/uploadAjaxAction',
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+                processData : false,
+                contentType : false,
+                data : formData,
+                type : 'POST',
+                dataType : 'json',
+                success : function(result) {
+                    console.log(result);
+                    showUploadImage(result);
+                },
+                error : function(result) {
+                    alert("이미지 파일이 아닙니다.");
+                }
+            });
 
-		});
+        });
 
-		/* 파일 체크 */
-		let regex = new RegExp("(.*?)\.(jpg|png|JPG)$");
-		let maxSize = 1048576; //1MB	
+        /* 파일 체크 */
+        let regex = new RegExp("(.*?)\.(jpg|png|JPG|PNG)$");
+        let maxSize = 1048576; //1MB    
 
-		function fileCheck(fileName, fileSize) {
+        function fileCheck(fileName, fileSize) {
 
-			if (fileSize >= maxSize) {
-				alert("파일 사이즈 초과");
-				return false;
-			}
+            if (fileSize >= maxSize) {
+                alert("파일 사이즈 초과");
+                return false;
+            }
 
-			if (!regex.test(fileName)) {
-				alert("해당 종류의 파일은 업로드할 수 없습니다.");
-				return false;
-			}
+            if (!regex.test(fileName)) {
+                alert("해당 종류의 파일은 업로드할 수 없습니다.");
+                return false;
+            }
 
-			return true;
+            return true;
 
-		}
+        }
 
-		/* 이미지 출력 */
-		function showUploadImage(uploadResultArr) {
-			/* 전달받은 데이터 검증 */
-			if (!uploadResultArr || uploadResultArr.length == 0) {
-				return
-			}
+        /* 이미지 출력 */
+        function showUploadImage(uploadResultArr) {
+            /* 전달받은 데이터 검증 */
+            if (!uploadResultArr || uploadResultArr.length == 0) {
+                return
+            }
 
-			let uploadResult = $("#uploadResult");
-			let obj = uploadResultArr[0];
-			let str = "";
-			let fileCallPath = encodeURIComponent(obj.uploadPath.replace(/\\/g,
-					'/')
-					+ "/thumbs_" + obj.uuid + "_" + obj.fileName);
+            let uploadResult = $("#uploadResult");
+            let obj = uploadResultArr[0];
+            let str = "";
+            let fileCallPath = encodeURIComponent(obj.uploadPath.replace(/\\/g,
+                    '/')
+                    + "/thumbs_" + obj.uuid + "_" + obj.fileName);
 
-			str += "<input type='hidden' name='imageList[0].fileName' value='"+ obj.fileName +"'>";
-			str += "<input type='hidden' name='imageList[0].uuid' value='"+ obj.uuid +"'>";
-			str += "<input type='hidden' name='imageList[0].uploadPath' value='"+ obj.uploadPath +"'>";
+            str += "<input type='hidden' name='imageList[0].fileName' value='"+ obj.fileName +"'>";
+            str += "<input type='hidden' name='imageList[0].uuid' value='"+ obj.uuid +"'>";
+            str += "<input type='hidden' name='imageList[0].uploadPath' value='"+ obj.uploadPath +"'>";
 
-			str += "<div id='result_card'>";
-			str += "<img src='/display?fileName=" + fileCallPath + "'>";
-			str += "<div class='imgDeleteBtn' data-file='" + fileCallPath + "'>x</div>";
-			str += "</div>";
+            str += "<div id='result_card'>";
+            str += "<img src='/display?fileName=" + fileCallPath + "'>";
+            str += "<div class='imgDeleteBtn' data-file='" + fileCallPath + "'>x</div>";
+            str += "</div>";
 
-			uploadResult.append(str);
-		}
+            uploadResult.append(str);
+        }
 
-		/* 이미지 삭제 버튼 동작 */
-		$("#uploadResult").on("click", ".imgDeleteBtn", function(e) {
-			deleteFile();
-		});
+        /* 이미지 삭제 버튼 동작 */
+        $("#uploadResult").on("click", ".imgDeleteBtn", function(e) {
+            deleteFile();
+        });
 
-		/* 파일 삭제 메서드 */
-		function deleteFile() {
-		
-			$("#result_card").remove();
-		}
-	</script>
+        /* 파일 삭제 메서드 */
+        function deleteFile() {
+        
+            $("#result_card").remove();
+        }
+    </script>
 </body>
 </html>
+

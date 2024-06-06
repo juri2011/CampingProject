@@ -34,6 +34,10 @@
 	.span-welcome{
 		color: white;
 	}
+	
+	.dropdown{
+		width: 100px;
+	}
 </style>
 
 <div class="header-template">
@@ -41,15 +45,15 @@
       <div class="hero-slide">
         <div
           class="img overlay"
-          style="background-image: url('${pageContext.request.contextPath}/resources/images/hero_bg_3.jpg')"
+          style="background-image: url('${pageContext.request.contextPath}/resources/images/campsite1.jpeg')"
         ></div>
         <div
           class="img overlay"
-          style="background-image: url('${pageContext.request.contextPath}/resources/images/hero_bg_2.jpg')"
+          style="background-image: url('${pageContext.request.contextPath}/resources/images/campsite2.jpeg')"
         ></div>
         <div
           class="img overlay"
-          style="background-image: url('${pageContext.request.contextPath}/resources/images/hero_bg_1.jpg')"
+          style="background-image: url('${pageContext.request.contextPath}/resources/images/campsite3.jpeg')"
         ></div>
       </div>
 
@@ -57,7 +61,7 @@
         <div class="row justify-content-center align-items-center">
           <div class="container-search col-lg-9 text-center">
             <h1 class="heading" data-aos="fade-up">
-              Easiest way to find your dream home
+              Easiest way to buy your camping item!
             </h1>
             <form
               action="/item/list"
@@ -69,9 +73,9 @@
               <input
                 type="text"
                 class="form-control px-4"
-                name="keyword" placeholder="검색..."
+                name="keyword" placeholder="..."
               />
-              <button type="submit" class="btn btn-primary">Search</button>
+              <button type="submit" class="btn btn-primary" style="width:120px;">검색</button>
             </form>
           </div>
         </div>
