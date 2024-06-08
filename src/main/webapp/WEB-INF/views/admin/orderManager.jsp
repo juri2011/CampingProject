@@ -122,6 +122,7 @@
               <td>
                 <form action="/admin/updateOrderStatus" method="post">
                   <input type="hidden" name="ord_no" value="${order.ord_no}" />
+                  <input type="hidden" name="cart_no" value="${order.cart_no}" />
                   <select name="status">
                     <option value="1" <c:if test="${order.status == 1}">selected</c:if>>결제완료</option>
                     <option value="2" <c:if test="${order.status == 2}">selected</c:if>>배송준비</option>

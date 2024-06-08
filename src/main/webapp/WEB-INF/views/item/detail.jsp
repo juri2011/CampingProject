@@ -321,7 +321,10 @@
         str += "<img src='/display?fileName=" + fileCallPath +"'>";
         str += "</div>";      
         
-        uploadReslut.html(str);                  
+        uploadReslut.html(str);
+        
+        $('#purchaseForm').append('<input type="hidden" name="fileName" value="'+obj.fileName+'" />');
+        
        }); // 이 부분의 중괄호가 올바르게 닫혀있어야 합니다.
    }); // $(document).ready() 함수의 중괄호도 제대로 닫혀있습니다.
    

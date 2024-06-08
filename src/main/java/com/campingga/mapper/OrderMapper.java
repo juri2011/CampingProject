@@ -19,5 +19,7 @@ public interface OrderMapper {
 	
 	OrderListVO findByOrdNo(@Param("ord_no") String ord_no);
 	
+	OrderListVO findByCartNo(@Param("cart_no") String cart_no);
+	
     void updateOrder(OrderListVO vo);
 }

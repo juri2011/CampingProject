@@ -37,9 +37,10 @@ public class OrderServiceImpl implements OrderService {
 	}
 	
 	@Override
-    public void updateOrderStatus(String ord_no, String status) {
+    public void updateOrderStatus(String ord_no, String cart_no, String status) {
         // 주문 업데이트 로직을 여기에 구현합니다.
-		OrderListVO vo = orderMapper.findByOrdNo(ord_no);
+		//OrderListVO vo = orderMapper.findByOrdNo(ord_no);
+		OrderListVO vo = orderMapper.findByCartNo(cart_no);
         if (vo != null) {
         	vo.setStatus(status);
             orderMapper.updateOrder(vo);

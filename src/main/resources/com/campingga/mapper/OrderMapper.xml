@@ -57,11 +57,14 @@
 		INNER JOIN item_image ii ON ol.item_no = ii.item_no
 	</select>
     
-      <select id="findByOrdNo" resultType="OrderListVO">
+     <select id="findByOrdNo" resultType="OrderListVO">
         SELECT * FROM orderList WHERE ord_no = #{ord_no}
+    </select>
+     <select id="findByCartNo" resultType="OrderListVO">
+        SELECT * FROM orderList WHERE cart_no = #{cart_no}
     </select>
 
     <update id="updateOrder">
-        UPDATE orderList SET status = #{status} WHERE ord_no = #{ord_no}
+        UPDATE orderList SET status = #{status} WHERE cart_no = #{cart_no}
     </update>
 </mapper>

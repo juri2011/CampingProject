@@ -16,5 +16,5 @@ public interface OrderService {
 	 */
 	public List<OrderListVO> getAllOrders();
 	
-	public void updateOrderStatus(String ord_no, String status);
+	public void updateOrderStatus(String ord_no, String cart_no, String status);
 }

@@ -79,7 +79,10 @@
 		const cart_no = cno;
 		console.log('cart_no',cart_no);
 		cartService.remove(cart_no, function(result){
-			alert(result);
+			//alert(result);
+			if(result === "success"){
+				alert('성공적으로 삭제되었습니다.');
+			}
 			showList();
 		});
 	}

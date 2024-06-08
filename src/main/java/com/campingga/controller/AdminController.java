@@ -367,9 +367,10 @@ public class AdminController {
 	
 	 @PostMapping("/updateOrderStatus")
 	    public String updateOrderStatus(@RequestParam("ord_no") String ord_no,
+	    								@RequestParam("cart_no") String cart_no,
 	                                    @RequestParam("status") String status) {
 	        // 주문 상태 업데이트 로직 수행
-	        orderService.updateOrderStatus(ord_no, status);
+	        orderService.updateOrderStatus(ord_no, cart_no, status);
 	        
 	        // 업데이트 후에는 주문 관리 페이지로 리다이렉트
 	        return "redirect:/admin/orderManager";
