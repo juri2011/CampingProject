@@ -27,6 +27,10 @@ Spring Framework 기반 팀프로젝트 과제로 진행한 캠핑 쇼핑몰 프
  <img src="https://github.com/juri2011/CampingProject/assets/154123667/a793329a-e005-485a-8940-e5909737f7ca">
 </p>
 
+## 🎬 시연영상
+[![Video Label](https://img.youtube.com/vi/hRCN4liGMag/0.jpg)](https://youtu.be/hRCN4liGMag?si=vgKEXiM-YRGfWx0i)
+<p>(클릭하면 영상 주소로 이동합니다)</p>
+
 ## 📝: 다이어그램
 <details>
  <summary>유스케이스 다이어그램</summary>
