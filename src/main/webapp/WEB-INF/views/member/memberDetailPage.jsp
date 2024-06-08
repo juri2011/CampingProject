@@ -53,7 +53,7 @@ input[readonly] {
 }
 
 /* 버튼 스타일 */
-.join_button, .address_button {
+.modify-button, .address_button {
     padding: 10px 20px;
     color: white;
     background-color: #005555;
@@ -63,7 +63,7 @@ input[readonly] {
     font-size: 16px;
 }
 
-.join_button:hover, .address_button:hover {
+.modify-button:hover, .address_button:hover {
     background-color: #004040;
 }
 
@@ -287,43 +287,154 @@ input[readonly] {
 						</div>
 					</div>
 				</div>
-				<button type="submit" class="join_button">정보 수정</button>
+				<button type="submit" class="modify-button">정보 수정</button>
 			</form>
 		</div>
 	</div>
 	<script src="https://ssl.daumcdn.net/dmaps/map_js_init/postcode.v2.js"></script>
-	<script>
-    function execution_daum_address() {
-        new daum.Postcode({
-            oncomplete: function(data) {
-                var addr = '';
-                var extraAddr = '';
+<script>
+	$(document).ready(function() {
+	    // CSRF 토큰 설정
+	    var token = $("meta[name='_csrf']").attr("content");
+	    var header = $("meta[name='_csrf_header']").attr("content");
 
-                if (data.userSelectedType === 'R') {
-                    addr = data.roadAddress;
-                } else {
-                    addr = data.jibunAddress;
-                }
+	    // 수정하기 버튼 클릭 시 회원 정보 수정 요청
+	    $(".modify-button").click(function(event) { 
+	        event.preventDefault(); // 폼 제출 기본 동작 방지
 
-                if (data.userSelectedType === 'R') {
-                    if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
-                        extraAddr += data.bname;
-                    }
-                    if (data.buildingName !== '' && data.apartment === 'Y') {
-                        extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
-                    }
-                    if (extraAddr !== '') {
-                        extraAddr = ' (' + extraAddr + ')';
-                    }
-                }
+	        // 이름 입력 검증 (2~20자)
+	        let userInput = $(".user_input").val().trim();
+	        if (userInput === "" || userInput.length < 2 || userInput.length > 20) {
+	            alert("이름은 2자 이상 20자 이하로 입력해주세요.");
+	            $(".user_input").focus();
+	            return; // 검증 종료
+	        }
 
-                document.getElementsByName('userStnum')[0].value = data.zonecode;
-                document.getElementsByName("userAddr")[0].value = addr + extraAddr;
-                document.getElementsByName("userDaddr")[0].focus();
-            }
-        }).open();
-    }
-	</script>
+	        // 생년월일 입력 검증
+	        var year = $("#birthYear").val();
+	        var month = $("#birthMonth").val();
+	        var day = $("#birthDay").val();
+	        if (!year || !month || !day) {
+	            alert("생년월일을 모두 선택해 주세요.");
+	            return; // 검증 종료
+	        }
+	        
+	        // 연도, 월, 일을 결합하여 birth 문자열 생성
+	        var birth = year + "-" + month + "-" + day;
+	        
+	        // 숨겨진 입력 필드에 값을 설정
+	        $("#birthHidden").val(birth);
+
+	        // 전화번호 입력 검증 (xxx-xxxx-xxxx 형식)
+	        let phoneInput = $(".phone_input").val().trim();
+	        let phonePattern = /^\d{3}-\d{4}-\d{4}$/;
+	        if (!phoneInput.match(phonePattern)) {
+	            alert("전화번호는 xxx-xxxx-xxxx 형식으로 입력해주세요.");
+	            $(".phone_input").focus();
+	            return; // 검증 종료
+	        }
+
+	        // 이메일 입력 검증
+	        let emailInput = $(".mail_input1").val().trim();
+	        let emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+	        if (emailInput === "" || !emailInput.match(emailPattern)) {
+	            alert("올바른 이메일 형식을 입력해주세요.");
+	            $(".mail_input1").focus();
+	            return; // 검증 종료
+	        }
+
+	        // 상세주소 입력 검증
+	        if ($(".address_input_3").val().trim() === "") {
+	            alert("상세주소를 입력해주세요.");
+	            $(".address_input_3").focus();
+	            return; // 검증 종료
+	        }
+
+	        // 모든 필드가 적절히 입력되었을 때
+	        var formData = $("#modify_form").serialize(); // 폼 데이터 직렬화
+	        $.ajax({
+	            type: "POST",
+	            url: "/member/updateMemberInfo", // 회원 정보 수정 엔드포인트
+	            beforeSend: function(xhr) {
+	                xhr.setRequestHeader(header, token); // CSRF 토큰을 헤더에 설정
+	            },
+	            data: formData,
+	            success: function(response) {
+	                if(response === "success") {
+	                    alert("회원 정보가 성공적으로 수정되었습니다.");
+	                    window.location.href = "/member/memberUpdate";
+	                } else {
+	                    alert("회원 정보 수정에 실패했습니다. 다시 시도해주세요.");
+	                }
+	            },
+	            error: function(xhr, status, error) {
+	                console.error("회원 정보 수정에 실패했습니다:", error);
+	                alert("회원 정보 수정에 실패했습니다. 다시 시도해주세요.");
+	            }
+	        });
+	    });
+	});
+
+	
+	/* 다음 주소 연동 */
+	function execution_daum_address() {
+
+		new daum.Postcode(
+				{
+					oncomplete : function(data) {
+						// 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분입니다.
+
+						// 각 주소의 노출 규칙에 따라 주소를 조합한다.
+						// 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+						var addr = ''; // 주소 변수
+						var extraAddr = ''; // 참고항목 변수
+
+						//사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+						if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+							addr = data.roadAddress;
+						} else { // 사용자가 지번 주소를 선택했을 경우(J)
+							addr = data.jibunAddress;
+						}
+
+						// 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+						if (data.userSelectedType === 'R') {
+							// 법정동명이 있을 경우 추가한다. (법정리는 제외)
+							// 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+							if (data.bname !== ''
+									&& /[동|로|가]$/g.test(data.bname)) {
+								extraAddr += data.bname;
+							}
+							// 건물명이 있고, 공동주택일 경우 추가한다.
+							if (data.buildingName !== ''
+									&& data.apartment === 'Y') {
+								extraAddr += (extraAddr !== '' ? ', '
+										+ data.buildingName
+										: data.buildingName);
+							}
+							// 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+							if (extraAddr !== '') {
+								extraAddr = ' (' + extraAddr + ')';
+							}
+							// 주소변수 문자열과 참고항목 문자열 합치기
+							addr += extraAddr;
+
+						} else {
+							addr += ' ';
+						}
+
+						$(".address_input_1").val(data.zonecode);
+						//$("[name=memberAddr1]").val(data.zonecode);    // 대체가능
+						$(".address_input_2").val(addr);
+						//$("[name=memberAddr2]").val(addr);            // 대체가능
+						// 커서를 상세주소 필드로 이동한다.
+						$(".address_input_3").attr("readonly", false);
+						$(".address_input_3").focus();
+
+					}
+				}).open();
+
+	}
+</script>
 
 </body>
 </html>
