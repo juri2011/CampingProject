@@ -60,6 +60,11 @@
       font-weight: bold;
       text-align: right;
     }
+    
+    .product-name>a{
+    	color:blue;
+    	text-decoration:underline;
+    }
   </style>
 </head>
 <body>
@@ -85,7 +90,7 @@
 	            <tr>
 		        	<td><img src="/resources/img/${order.fileName}" alt="상품이미지" /></td>
 		        	<td class="order-date"><fmt:formatDate value="${order.regdate}" pattern="yyyy-MM-dd hh:mm:ss" /></td>
-		        	<td class="product-name"><c:out value="${order.item_name}" /></td>
+		        	<td class="product-name"><a href="/item/detail?item_no=${order.item_no}"><c:out value="${order.item_name}" /></a></td>
 		        	<td><c:out value="${order.amount}"/></td>
 		        	<td class="price"><fmt:formatNumber value="${order.price}" pattern="#,###원" /></td>
 		        	<td class="shipping">
